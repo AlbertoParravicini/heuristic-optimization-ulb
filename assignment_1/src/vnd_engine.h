@@ -10,10 +10,10 @@ class VndEngine
     PfspProblem* m_pcProblem;
     PfspState* m_pcResult;
     long int m_dResultValue;
-    std::vector<GetNeighbourFunction> m_vecNeighbourFunctions;
+    std::vector<GetNeighbourFunctionPfsp> m_vecNeighbourFunctions;
 
   public:
-    VndEngine(PfspProblem& c_problem, std::vector<GetNeighbourFunction>& vec_neighbour_functions);
+    VndEngine(PfspProblem& c_problem, std::vector<GetNeighbourFunctionPfsp>& vec_neighbour_functions);
     ~VndEngine();
 
     // Get the result of the search, as state and value.
@@ -24,7 +24,7 @@ class VndEngine
     PfspProblem& GetProblem();
 
     // Get the vector of neighbourhood functions;
-    std::vector<GetNeighbourFunction>& GetNeighbourFunctions();
+    std::vector<GetNeighbourFunctionPfsp>& GetNeighbourFunctions();
 
     // Start the optimization process.
     void PerformSearch();

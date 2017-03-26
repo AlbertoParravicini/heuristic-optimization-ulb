@@ -4,7 +4,7 @@
 #include "pfspinstance.h"
 #include "pfsp_state.h"
 #include "pfsp_problem.h"
-#include "local_search_engine.h"
+#include "ii_engine.h"
 
 #include <armadillo>
 

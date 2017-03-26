@@ -20,24 +20,32 @@ include_directories("${PROJECT_SOURCE_DIR}")
 
 # Set header files
 set(HEADER_FILES
+	#state.h
+	#problem.h
 	pfspinstance.h
 	pfsp_state.h
 	pfsp_problem.h
+	
 	support_functions.h
-	local_search_engine.h
+	ii_engine.h
 	vnd_engine.h
+
   )
   
   # Set header files
 set(SOURCE_FILES
 	${HEADER_FILES}
-	pfspinstance.cpp
 	flowshop.cpp
+	#state.cpp
+	#problem.cpp
+	pfspinstance.cpp
+	
 	pfsp_state.cpp
 	pfsp_problem.cpp
 	support_functions.cpp
-	local_search_engine.cpp
+	ii_engine.cpp
 	vnd_engine.cpp
+	
 
   )
 
@@ -45,4 +53,5 @@ add_executable(flowshop
 	${SOURCE_FILES}
 	)
 	
-target_link_libraries(flowshop ${ARMADILLO_LIBRARIES})
+target_link_libraries(flowshop 
+	${ARMADILLO_LIBRARIES})

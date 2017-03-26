@@ -3,7 +3,7 @@
 /****************************************/
 /****************************************/
 
-VndEngine::VndEngine(PfspProblem &c_problem, std::vector<GetNeighbourFunction> &vec_neighbour_functions)
+VndEngine::VndEngine(PfspProblem &c_problem, std::vector<GetNeighbourFunctionPfsp> &vec_neighbour_functions)
 {
   this->m_pcProblem = &c_problem;
   this->m_vecNeighbourFunctions = vec_neighbour_functions;
@@ -43,7 +43,7 @@ const long int VndEngine::GetResultValue() const
 /****************************************/
 /****************************************/
 
-std::vector<GetNeighbourFunction> &VndEngine::GetNeighbourFunctions()
+std::vector<GetNeighbourFunctionPfsp> &VndEngine::GetNeighbourFunctions()
 {
   return this->m_vecNeighbourFunctions;
 }
@@ -54,7 +54,7 @@ std::vector<GetNeighbourFunction> &VndEngine::GetNeighbourFunctions()
 void VndEngine::PerformSearch()
 {
   PfspState *cCurrentState = &(this->m_pcProblem->GetInitialState());
-  std::cout << cCurrentState->GetState().t() << std::endl;
+  //std::cout << cCurrentState->GetState().t() << std::endl;
   bool bKeepSearching = true;
   bool bImprovementFound = false;
 
@@ -65,7 +65,7 @@ void VndEngine::PerformSearch()
     // Compute the neighbourhoods with multiple functions.
     // Start from the first (assumed to be the most restrictive),
     // then move to the others if no improvement was found.
-    for (GetNeighbourFunction fNeighFunction : m_vecNeighbourFunctions)
+    for (GetNeighbourFunctionPfsp fNeighFunction : m_vecNeighbourFunctions)
     {
       std::vector<PfspState *> vecNeighbours = fNeighFunction(*cCurrentState);
       //std::cout << "current state: " << cCurrentState->GetState().t() << std::endl;

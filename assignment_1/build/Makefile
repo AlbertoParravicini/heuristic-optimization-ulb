@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/src
+CMAKE_SOURCE_DIR = /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/build
+CMAKE_BINARY_DIR = /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/build/CMakeFiles /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/build/CMakeFiles /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -150,32 +150,32 @@ flowshop.cpp.s:
 	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/flowshop.cpp.s
 .PHONY : flowshop.cpp.s
 
-local_search_engine.o: local_search_engine.cpp.o
+ii_engine.o: ii_engine.cpp.o
 
-.PHONY : local_search_engine.o
+.PHONY : ii_engine.o
 
 # target to build an object file
-local_search_engine.cpp.o:
-	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/local_search_engine.cpp.o
-.PHONY : local_search_engine.cpp.o
+ii_engine.cpp.o:
+	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/ii_engine.cpp.o
+.PHONY : ii_engine.cpp.o
 
-local_search_engine.i: local_search_engine.cpp.i
+ii_engine.i: ii_engine.cpp.i
 
-.PHONY : local_search_engine.i
+.PHONY : ii_engine.i
 
 # target to preprocess a source file
-local_search_engine.cpp.i:
-	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/local_search_engine.cpp.i
-.PHONY : local_search_engine.cpp.i
+ii_engine.cpp.i:
+	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/ii_engine.cpp.i
+.PHONY : ii_engine.cpp.i
 
-local_search_engine.s: local_search_engine.cpp.s
+ii_engine.s: ii_engine.cpp.s
 
-.PHONY : local_search_engine.s
+.PHONY : ii_engine.s
 
 # target to generate assembly for a file
-local_search_engine.cpp.s:
-	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/local_search_engine.cpp.s
-.PHONY : local_search_engine.cpp.s
+ii_engine.cpp.s:
+	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/ii_engine.cpp.s
+.PHONY : ii_engine.cpp.s
 
 pfsp_problem.o: pfsp_problem.cpp.o
 
@@ -324,9 +324,9 @@ help:
 	@echo "... flowshop.o"
 	@echo "... flowshop.i"
 	@echo "... flowshop.s"
-	@echo "... local_search_engine.o"
-	@echo "... local_search_engine.i"
-	@echo "... local_search_engine.s"
+	@echo "... ii_engine.o"
+	@echo "... ii_engine.i"
+	@echo "... ii_engine.s"
 	@echo "... pfsp_problem.o"
 	@echo "... pfsp_problem.i"
 	@echo "... pfsp_problem.s"

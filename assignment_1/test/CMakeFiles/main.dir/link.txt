@@ -1,0 +1,1 @@
+/usr/bin/c++   -lboost_program_options   CMakeFiles/main.dir/test.cpp.o  -o main -rdynamic /usr/local/boost_1_61_0/stage/lib/libboost_system.so /usr/local/boost_1_61_0/stage/lib/libboost_filesystem.so /usr/local/boost_1_61_0/stage/lib/libboost_program_options.so -Wl,-rpath,/usr/local/boost_1_61_0/stage/lib 

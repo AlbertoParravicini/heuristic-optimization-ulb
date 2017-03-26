@@ -1,10 +1,10 @@
-#ifndef _LOCALSEARCHENGINE_H_
-#define _LOCALSEARCHENGINE_H_
+#ifndef _IIENGINE_H_
+#define _IIENGINE_H_
 
 #include "pfsp_problem.h"
 #include "pfsp_state.h"
 
-class LocalSearchEngine
+class IIEngine
 {
   private:
     PfspProblem* m_pcProblem;
@@ -13,8 +13,8 @@ class LocalSearchEngine
     bool m_bBestImprovement;
 
   public:
-    LocalSearchEngine(PfspProblem& c_problem, bool best_improvement = false);
-    ~LocalSearchEngine();
+    IIEngine(PfspProblem& c_problem, bool best_improvement = false);
+    ~IIEngine();
 
     // Get the result of the search, as state and value.
     const long int GetResultValue() const;

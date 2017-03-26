@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/src
+CMAKE_SOURCE_DIR = /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/build
+CMAKE_BINARY_DIR = /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/flowshop.dir
@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assig
 CMakeFiles/flowshop.dir/all:
 	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/depend
 	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target flowshop"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target flowshop"
 .PHONY : CMakeFiles/flowshop.dir/all
 
 # Include target in all.
@@ -76,9 +76,9 @@ all: CMakeFiles/flowshop.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/flowshop.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/flowshop.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/albyr/Documents/heurisitc-optimization-ulb/assignment_1/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/build/CMakeFiles 0
 .PHONY : CMakeFiles/flowshop.dir/rule
 
 # Convenience name for target.

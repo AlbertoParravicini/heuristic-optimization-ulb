@@ -1,9 +1,12 @@
-#include "local_search_engine.h"
+#include "ii_engine.h"
+
+
+#include "pfsp_state.h"
 
 /****************************************/
 /****************************************/
 
-LocalSearchEngine::LocalSearchEngine(PfspProblem &c_problem, bool best_improvement)
+IIEngine::IIEngine(PfspProblem &c_problem, bool best_improvement)
 {
   this->m_pcProblem = &c_problem;
   this->m_bBestImprovement = best_improvement; 
@@ -12,14 +15,14 @@ LocalSearchEngine::LocalSearchEngine(PfspProblem &c_problem, bool best_improveme
 /****************************************/
 /****************************************/
 
-LocalSearchEngine::~LocalSearchEngine()
+IIEngine::~IIEngine()
 {
 }
 
 /****************************************/
 /****************************************/
 
-PfspProblem& LocalSearchEngine::GetProblem()
+PfspProblem& IIEngine::GetProblem()
 {
   return *(this->m_pcProblem);
 }
@@ -27,7 +30,7 @@ PfspProblem& LocalSearchEngine::GetProblem()
 /****************************************/
 /****************************************/
 
-PfspState& LocalSearchEngine::GetResultState()
+PfspState& IIEngine::GetResultState()
 {
   return *(this->m_pcResult);
 }
@@ -35,7 +38,7 @@ PfspState& LocalSearchEngine::GetResultState()
 /****************************************/
 /****************************************/
 
-const long int LocalSearchEngine::GetResultValue() const
+const long int IIEngine::GetResultValue() const
 {
   return m_dResultValue;
 }
@@ -43,7 +46,7 @@ const long int LocalSearchEngine::GetResultValue() const
 /****************************************/
 /****************************************/
 
-const bool LocalSearchEngine::GetBestImprovementValue() const
+const bool IIEngine::GetBestImprovementValue() const
 {
   return this->m_bBestImprovement;
 }
@@ -52,7 +55,7 @@ const bool LocalSearchEngine::GetBestImprovementValue() const
 /****************************************/
 /****************************************/
 
-void LocalSearchEngine::SetBestImprovementValue(bool best_improvement)
+void IIEngine::SetBestImprovementValue(bool best_improvement)
 {
   this->m_bBestImprovement = best_improvement;
 }
@@ -61,10 +64,9 @@ void LocalSearchEngine::SetBestImprovementValue(bool best_improvement)
 /****************************************/
 /****************************************/
 
-void LocalSearchEngine::PerformSearch()
+void IIEngine::PerformSearch()
 {
   PfspState* cCurrentState = &(this->m_pcProblem->GetInitialState());
-  std::cout << cCurrentState->GetState().t() << std::endl;
   bool bKeepSearching = true;
   bool bImprovementFound = false;
 
@@ -73,13 +75,11 @@ void LocalSearchEngine::PerformSearch()
   while (bKeepSearching)
   {
     std::vector<PfspState*> vecNeighbours = m_pcProblem->GetNeighbours(*cCurrentState);
-    //std::cout << "current state: " << cCurrentState->GetState().t() << std::endl;
     bImprovementFound = false;
     // Evaluate the neighbours.
     for (PfspState* cNeigh : vecNeighbours)
     {
       long int nTempScore = m_pcProblem->EvaluateState(*(this->m_pcProblem), *cNeigh);
-      //std::cout << "neigh: " << cNeigh->GetState().t() << std::endl;
 
       // Minimization
       if (nTempScore < nBestResultValue)

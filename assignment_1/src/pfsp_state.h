@@ -2,11 +2,11 @@
 #define _PFSPSTATE_H_
 
 
-
+//#include "state.h"
 #include <armadillo>
 #include <limits>
 
-class PfspState 
+class PfspState //: public State
 {
   private:
     arma::Col<int> m_vecState;
@@ -19,8 +19,6 @@ class PfspState
     ~PfspState();
 
     arma::Col<int>& GetState();
-    const long int GetStateValue() const;
-    void SetStateValue(const long int n_new_state_value); 
 };
 
 #endif
