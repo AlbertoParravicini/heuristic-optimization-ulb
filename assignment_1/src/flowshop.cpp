@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
       std::cout << "-----------------------------------" << std::endl;
 
       std::ofstream output_file;
-      output_file.open(".rz/results/results_ii.csv", std::ios_base::app);
+      output_file.open("./results/results_ii.csv", std::ios_base::app);
 
       // Write results
       output_file << sFileName << ", " << 
