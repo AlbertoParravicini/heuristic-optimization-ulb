@@ -24,12 +24,10 @@ set(HEADER_FILES
 	#problem.h
 	pfspinstance.h
 	pfsp_state.h
-	pfsp_problem.h
-	
+	pfsp_problem.h	
 	support_functions.h
 	ii_engine.h
 	vnd_engine.h
-
   )
   
   # Set header files
@@ -38,15 +36,12 @@ set(SOURCE_FILES
 	flowshop.cpp
 	#state.cpp
 	#problem.cpp
-	pfspinstance.cpp
-	
+	pfspinstance.cpp	
 	pfsp_state.cpp
 	pfsp_problem.cpp
 	support_functions.cpp
 	ii_engine.cpp
 	vnd_engine.cpp
-	
-
   )
 
 add_executable(flowshop 

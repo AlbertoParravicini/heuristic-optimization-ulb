@@ -1,0 +1,71 @@
+#############################
+RZ VS RANDOM
+
+EXEC TIME					100 JOBS ||||||||| 50 JOBS		
+(rz 0 t)  VS (random 0 t):	t 7.873e-15			w 2.827e-11
+(rz 0 e)  VS (random 0 e):	w 2.2e-16			w 3.018e-11
+(rz 0 i)  VS (random 0 i):	w 2.2e-16			w 3.018e-11
+(rz 1 t)  VS (random 1 t):	w 2.993e-11			t 6.434e-16
+(rz 1 e)  VS (random 1 e):	w 2.2e-16			w 3.016e-11
+(rz 1 i)  VS (random 1 i):	w 3.018e-11			w 2.2e-16
+
+
+RESULT						100 JOBS ||||||||| 50 JOBS		
+(rz 0 t)  VS (random 0 t):	w 2.2e-16			w 1.133e-15
+(rz 0 e)  VS (random 0 e):	w 0.2665			w 0.6333
+(rz 0 i)  VS (random 0 i):	w 0.994				w 0.9707
+(rz 1 t)  VS (random 1 t):	w 2.2e-16			w 1.133e-15
+(rz 1 e)  VS (random 1 e):	w 0.2939			w 0.4147
+(rz 1 i)  VS (random 1 i):	w 0.3817			w 0.6228
+
+
+#############################
+FI VS BI (bi is better)
+
+EXEC TIME						100 JOBS ||||||||| 50 JOBS		
+(rz 0 t)  VS (rz 1 t):			t 0.1331		t 0.1455
+(rz 0 e)  VS (rz 1 e):			w 0.01487		w 0.4688
+(rz 0 i)  VS (rz 1 i):			w 0.001366		w 0.4508
+(random 0 t)  VS (random 1 t):	w 0.3219		w 0.0291
+(random 0 e)  VS (random 1 e):	t 2.2e-16		w 3.016e-11
+(random 0 i)  VS (random 1 i):	w 4.459e-11		w 2.2e-16
+
+
+RESULT							100 JOBS ||||||||| 50 JOBS		
+(rz 0 t)  VS (rz 1 t):			w 0.9823		w 0.9882
+(rz 0 e)  VS (rz 1 e):			w 0.7635		w 0.9646
+(rz 0 i)  VS (rz 1 i):			w 0.8776		w 0.7117
+(random 0 t)  VS (random 1 t):	w 0.4671		t 0.7648
+(random 0 e)  VS (random 1 e):	w 0.03318		w 0.2729
+(random 0 i)  VS (random 1 i):	w 0.3158		w 0.4853
+
+#############################
+T VS E VS I	
+			
+EXEC TIME										100 JOBS ||||||||| 50 JOBS	
+(rz 0 t) vs (rz 0 e) vs (rz 0 i)                k 2.2e-16		k 2.2e-16
+(rz 1 t) vs (rz 1 e) vs (rz 1 i)                k 2.2e-16		k 2.2e-16
+(random 0 t) vs (random 0 e) vs (random 0 i)    k 2.2e-16		k 2.2e-16
+(random 1 t) vs (random 1 e) vs (random 1 i)    k 2.2e-16		k 2.2e-16
+
+RESULTS  										100 JOBS ||||||||| 50 JOBS	
+(rz 0 t) vs (rz 0 e) vs (rz 0 i)                k 2.2e-16		k 2.2e-16
+(rz 1 t) vs (rz 1 e) vs (rz 1 i)                k 2.2e-16		k 2.2e-16
+(random 0 t) vs (random 0 e) vs (random 0 i)    k 2.2e-16		k 2.2e-16
+(random 1 t) vs (random 1 e) vs (random 1 i)    k 2.2e-16		k 2.2e-16
+
+E VS I
+
+
+
+EXEC TIME  										100 JOBS ||||||||| 50 JOBS	
+(rz 0 e) vs (rz 0 i)                			w 3.894e-13		t 1.337e-10
+(rz 1 e) vs (rz 1 i)                			w 2.2e-16		w 1.956e-10
+(random 0 e) vs (random 0 i)    				w 2.2e-16		w 3.018e-11
+(random 1 e) vs (random 1 i)    				w 3.018e-11		w 3.018e-11
+     
+RESULTS		 (insert is better)					100 JOBS ||||||||| 50 JOBS	
+(rz 0 e) vs (rz 0 i)                			w 0.4671		w 0.4063
+(rz 1 e) vs (rz 1 i)                			w 0.4581		w 0.5718
+(random 0 e) vs (random 0 i)    				w 0.7123		w 0.8201
+(random 1 e) vs (random 1 i)    				w 0.3504		w 0.4761
