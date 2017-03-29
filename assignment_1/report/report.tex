@@ -1,0 +1,332 @@
+\documentclass[
+12pt,
+a4paper,
+oneside,
+headinclude,
+footinclude]{article}
+
+\usepackage[table,xcdraw,svgnames, dvipsnames]{xcolor}
+\usepackage[capposition=bottom]{floatrow}
+\usepackage[colorlinks]{hyperref} % to add hyperlinks
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{csquotes}
+\usepackage{amsmath} % For the big bracket
+\usepackage[export]{adjustbox}[2011/08/13]
+% \usepackage{subfig}
+\usepackage{array}
+\usepackage{url}
+\usepackage{graphicx} % to insert images
+\usepackage{titlepic} % to insert image on front page
+\usepackage{geometry} % to define margin
+\usepackage{listings} % to add code
+\usepackage{caption}
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[utf8]{inputenc} % Required for including letters with accents
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage[nochapters, dottedtoc]{classicthesis}
+\usepackage{listings} % For Python code
+
+\usepackage[ruled]{algorithm2e} % For pseudo-code
+
+\usepackage{mathpazo}
+
+\usepackage{amsthm} % For definitions and theorems
+
+\theoremstyle{definition} % Define the style of definitions
+\newtheorem{definition}{Definition}[section]
+
+
+\usepackage{lipsum} % For testing
+\usepackage{color}
+
+\usepackage{etoolbox}
+
+\usepackage{bm} % For bold math
+
+\usepackage{setspace}
+\usepackage{minted}
+
+% For tables
+\usepackage{amssymb}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\definecolor{webbrown}{rgb}{.6,0,0}
+
+\usepackage{titlesec} % to customize titles
+\titleformat{\chapter}{\normalfont\huge}{\textbf{\thechapter.}}{20pt}{\huge\textbf}[\vspace{2ex}\titlerule] % to customize chapter title aspect
+\titleformat{\section} % to customize section titles
+{\fontsize{14}{15}\bfseries}{\thesection}{1em}{}
+
+\titlespacing*{\chapter}{0pt}{-50pt}{20pt} % to customize chapter title space
+
+\graphicspath{ {./figures/} } % images folder
+\parindent0pt \parskip10pt % make block paragraphs
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm,headheight=3cm,headsep=3cm,footskip=1cm} % define margin
+\hyphenation{Fortran hy-phen-ation}
+
+\AtBeginDocument{%
+	\hypersetup{
+		colorlinks=true, breaklinks=true, bookmarks=true,
+		urlcolor=webbrown, citecolor=Black, linkcolor=Black% Link colors
+}}
+
+
+\pagestyle{plain}
+\title{\textbf{Heuristic Optimization \\ Implementation Exercise 1}}
+\author{{Alberto Parravicini}}
+\date{}	% default \today
+
+
+
+% ====================================================
+% =============================================== BEGIN
+% ====================================================
+
+
+\begin{document}
+
+\maketitle
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+
+
+
+
+% ====================================================
+% =============================================== COMPILATION
+% ====================================================
+
+\section{How to compile and run the code}
+\subsection{\textbf{Prerequisites}}
+\begin{itemize}
+    \item \textbf{Cmake}, \textbf{make}, a \textbf{C++11} compiler.
+    \item \textbf{Armadillo}, a linear algebra library. How to install it:\\
+        \-\quad\texttt{sudo apt-get install liblapack-dev}\\
+        \-\quad\texttt{sudo apt-get install libblas-dev}\\
+        \-\quad\texttt{sudo apt-get install libboost-dev}\\
+        
+        \quad\texttt{sudo apt-get install libarmadillo-dev}
+\end{itemize}
+\subsection{\textbf{Compilation}}
+\begin{itemize}
+   \item Move to the \textit{build} folder\\
+    \-\quad\texttt{cd build}
+   \item Run \textit{cmake}\\
+    \-\quad\texttt{cmake ../src}
+   \item Run \textit{make}\\
+    \-\quad\texttt{make}
+\end{itemize}
+
+The executable will be located in the \textit{build} folder, and is called \textbf{flowshop}.
+
+\newpage
+\subsection{\textbf{How to run the program}}
+The generic syntax to run the program is\\
+\-\quad\texttt{./flowshop} \\
+\-\quad\quad\texttt{-{}-filename ../instances/instance\_name} \\
+\-\quad\quad\texttt{-{}-algorithm [ii|vnd]} \\
+\-\quad\quad\texttt{-{}-random\_seed 42} \\
+\-\quad\quad\texttt{-{}-neighbourhood\_function [t|e|i]} \\
+\-\quad\quad\texttt{-{}-initial\_state\_function [random|rz]} \\
+\-\quad\quad\texttt{-{}-use\_best\_improvement [0|1]} \\
+\-\quad\quad\texttt{-{}-neigh\_vector [tei|tie]} \\
+
+
+\begin{itemize}
+    \item \texttt{-{}-filename}, \texttt{-f}: path to the instance file to be used.
+    \item \texttt{-{}-algorithm}, \texttt{-a}: algorithm to be used, either \textbf{ii}, \textit{Iterative improvement} (default), or \textbf{vnd}, \textit{Variable neighbour descent}.
+    \item \texttt{-{}-random\_seed}, \texttt{-r}: integer number, used as seed for random number generation by the program. If omitted, the seed is randomized.
+    \item \texttt{-{}-neighbourhood\_function}, \texttt{-n}: how the neighbours of a given candidate solution are computed, either \textbf{t}, \textit{Transpose} (default), \textbf{e}, \textit{Exchange}, or \textbf{i}, \textit{Insert}.
+    \item \texttt{-{}-initial\_state\_function}, \texttt{-i}: how the initial candidate solution is computed, either \textbf{random}, \textit{randomly}, or \textbf{rz}, using the \textit{Simplified RZ heuristic} (default).
+    \item \texttt{-{}-use\_best\_improvement}, \texttt{-b}: either \textbf{0} or \textbf{1} (default), set if the \textit{iterative improvement} algorithm should use \textit{First improvement} or \textit{Best improvement}. Ignored if the algorithm is set to \textbf{vnd}.
+    \item \texttt{-{}-neigh\_vector}, \texttt{-v}: set the sequence of neighbourhood functions to be used by the \textbf{vnd} algorithm, either \textbf{tei}, \textit{Transpose, Exchange, Insert} (default) or \textbf{tie}, \textit{Transpose, Insert, Exchange}. Ignored if the algorithm is set to \textbf{ii}.
+\end{itemize}
+
+Example:\\
+\quad\texttt{./flowshop -f ../instances/50\_20\_10 -a ii -{}-use\_best\_improvement=1 -i rz}
+
+The algorithm will solve the instance \textbf{50\_20\_10} using \textit{Best improvement iterative search}, with a random seed, \textit{Transpose} neighbour function, and \textit{RZ heuristic}.
+
+
+
+
+% ====================================================
+% =============================================== PFSP
+% ====================================================
+
+
+\newpage
+\section{Introduction to the PFSP}
+In the \textit{Permutation Flow Shop Scheduling} (\textbf{PFSP}) we are given:
+\begin{itemize}
+    \item A set of $n$ jobs $J_1,\ \ldots,\ J_n$.
+    \item A set of $m$ machines $M_1\ \ldots,\ M_m$.
+    \item Each job $J_i$ is composed of $m$ different steps, $o_{i1},\ \ldots,\ o_{im}$, and each step must be executed on a different machine.
+    \item Each step $o_{ij}$ has a processing time $p_{ij}$ associated to it.
+    \item All jobs pass through the machines in the same order.
+    \item A machine can process at most $1$ job at a time.
+    \item Each job has a weight $w_i$ associated to it, which represents its importance.
+\end{itemize}
+
+Assume that the jobs run in the order $j_1,\ \ldots,\ j_n$, and go through the machines in order $M_1,\ \ldots,\ M_m$.
+The completion time of the $i$th operation of job $j_k$ will be given by
+
+\[
+    C_{i,j_k}=
+        \begin{cases}
+        \sum_{l=i}^{i}{p_{l,j_1}} & if\ j_k = j_1\ \text{(first job)} \\
+        \sum_{l=1}^{k}{p_{1,j_l}} & if\ i = 1\ \text{(first machine)} \\
+        max(C_{i-1, j_k}, C_{i, j_{k-1}}) + p_{i,j_k} & \text{otherwise}
+        \end{cases}
+\]
+
+In short, the completion time of the first job will be given by the sum of the processing times of each of its steps (as $j_1$ will always find all the machines available).\\
+Also, a new job can be processed by the first machine as soon as this is available, hence the second condition.
+
+Our goal is to find the optimal scheduling for the jobs, such that the \textbf{weighted completion time} is minimized.
+
+$$min\ WCT = \sum_{i=1}^n{w_i \cdot C_{m, j_i}}$$
+
+
+
+
+% ====================================================
+% =============================================== IMPLEMENTATION
+% ====================================================
+
+
+\newpage
+\section{Implementation}
+This section will focus on the \textbf{C++} implementation of algorithms to solve \textbf{PFSP}. \\
+For each class/file, it is provided a brief description.
+
+$\bullet$ \texttt{flowshop.cpp}:\\
+main access point to the implementation. The input arguments are handled using \textbf{Cxxopts} (\href{https://github.com/jarro2783/cxxopts}{https://github.com/jarro2783/cxxopts}), which provides GNU-style syntax for the input arguments.\\
+It will also measure the execution time, and write the output to a file.
+
+The central idea of the optimization algorithms implementation is to create a structure which allows the algorithms to operate transparently to the problem they are solving.\\
+In order to do so, the implementation of the problem instance and of the candidate solutions are wrapped into appropriate classes, which expose to the optimization algorithm a set of functions what work transparently to the underlying implementation of the algorithm.
+
+Even though this architecture can look rather complex, and potentially slow down the optimization process, it is also very versatile and can be extended to any sort of optimization or search problem that can be solved by \textit{local search}
+algorithms.
+
+$\bullet$ \texttt{pfsp\_state.h, pfsp\_state.cpp}: \\
+The \textit{candidate solutions} (also referred to as \textit{states}) are wrapped into a class which allows the optimization algorithms to process the candidates solutions independently from their actual implementation.\\
+The class can also store the value of the state, given by some evaluation function.\\
+This could be useful, for example, if we had to store states in a priority queue sorted according to the state value.
+
+$\bullet$ \texttt{pfps\_problem.h, pfsp\_problem.cpp}:\\
+This class works as a wrapper to the actual problem instance. \\
+A \textit{problem} is modelled as an entity having an initial state, an evaluation function which can be applied to the states, and a function to compute the neighbourhood of a given state. \\
+All these functions are actually function pointers, and their implementations can be set at runtime when the problem is instantiated, or even after, if one wants to dynamically update the evaluation function that is being used (as in \textit{dynamic search}), or update how neighbours are generated (as in \textit{variable neighbourhood descent}).
+
+$\bullet$ \texttt{support\_function.h, support\_function.cpp}: \\
+this file provides a series of functions that are used by the optimization algorithms.
+These functions are passed as input to the optimization algorithms by using function pointers. \\
+This provide higher flexibility, and makes the algorithms transparent to how candidates solutions are evaluated or generated.
+
+The evaluation function is decomposed in 2 parts: one is exposed to the optimization algorithm, and has a signature which is independent to the problem which is being solved; the other takes as input some parameters specific to an instance; this was done so that the \textbf{RZ heuristic} can evaluate partial solutions by re-using the existing code. 
+
+\textbf{Armadillo} provides easy-to-use data-structures for matrices and vectors, with a syntax close to \textit{MATLAB}.\\
+This allows for easy manipulations of vectors, and very efficient vectorized operations.
+
+The 3 functions to generate the neighbours of a given candidate solution will return a vector of candidate solutions, which can be inspected by the optimization algorithm.\\
+The functions that compute the initial candidate solution are also provided here. 
+They take a problem instance as input, and output a candidate solution.\\
+It should be noted that all the neighbours of a given state are generated, and they are evaluated only later.\\
+Evaluating them straight away would improve the performances of \textit{Iterative Improvement}: however it will be shown later that the speed-up are very small, if the algorithm is combined with the \textit{RZ heuristic} (which is what would be done in a real-case usage).
+
+$\bullet$ \texttt{ii\_engine.h, ii\_engine.cpp}:\\
+this class holds the implementation of the \textbf{iterative improvement} algorithm.\\
+The constructor allows to choose between using \textit{first} or \textit{best} improvement, and to specify a \textit{problem} to be solved, or optimized.
+The result of the search will be stored inside the class, and accessible to the outside.\\
+It is important to note that the algorithm doesn't directly know how the problem instances or the candidate solutions are implemented, and as such the implementation is very flexible and easily extendible to other problems.
+
+$\bullet$ \texttt{vnd\_engine.h, vnd\_engine.cpp}:
+this class holds the implementation of the \textbf{variable neighbourhood descent} algorithm (\textit{VND}).\\
+The structure of the class is similar to the one of iterative improvement.\\
+In the case of \textit{VND}, we use multiple neighbourhood functions, passed as a vector of function pointers to the class constructor.\\
+As such, it is easily possible to use any combination of neighbourhood functions; moreover, if a single function is given, the algorithm becomes equivalent to \textit{iterative search}. 
+However, it was preferred to keep separate the 2 implementations, for the sake of clarity.
+
+
+
+
+% ====================================================
+% =============================================== TESTS
+% ====================================================
+
+\section{Inferential statistical analysis}
+
+\subsection{Introduction}
+The implemented algorithms offer a wide choice of parameters to be set, in terms of how the initial state is computed, how new candidate solutions are generated, and so on.\\
+As such, it is important to evaluate which combinations offer the best performances, both in terms of \textbf{results} (the \textit{weighted completion time} defined above) and \textbf{execution time}.
+
+The algorithms were tested on $60$ different problem instances: $30$ instances with $50$ jobs and $30$ instances with $100$ jobs.
+All the instances had $20$ machines. 
+
+2 types of tests were performed:
+\begin{itemize}
+    \item Test the \textit{iterative improvement} algorithm, by trying all different combinations of initial state generation (\textit{random} and \textit{RZ}), neighbourhood generation (\textit{transpose}, \textit{exchange}, \textit{insert}) and first/best improvement, for a total of $12$ different combinations of parameters.
+    
+    \item Test the \textit{variable neighbourhood descent} algorithm, by trying different combinations of neighbourhood generator functions. The algorithm was tested with \textit{Transpose, Exchange, Insert} and with \textit{Transpose, Insert, Exchange}. In both cases, the algorithm was set to use \textit{first improvement} and the \textit{RZ} heuristic for the starting state.
+\end{itemize}
+
+To have comparable results across the tests on a single problem instance, the \textbf{seed} used by the \textit{random number generator} was kept fixed across a single instance.
+
+The tests were performed on the following machine:
+\begin{itemize}
+    \item Computer: Microsoft Surface Pro 4
+    \item CPU: Intel Core i5-6300U at 2.4 GHz (clocked at 2.95 Ghz)
+    \item RAM: 4 GB at 1867Mhz
+\end{itemize}
+ 
+ 
+\subsection{Exploratory analysis}
+Before starting any statistical test, it is a good idea to visualize the data, so to see if it's immediately possible to notice any interesting structure in the results.
+
+First of all, it is required to separate the data relative to the instances with $50$ jobs from the ones with $100$ jobs, as the values from the 2 sets are not comparable with each other.
+
+Then, it is possible to plot \textbf{boxplots} that display summary statistics of the \textbf{execution times} and of the \textbf{result values}. Relatively to the optimization results, it is also visualized the boxplot of the \textbf{ideal optimization results}, the values that would be achieved by an exact solver.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.3\textwidth, center, keepaspectratio=1]{{"II_execution_time"}.pdf}
+    \caption{\emph{Summary statistics of the execution time for \textbf{iterative improvement}, with different parameters.}}
+\end{figure}
+
+By looking at the execution times of \textbf{iterative improvement}, it is immediately possible to notice how \textit{first improvement} with \textit{random initial state} and \textit{exchange} or \textit{insert} neighbourhood functions is much slower than the other implementations.
+Moreover, it is clear how the \textit{transpose} function is much faster than the other, as the number of generated neighbours is linear with respect to the number of jobs, instead of quadratic.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.3\textwidth, center, keepaspectratio=1]{{"II_results"}.pdf}
+    \caption{\emph{Summary statistics of the optimization results for \textbf{iterative improvement}, with different parameters.}}
+\end{figure}
+
+The optimization results given by the algorithms seems to be all very close to each other regardless of the chosen parameters, with the obvious exception of the \textit{transpose} function: despite being faster, it generates a lower amount of new candidate solutions, and it's not surprising to see it perform worse than the other options.\\
+The fact that the results are all quite close to each other means that the choice of initial parameters will be based mostly on execution time, which greatly simplify the problem of picking the "best" algorithm.\\ 
+Moreover, we can see how the results are seemingly very close to the best theoretical results. We will soon evaluate whether there is a statistical difference between the ideal results and the ones provided by our heuristic algorithms.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth, center, keepaspectratio=1]{{"vnd_boxplot"}.pdf}
+    \caption{\emph{Summary statistics of execution time and optimization results for \textbf{variable neighbourhood descent}, with different parameters.}}
+\end{figure}
+
+Relatively to \textit{variable neighbourhood descent}, we can see how \textbf{TIE} (\textit{Transpose, Insert, Exchange}) is generally faster than \textbf{TEI} (\textit{Transpose, Exchange, Insert}). Both options are however very fast, if compared to the times given by some of the variants of  \textit{iterative improvement} algorithms seen above.\\
+As for the results, both options seem to give results that are pretty much equivalent, and once again very close to the theoretical optimum.
+
+From this initial analysis, it seems that the best algorithms could be \textbf{iterative search} with \textit{RZ} heuristic and \textit{Exchange} function (using \textit{best} or \textit{first} improvement doesn't seem to change much, with the previous parameters) and \textbf{VND} with \textit{Transpose, Insert, Exchange}. \\
+To get a definitive answer, however, more in-depth tests will be required.
+\bibliographystyle{plainurl}
+\bibliography{bibliography}
+
+\end{document}
