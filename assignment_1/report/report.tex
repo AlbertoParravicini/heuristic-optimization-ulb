@@ -621,7 +621,7 @@ The \textbf{RZ heuristic} and the \textbf{random} initial state are compared, wh
 Depending on the distribution of the populations, the appropriate tests were performed. \textbf{Bonferroni correction} is used to deal with the repeated pairwise tests, and so the significance level is divided by the number of hypotheses: assuming the usual significance at $\alpha = 0.05$, we have to use $\alpha = 0.05 / 6 = 0.008$.
 
 \begin{table}[H]
-    \begin{tabular}{l l l l l l l l} % creating eight columns
+    \begin{tabular}{l l l l l l} % creating eight columns
         \hline
         \hline 
         \\[-1.5ex]
@@ -642,7 +642,7 @@ Depending on the distribution of the populations, the appropriate tests were per
 
 
 \begin{table}[H]
-    \begin{tabular}{l l l l l l l l} % creating eight columns
+    \begin{tabular}{l l l l l l} % creating eight columns
         \hline
         \hline 
         \\[-1.5ex]
@@ -665,8 +665,7 @@ By looking at the adjusted p-values, it seems that the \textbf{RZ} performs bett
 In the other cases, we can consider the execution times. In all cases, using the \textbf{RZ} heuristic gives shorter computation time. As there is no statistical evidence that \textbf{random} gives better results, we can conclude that using the \textbf{RZ} heuristic is the best choice.
 
 \begin{table}[H]
-    \hspace*{-1.8cm}  
-    \begin{tabular}{l l l l l l l l} % creating eight columns
+    \begin{tabular}{l l l l l l} % creating eight columns
         \hline
         \hline 
         \\[-1.5ex]
@@ -686,8 +685,7 @@ In the other cases, we can consider the execution times. In all cases, using the
 \end{table} 
 
 \begin{table}[H]
-    \hspace*{-1.8cm}  
-    \begin{tabular}{l l l l l l l l} % creating eight columns
+    \begin{tabular}{l l l l l l} % creating eight columns
         \hline
         \hline 
         \\[-1.5ex]
@@ -717,8 +715,7 @@ Looking at the instances with \textbf{50 jobs} further confirms what was observe
 In this section it is tested which \textbf{iterative improvement} version is the better option. The approach to testing is the same of the previous section.
 
 \begin{table}[H]
-    \hspace*{-1.8cm}  
-    \begin{tabular}{l l l l l l l l} % creating eight columns
+    \begin{tabular}{l l l l l l} % creating eight columns
         \hline
         \hline 
         \\[-1.5ex]
@@ -734,13 +731,12 @@ In this section it is tested which \textbf{iterative improvement} version is the
         [1ex] % [1ex] adds vertical space
         \hline % inserts single-line
     \end{tabular}
-    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{100 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
+    \caption{\label{tab:ii-ty100ex}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{100 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
 \end{table} 
 
 
 \begin{table}[H]
-    \hspace*{-1.8cm}  
-    \begin{tabular}{l l l l l l l l} % creating eight columns
+    \begin{tabular}{l l l l l l} % creating eight columns
         \hline
         \hline 
         \\[-1.5ex]
@@ -756,7 +752,7 @@ In this section it is tested which \textbf{iterative improvement} version is the
         [1ex] % [1ex] adds vertical space
         \hline % inserts single-line
     \end{tabular}
-    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{100 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
+    \caption{\label{tab:ii-ty100res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{100 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
 \end{table} 
 
 There is no significant difference in terms of \textbf{optimization results}. However, \textbf{Best improvement} is faster in every significant case, making it the best option.
@@ -764,8 +760,7 @@ There is no significant difference in terms of \textbf{optimization results}. Ho
 
 
 \begin{table}[H]
-    \hspace*{-1.8cm}  
-    \begin{tabular}{l l l l l l l l} % creating eight columns
+    \begin{tabular}{l l l l l l} % creating eight columns
         \hline
         \hline 
         \\[-1.5ex]
@@ -781,7 +776,7 @@ There is no significant difference in terms of \textbf{optimization results}. Ho
         [1ex] % [1ex] adds vertical space
         \hline % inserts single-line
     \end{tabular}
-    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{50 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
+    \caption{\label{tab:ii-ty50ex}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{50 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
 \end{table} 
 
 
@@ -789,8 +784,7 @@ There is no significant difference in terms of \textbf{optimization results}. Ho
 
 
 \begin{table}[H]
-    \hspace*{-1.8cm}  
-    \begin{tabular}{l l l l l l l l} % creating eight columns
+    \begin{tabular}{l l l l l l} % creating eight columns
         \hline
         \hline 
         \\[-1.5ex]
@@ -807,12 +801,102 @@ There is no significant difference in terms of \textbf{optimization results}. Ho
         [1ex] % [1ex] adds vertical space
         \hline % inserts single-line
     \end{tabular}
-    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{50 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
+    \caption{\label{tab:ii-ty50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{50 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
 \end{table} 
 
 
 The previous claim is confirmed by the \textbf{50 jobs} instances.
 
+
+
+\subsection{Transpose VS Exchange VS Insert}
+This last section will compare the different ways to generate neighbours. As there are 3 different possibilities, it is better to first perform a \textbf{Kruskal-Wallis} test on the 3 populations, and then proceed with pairwise tests if required.
+
+\begin{table}[H]
+    \hspace*{-1.8cm}
+    \begin{tabular}{l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2}  & \textcolor{BrickRed}{Algorithm 3} & \textcolor{BrickRed}{Kruskal-Wallis} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2} & \textcolor{BrickRed}{Mean 3}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        
+        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{FI, RZ, I}& 2.2e-16 & 34.83 & 8037.00 & 19933.67 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, I} & 2.2e-16 & 41.93 & 5634.90 & 15790.23 \\ 
+        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{FI, Random, I} & 2.2e-16 & 479.40 & 112518.03 & 264573.10 \\ 
+        \textcolor{MidnightBlue}{BI, Random, T} & \textcolor{MidnightBlue}{BI, Random, E} & \textcolor{MidnightBlue}{BI, Random, I} &2.2e-16 & 512.93 & 25956.37 & 58112.23 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-n100exec}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{100 jobs} instances, changing the \textit{neighbourhood generation} setting.}
+\end{table} 
+
+
+\begin{table}[H]
+    \hspace*{-2.5cm}
+    \begin{tabular}{l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2}  & \textcolor{BrickRed}{Algorithm 3} & \textcolor{BrickRed}{Kruskal-Wallis} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2} & \textcolor{BrickRed}{Mean 3}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        
+        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{FI, RZ, I} & 0.23 & 1824292.40 & 1799165.57 & 1782487.10 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, I} & 0.32 & 1824527.83 & 1805388.90 & 1788360.23 \\ 
+        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{FI, Random, I} & 1.495e-13 & 2430299.40 & 1773176.93 & 1781657.14 \\ 
+        \textcolor{MidnightBlue}{BI, Random, T} & \textcolor{MidnightBlue}{BI, Random, E} & \textcolor{MidnightBlue}{BI, Random, I} & 1.215e-13 & 2448811.80 & 1828531.93 & 1807937.30 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-n100res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{100 jobs} instances, changing the \textit{neighbourhood generation} setting.}
+\end{table} 
+
+
+\begin{table}[H]
+    \hspace*{-1.8cm}
+    \begin{tabular}{l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2}  & \textcolor{BrickRed}{Algorithm 3} & \textcolor{BrickRed}{Kruskal-Wallis} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2} & \textcolor{BrickRed}{Mean 3}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        
+           \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{FI, RZ, I} & 2.2e-16 & 3.97 & 310.53 & 1176.97 \\ 
+           \textcolor{MidnightBlue}{BI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, I} & 2.2e-16 & 5.17 & 333.83 & 1051.07 \\ 
+           \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{FI, Random, I} & 2.2e-16 & 45.17 & 4691.67 & 11954.67 \\ 
+           \textcolor{MidnightBlue}{BI, Random, T} & \textcolor{MidnightBlue}{BI, Random, E} & \textcolor{MidnightBlue}{BI, Random, I} & 2.2e-16 & 56.13 & 1553.77 & 3629.73 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-n50exec}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{50 jobs} instances, changing the \textit{neighbourhood generation} setting.}
+\end{table} 
+
+
+\begin{table}[H]
+    \hspace*{-2.2cm}
+    \begin{tabular}{l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2}  & \textcolor{BrickRed}{Algorithm 3} & \textcolor{BrickRed}{Kruskal-Wallis} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2} & \textcolor{BrickRed}{Mean 3}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+          \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{FI, RZ, E} & \textcolor{MidnightBlue}{FI, RZ, I} & 0.47 & 607710.27 & 602852.33 & 596090.40 \\ 
+          \textcolor{MidnightBlue}{BI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, E} & \textcolor{MidnightBlue}{BI, RZ, I} & 0.58 & 607855.87 & 602511.47 & 597905.50 \\ 
+          \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{FI, Random, I} & 2.64e-13 & 779167.53 & 597764.77 & 595541.27 \\ 
+          \textcolor{MidnightBlue}{BI, Random, T} & \textcolor{MidnightBlue}{BI, Random, E} & \textcolor{MidnightBlue}{BI, Random, I} & 3.078e-13 & 784191.83 & 610805.03 & 602568.37 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-n50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{50 jobs} instances, changing the \textit{neighbourhood generation} setting.}
+\end{table} 
+
+The results of these tables are quite interesting: if the \textbf{RZ} heuristic is used, there is no statistical evidence that one way to generate \textbf{neighbours} is better than another. As such, taking the fastest option, i.e. \textbf{transpose}, seems to be the best idea.
+
+Combining all the previous results together, we can conclude that \textbf{best improvement, RZ heuristic, transpose} is the overall best combination. It's one of the fastest combinations, and its results cannot be said to be worse than the ones of other, slower, combinations.
 
 \bibliographystyle{plainurl}
 \bibliography{bibliography}\textbf{}

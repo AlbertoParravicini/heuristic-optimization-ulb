@@ -247,8 +247,8 @@ tests_2 = c("1 rz t", "1 rz e", "1 rz i", "1 random t", "1 random e", "1 random 
 tests_1_lab = c("FI, RZ, T", "FI, RZ, E", "FI, RZ, I", "FI, Random, T", "FI, Random, E", "BI, Random, I")
 tests_2_lab = c("BI, RZ, T", "BI, RZ, E", "BI, RZ, I", "BI, Random, T", "BI, Random, E", "BI, Random, I")
 for (i in 1:6) {
-  d1 <- subset(ii_100, initial_params==tests_1[i])$execution_time.ms
-  d2 <- subset(ii_100, initial_params==tests_2[i])$execution_time.ms
+  d1 <- subset(ii_50, initial_params==tests_1[i])$result
+  d2 <- subset(ii_50, initial_params==tests_2[i])$result
   n1 <- shapiro.test(d1)
   n2 <- shapiro.test(d2)
   t <- t.test(d1, d2)
@@ -279,27 +279,44 @@ xtable(test_result,display = c("s", "s", "s", "f", "f", "g", "g", "g", "g", "f",
 
 
 
-# 3.1: T VStests_1 = c("0 rz t", "1 rz e", "0 random t", "1 random t")
-tests_1 = c("0 rz t", "1 rz e", "0 random t", "1 random t") 
+# 3.1: T VS E VS I
+test_result <- data.frame(initial_params_1=character(),
+                          initial_params_2=character(), 
+                          initial_params_3=character(),
+                          k=numeric(0),
+                          m1=numeric(0),
+                          m2=numeric(0),
+                          m3=numeric(0))
+
+
+tests_1 = c("0 rz t", "1 rz t", "0 random t", "1 random t") 
 tests_2 = c("0 rz e", "1 rz e", "0 random e", "1 random e")
-tests_3 = c("0 rz i", "1 rz e", "0 random i", "1 random t")
+tests_3 = c("0 rz i", "1 rz i", "0 random i", "1 random i")
+tests_1_lab = c("FI, RZ, T", "BI, RZ, T", "FI, Random, T", "BI, Random, T") 
+tests_2_lab = c("FI, RZ, E", "BI, RZ, E", "FI, Random, E", "BI, Random, E")
+tests_3_lab = c("FI, RZ, I", "BI, RZ, I", "FI, Random, I", "BI, Random, I")
 for (i in 1:4) {
-  d1 <- subset(ii_50, initial_params==tests_1[i], select=result)
-  d2 <- subset(ii_50, initial_params==tests_2[i], select=result)
-  d3 <- subset(ii_50, initial_params==tests_3[i], select=result)
-  n1 <- shapiro.test(d1$result)
-  n2 <- shapiro.test(d2$result)
-  n3 <- shapiro.test(d3$result)
-  kruskal.test(d1$result, d2$result, d3$result)
+  d1 <- subset(ii_100, initial_params==tests_1[i])$execution_time.ms
+  d2 <- subset(ii_100, initial_params==tests_2[i])$execution_time.ms
+  d3 <- subset(ii_100, initial_params==tests_3[i])$execution_time.ms
+  n1 <- shapiro.test(d1)
+  n2 <- shapiro.test(d2)
+  n3 <- shapiro.test(d3)
+  k <- kruskal.test(list(d1, d2, d3))
   print("----------------")
   print(n1)
   print(n2)
   print(n3)
-  print(t)
-  #print(w)
+  print(k)
   print("----------------")
+  
+  test_result <- rbind(test_result, data.frame(tests_1_lab[i], tests_2_lab[i], tests_3_lab[i],
+                                               k$p.value,
+                                               mean(d1),
+                                               mean(d2),
+                                               mean(d3)))
 }
-
+xtable(test_result)
 
 # 3.2 E VS I
 tests_1 = c("0 rz e", "1 rz e", "0 random e", "1 random e")
