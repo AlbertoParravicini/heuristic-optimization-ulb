@@ -49,18 +49,18 @@
 
 
  
-\textcolor{MidnightBlue}{FI, Random, E} & 1.607625   & 1.9744         & 1.607625
-\textcolor{MidnightBlue}{FI, Random, I} & 2.019402   &  1.578662      & 2.019402
-\textcolor{MidnightBlue}{FI, Random, T} & 39.3606    &  33.03201      & 39.3606
-\textcolor{MidnightBlue}{FI, RZ, E}     & 3.099908   &  2.840713      & 3.099908
-\textcolor{MidnightBlue}{FI, RZ, I}     & 2.137591   &   1.702044     & 2.137591
-\textcolor{MidnightBlue}{FI, RZ, T}     & 4.53555    &    3.664744    & 4.535555
-\textcolor{MidnightBlue}{BI, Random, E} & 4.760639   &   4.20176      & 4.760639
-\textcolor{MidnightBlue}{BI, Random, I} & 3.573396   &    2.780781    & 3.573396
-\textcolor{MidnightBlue}{BI, Random, T} & 40.41302   &   33.88196     & 40.41302
-\textcolor{MidnightBlue}{BI, RZ, E}     & 3.450056   &   2.787234     & 3.450056
-\textcolor{MidnightBlue}{BI, RZ, I}     & 2.462845   &  1.994742      & 2.462845
-\textcolor{MidnightBlue}{BI, RZ, T}     & 4.547392   &   3.686519     & 4.547392
+\textcolor{MidnightBlue}{FI, Random, E} & 1.607625   & 1.9744         & 1.607625    \\
+\textcolor{MidnightBlue}{FI, Random, I} & 2.019402   &  1.578662      & 2.019402    \\
+\textcolor{MidnightBlue}{FI, Random, T} & 39.3606    &  33.03201      & 39.3606     \\
+\textcolor{MidnightBlue}{FI, RZ, E}     & 3.099908   &  2.840713      & 3.099908    \\
+\textcolor{MidnightBlue}{FI, RZ, I}     & 2.137591   &   1.702044     & 2.137591    \\
+\textcolor{MidnightBlue}{FI, RZ, T}     & 4.53555    &    3.664744    & 4.535555    \\
+\textcolor{MidnightBlue}{BI, Random, E} & 4.760639   &   4.20176      & 4.760639    \\
+\textcolor{MidnightBlue}{BI, Random, I} & 3.573396   &    2.780781    & 3.573396    \\
+\textcolor{MidnightBlue}{BI, Random, T} & 40.41302   &   33.88196     & 40.41302    \\
+\textcolor{MidnightBlue}{BI, RZ, E}     & 3.450056   &   2.787234     & 3.450056    \\
+\textcolor{MidnightBlue}{BI, RZ, I}     & 2.462845   &  1.994742      & 2.462845    \\
+\textcolor{MidnightBlue}{BI, RZ, T}     & 4.547392   &   3.686519     & 4.547392    
 
 
 

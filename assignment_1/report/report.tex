@@ -587,6 +587,233 @@ $\bullet$ Then, we can compare the optimization results, keeping into account th
 It seems that there is no statistical difference not only between the 2 algorithms, but also with respect to the optimal solution.\\
 As such, the choice of initial parameters will be based on the \textbf{execution speed}; as we have seen, the fastest option is \textbf{Transpose, Insert, Exchange}.
 
+\subsection{Tests on Iterative Improvement}
+
+Tests on Iterative improvement are more complex, due to the high number of input parameters that can be set.\\
+The approach we can use is to keep fixed a certain number of parameters, and test the differences on the other. For instance, we can fix the how the \textbf{starting state} and the \textbf{neighbours} are computed, and see if \textbf{first improvement} is better than \textbf{best improvement}.\\
+Depending on the parameter that is evaluated, we could have 2 or more options available, and suitable tests have to be used.\\
+In every case, it's also required to check the normality of the distributions. The results of the \textbf{Shapiro-Wilk} test are not reported for brevity, but the approach is similar to the one used in the previous section. Depending on the results of this test, the appropriate follow-up tests have been used.
+
+As a preliminary test, we can use \textbf{ANOVA} on the execution times and on the optimization results. In this case, all the 12 combinations of initial parameters are compared at once.
+
+\begin{table}[H]
+    \centering % centering table    
+    \begin{tabular}{l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{p-value, Execution time} & \textcolor{BrickRed}{p-value, Optimization result}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{100 Jobs}  & 2.2e-16 & 2.2e-16\\
+        \textcolor{MidnightBlue}{50 Jobs}   & 2.2e-16  & 2.2e-16   
+        \\[1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-anova}\textbf{p-values} of the \textbf{ANOVA test} test for the \textbf{execution times} and \textbf{optimization results} of the various algorithms.}
+\end{table} 
+
+As expected, in every case there are significant differences in the population means. \textbf{ANOVA} however doesn't tell which are the statistically different populations, which means that more detailed tests have to be carried out.
+
+\subsection{RZ Heuristic VS Random initial state}
+In this section it is investigated which is the best approach to compute the initial state of the problem.\\
+The \textbf{RZ heuristic} and the \textbf{random} initial state are compared, while the other parameters are kept fixed. \\
+Depending on the distribution of the populations, the appropriate tests were performed. \textbf{Bonferroni correction} is used to deal with the repeated pairwise tests, and so the significance level is divided by the number of hypotheses: assuming the usual significance at $\alpha = 0.05$, we have to use $\alpha = 0.05 / 6 = 0.008$.
+
+\begin{table}[H]
+    \begin{tabular}{l l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{FI, RZ, T} & \textcolor{MidnightBlue}{FI, Random, T} &  & 3e-11  & 34.83 & 479.40 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, E} & \textcolor{MidnightBlue}{FI, Random, E} &  & 1.7e-17 & 8037.00 & 112518.03 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, I} & \textcolor{MidnightBlue}{FI, Random, I} &  & 3.4e-17 & 19933.67 & 264573.10 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 3e-11 & 41.93 & 512.93 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, E} & \textcolor{MidnightBlue}{BI, Random, E} &  & 1.7e-17 & 5634.90 & 25956.37 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, I} & \textcolor{MidnightBlue}{BI, Random, I} &  & 3e-11 & 15790.23 & 58112.23 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-initialstate100exec}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{100 jobs} instances, changing the \textit{Initial state} computation.}
+\end{table} 
+
+
+\begin{table}[H]
+    \begin{tabular}{l l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.}  & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{FI, RZ, T} & \textcolor{MidnightBlue}{FI, Random, T} & 1.4e-24 &  & 1824292.40 & 2430299.40 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, E} & \textcolor{MidnightBlue}{FI, Random, E} & 0.37 &  & 1799165.57 & 1773176.93 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, I} & \textcolor{MidnightBlue}{FI, Random, I} & 0.98 &  & 1782487.10 & 1781657.14 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, T} & \textcolor{MidnightBlue}{BI, Random, T} & 6.5e-25 &  & 1824527.83 & 2448811.80 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, E} & \textcolor{MidnightBlue}{BI, Random, E} & 0.45 &  & 1805388.90 & 1828531.93 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, I} & \textcolor{MidnightBlue}{BI, Random, I} & 0.53 &  & 1788360.23 & 1807937.30 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-initialstate100res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{100 jobs} instances, changing the \textit{Initial state} computation.}
+\end{table} 
+
+By looking at the adjusted p-values, it seems that the \textbf{RZ} performs better only when \textbf{transpose} is used as neighbour generator. This is not suprising, as the number of candidate solutions that is explored is much smaller than in the other cases. As such, having a good initial candidate solution can have a much bigger impact.
+In the other cases, we can consider the execution times. In all cases, using the \textbf{RZ} heuristic gives shorter computation time. As there is no statistical evidence that \textbf{random} gives better results, we can conclude that using the \textbf{RZ} heuristic is the best choice.
+
+\begin{table}[H]
+    \hspace*{-1.8cm}  
+    \begin{tabular}{l l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.}  & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+         \textcolor{MidnightBlue}{FI, RZ, T}&  \textcolor{MidnightBlue}{FI, Random, T} &  & 2.8e-11 & 3.97 & 45.17 \\ 
+         \textcolor{MidnightBlue}{FI, RZ, E}&  \textcolor{MidnightBlue}{FI, Random, E} &  & 3e-11 & 310.53 & 4691.67 \\ 
+         \textcolor{MidnightBlue}{FI, RZ, I}&  \textcolor{MidnightBlue}{FI, Random, I} &  & 3e-11 & 1176.97 & 11954.67 \\ 
+         \textcolor{MidnightBlue}{BI, RZ, T}&  \textcolor{MidnightBlue}{BI, Random, T} &  & 2.8e-11 &  5.17 & 56.13 \\ 
+         \textcolor{MidnightBlue}{BI, RZ, E}&  \textcolor{MidnightBlue}{BI, Random, E} &  & 3e-11 & 333.83 & 1553.77 \\ 
+         \textcolor{MidnightBlue}{BI, RZ, I}&  \textcolor{MidnightBlue}{BI, Random, I} &  & 1.7e-17 & 1051.07 & 3629.73 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-initialstate50exec}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{50 jobs} instances, changing the\textit{Initial state} computation.}
+\end{table} 
+
+\begin{table}[H]
+    \hspace*{-1.8cm}  
+    \begin{tabular}{l l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{FI, RZ, T} & \textcolor{MidnightBlue}{FI, Random, T} &  & 1.1e-15 & 607710.27 & 779167.53 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, E} & \textcolor{MidnightBlue}{FI, Random, E} &  & 0.63 &  602852.33 & 597764.77 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, I} & \textcolor{MidnightBlue}{FI, Random, I} &  & 0.97 & 596090.40 & 595541.27 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 1.1e-15 &   607855.87 & 784191.83 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, E} & \textcolor{MidnightBlue}{BI, Random, E} &  & 0.41 & 602511.47 & 610805.03 \\ 
+        \textcolor{MidnightBlue}{BI, RZ, I} & \textcolor{MidnightBlue}{BI, Random, I} &  & 0.62 & 597905.50 & 602568.37 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{50 jobs} instances, changing the\textit{Initial state} computation.}
+\end{table} 
+
+Looking at the instances with \textbf{50 jobs} further confirms what was observed above.
+
+
+
+
+
+
+\subsection{First improvement VS Best improvement}
+In this section it is tested which \textbf{iterative improvement} version is the better option. The approach to testing is the same of the previous section.
+
+\begin{table}[H]
+    \hspace*{-1.8cm}  
+    \begin{tabular}{l l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, T}     &  & 0.035 &  34.83 & 41.93 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, E}     & 0.0025 &  & 8037.00 & 5634.90 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, I}     & \textcolor{MidnightBlue}{BI, RZ, I}     & 0.0029 &  & 19933.67 & 15790.23 \\ 
+        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 0.32 &  479.40 & 512.93 \\ 
+        \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{BI, Random, E} &  & 1.7e-17 &  112518.03 & 25956.37 \\ 
+        \textcolor{MidnightBlue}{BI, Random, I} & \textcolor{MidnightBlue}{BI, Random, I} & 3.5e-23 &  & 264573.10 & 58112.23 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{100 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
+\end{table} 
+
+
+\begin{table}[H]
+    \hspace*{-1.8cm}  
+    \begin{tabular}{l l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, T}     & 0.99 &  & 1824292.40 & 1824527.83 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, E}     & 0.83 &  & 1799165.57 & 1805388.90 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, I}     & \textcolor{MidnightBlue}{BI, RZ, I}     & 0.84 &  & 1782487.10 & 1788360.23 \\ 
+        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{BI, Random, T} & 0.63 &  &2430299.40 & 2448811.80 \\ 
+        \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{BI, Random, E} & 0.068 &  & 1773176.93 & 1828531.93 \\ 
+        \textcolor{MidnightBlue}{BI, Random, I} & \textcolor{MidnightBlue}{BI, Random, I} & 0.4 &  & 1781657.14 & 1807937.30 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{100 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
+\end{table} 
+
+There is no significant difference in terms of \textbf{optimization results}. However, \textbf{Best improvement} is faster in every significant case, making it the best option.
+
+
+
+\begin{table}[H]
+    \hspace*{-1.8cm}  
+    \begin{tabular}{l l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, T}     &  & 0.11 &   3.97 & 5.17 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, E}     &  & 0.47 &   310.53 & 333.83 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, I}     & \textcolor{MidnightBlue}{BI, RZ, I}     & 0.27 &  &  1176.97 & 1051.07 \\ 
+        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 0.029 &  45.17 & 56.13 \\ 
+        \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{BI, Random, E} & 3.3e-21 &  &  4691.67 & 1553.77 \\ 
+        \textcolor{MidnightBlue}{BI, Random, I} & \textcolor{MidnightBlue}{BI, Random, I} & 2.5e-19 &  &  11954.67 & 3629.73 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{50 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
+\end{table} 
+
+
+
+
+
+\begin{table}[H]
+    \hspace*{-1.8cm}  
+    \begin{tabular}{l l l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+                
+        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, T}     & 0.99 &  &  607710.27 & 607855.87 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, E}     & 0.98 &  &  602852.33 & 602511.47 \\ 
+        \textcolor{MidnightBlue}{FI, RZ, I}     & \textcolor{MidnightBlue}{BI, RZ, I}     & 0.88 &  & 596090.40 & 597905.50 \\ 
+        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 0.64 &  779167.53 & 784191.83 \\ 
+        \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{BI, Random, E} & 0.29 &  &  597764.77 & 610805.03 \\ 
+        \textcolor{MidnightBlue}{BI, Random, I} & \textcolor{MidnightBlue}{BI, Random, I} & 0.57 &  &  595541.27 & 602568.37 \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{50 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
+\end{table} 
+
+
+The previous claim is confirmed by the \textbf{50 jobs} instances.
+
+
 \bibliographystyle{plainurl}
 \bibliography{bibliography}\textbf{}
 

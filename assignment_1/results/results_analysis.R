@@ -4,6 +4,7 @@ library(tidyr)
 library(ggplot2)
 library(sqldf)
 library(readr)
+library(xtable)
 
 source("multiplot.R")
 
@@ -200,68 +201,81 @@ t8 <- summary(lm(result ~ initial_params, data=ii_50))
 t7
 t8
 
-# Both show different mean, let's do paired t-test with bonferroni correction.
+# Both show different mean, lets do pairwise comparisons
 
-# 1.1: RZ vs RANDOM EXEC TIME
-d1 <- subset(ii_50, initial_params=="1 rz i", select=execution_time.ms)
-d2 <- subset(ii_50, initial_params=="1 random i", select=execution_time.ms)
-n1 <- shapiro.test(d1$execution_time.ms)
-n2 <- shapiro.test(d2$execution_time.ms)
-t <- t.test(d1, d2)
-w <- wilcox.test(d1$execution_time.ms,d2$execution_time.ms)
-n1
-n2
-t
-w
+# 2.1 RZ vs RANDOM
+test_result <- data.frame(initial_params=character(), sh1=numeric(0), sh2=numeric(0), t=numeric(0), w=numeric(0), adj_t=numeric(0), adj_q=numeric(0), m1=numeric(0), m2=numeric(0))
 
-# 1.1: RZ vs RANDOM RESULT
-d1 <- subset(ii_50, initial_params=="1 rz i", select=execution_time.ms)
-d2 <- subset(ii_50, initial_params=="1 random i", select=execution_time.ms)
-n1 <- shapiro.test(d1$execution_time.ms)
-n2 <- shapiro.test(d2$execution_time.ms)
-t <- t.test(d1, d2)
-w <- wilcox.test(d1$execution_time.ms,d2$execution_time.ms)
-n1
-n2
-t
-w
+tests_1 = c("0 rz t", "0 rz e", "0 rz i", "1 rz t", "1 rz e", "1 rz i")
+tests_2 = c("0 random t", "0 random e", "0 random i", "1 random t", "1 random e", "1 random i")
+tests_1_lab = c("FI, RZ, T", "FI, RZ, E", "FI, RZ, I", "BI, RZ, T", "BI, RZ, E", "BI, RZ, I")
+tests_2_lab = c("FI, Random, T", "FI, Random, E", "FI, Random, I", "BI, Random, T", "BI, Random, E", "BI, Random, I")
+for (i in 1:6) {
+  d1 <- subset(ii_50, initial_params==tests_1[i])$result
+  d2 <- subset(ii_50, initial_params==tests_2[i])$result
+  n1 <- shapiro.test(d1)
+  n2 <- shapiro.test(d2)
+  t <- t.test(d1, d2)
+  w <- wilcox.test(d1, d2)
 
-# 
-# # 1.2: RZ vs RANDOM VS BEST RES
-# d1 <- subset(ii_100, initial_params=="0 rz i", select=result)
-# d2 <- subset(ii_100, initial_params=="0 random i", select=result)
-# d3 <- best_100$result
-# n1 <- shapiro.test(d1$result)
-# n2 <- shapiro.test(d2$result)
-# n3 <- shapiro.test(d3)
-# data1 <- data.frame(type="0 rz i", result=d1$result)
-# data2 <- data.frame(type="0 random i", result=d2$result)
-# data3 <- data.frame(type="best", result=d3)
-# data <- rbind(data1, data2, data3)
-# a <- summary(lm(result ~ type, data))
-# n1
-# n2
-# n3
-# a
+  test_result <- rbind(test_result, data.frame(tests_1_lab[i], tests_2_lab[i], 
+             n1$p.value,
+             n2$p.value,
+             t$p.value,
+             w$p.value,
+             t$p.value / 6,
+             w$p.value / 6,
+             mean(d1),
+             mean(d2)))
+}
+print(test_result)
+xtable(test_result,display = c("s", "s", "s", "f", "f", "g", "g", "g", "g", "f", "f"))
+# Keep only the useful tests
+test_result[test_result$n1.p.value < 0.05 | test_result$n2.p.value < 0.05, ]$t.p.value = NA
+test_result[test_result$n1.p.value < 0.05 | test_result$n2.p.value < 0.05, ]$t.p.value.6= NA
+test_result[test_result$n1.p.value >= 0.05 & test_result$n2.p.value >= 0.05, ]$w.p.value = NA
+test_result[test_result$n1.p.value >= 0.05 & test_result$n2.p.value >= 0.05, ]$w.p.value.6 = NA
+
+xtable(test_result,display = c("s", "s", "s", "f", "f", "g", "g", "g", "g", "f", "f"))
 
 
-# 2.1 FI VS BI RESULTS AND EXEC TIME
+# 2.1 FI VS BEST
+test_result <- data.frame(initial_params=character(), sh1=numeric(0), sh2=numeric(0), t=numeric(0), w=numeric(0), adj_t=numeric(0), adj_q=numeric(0), m1=numeric(0), m2=numeric(0))
+
 tests_1 = c("0 rz t", "0 rz e", "0 rz i", "0 random t", "0 random e", "0 random i")
 tests_2 = c("1 rz t", "1 rz e", "1 rz i", "1 random t", "1 random e", "1 random i")
+tests_1_lab = c("FI, RZ, T", "FI, RZ, E", "FI, RZ, I", "FI, Random, T", "FI, Random, E", "BI, Random, I")
+tests_2_lab = c("BI, RZ, T", "BI, RZ, E", "BI, RZ, I", "BI, Random, T", "BI, Random, E", "BI, Random, I")
 for (i in 1:6) {
-  d1 <- subset(ii_100, initial_params==tests_1[i], select=result)
-  d2 <- subset(ii_100, initial_params==tests_2[i], select=result)
-  n1 <- shapiro.test(d1$result)
-  n2 <- shapiro.test(d2$result)
+  d1 <- subset(ii_100, initial_params==tests_1[i])$execution_time.ms
+  d2 <- subset(ii_100, initial_params==tests_2[i])$execution_time.ms
+  n1 <- shapiro.test(d1)
+  n2 <- shapiro.test(d2)
   t <- t.test(d1, d2)
-  w <- wilcox.test(d1$result, d2$result)
-  print("----------------")
-  print(n1)
-  print(n2)
-  print(t)
-  print(w)
-  print("----------------")
+  w <- wilcox.test(d1, d2)
+  
+  test_result <- rbind(test_result, data.frame(tests_1_lab[i], tests_2_lab[i], 
+                                               n1$p.value,
+                                               n2$p.value,
+                                               t$p.value,
+                                               w$p.value,
+                                               t$p.value / 6,
+                                               w$p.value / 6,
+                                               mean(d1),
+                                               mean(d2)))
 }
+print(test_result)
+xtable(test_result,display = c("s", "s", "s", "f", "f", "g", "g", "g", "g", "f", "f"))
+# Keep only the useful tests
+test_result[test_result$n1.p.value < 0.05 | test_result$n2.p.value < 0.05, ]$t.p.value = NA
+test_result[test_result$n1.p.value < 0.05 | test_result$n2.p.value < 0.05, ]$t.p.value.6= NA
+test_result[test_result$n1.p.value >= 0.05 & test_result$n2.p.value >= 0.05, ]$w.p.value = NA
+test_result[test_result$n1.p.value >= 0.05 & test_result$n2.p.value >= 0.05, ]$w.p.value.6 = NA
+
+xtable(test_result,display = c("s", "s", "s", "f", "f", "g", "g", "g", "g", "f", "f"))
+
+
+
 
 
 

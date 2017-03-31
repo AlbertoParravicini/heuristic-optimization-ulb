@@ -1,71 +1,147 @@
 #############################
-RZ VS RANDOM
+RZ VS Random
 
 EXEC TIME					100 JOBS ||||||||| 50 JOBS		
-(rz 0 t)  VS (random 0 t):	t 7.873e-15			w 2.827e-11
-(rz 0 e)  VS (random 0 e):	w 2.2e-16			w 3.018e-11
-(rz 0 i)  VS (random 0 i):	w 2.2e-16			w 3.018e-11
-(rz 1 t)  VS (random 1 t):	w 2.993e-11			t 6.434e-16
-(rz 1 e)  VS (random 1 e):	w 2.2e-16			w 3.016e-11
-(rz 1 i)  VS (random 1 i):	w 3.018e-11			w 2.2e-16
+(RZ 0 T)  VS (Random 0 T):	T 7.873E-15			w 2.827E-11
+(RZ 0 E)  VS (Random 0 E):	w 2.2E-16			w 3.018E-11
+(RZ 0 I)  VS (Random 0 I):	w 2.2E-16			w 3.018E-11
+(RZ 1 T)  VS (Random 1 T):	w 2.993E-11			T 6.434E-16
+(RZ 1 E)  VS (Random 1 E):	w 2.2E-16			w 3.016E-11
+(RZ 1 I)  VS (Random 1 I):	w 3.018E-11			w 2.2E-16
 
 
 RESULT						100 JOBS ||||||||| 50 JOBS		
-(rz 0 t)  VS (random 0 t):	w 2.2e-16			w 1.133e-15
-(rz 0 e)  VS (random 0 e):	w 0.2665			w 0.6333
-(rz 0 i)  VS (random 0 i):	w 0.994				w 0.9707
-(rz 1 t)  VS (random 1 t):	w 2.2e-16			w 1.133e-15
-(rz 1 e)  VS (random 1 e):	w 0.2939			w 0.4147
-(rz 1 i)  VS (random 1 i):	w 0.3817			w 0.6228
+(RZ 0 T)  VS (Random 0 T):	w 2.2E-16			w 1.133E-15
+(RZ 0 E)  VS (Random 0 E):	w 0.2665			w 0.6333
+(RZ 0 I)  VS (Random 0 I):	w 0.994				w 0.9707
+(RZ 1 T)  VS (Random 1 T):	w 2.2E-16			w 1.133E-15
+(RZ 1 E)  VS (Random 1 E):	w 0.2939			w 0.4147
+(RZ 1 I)  VS (Random 1 I):	w 0.3817			w 0.6228
 
 
 #############################
-FI VS BI (bi is better)
+FI VS BI (bI Is bETTEr)
 
 EXEC TIME						100 JOBS ||||||||| 50 JOBS		
-(rz 0 t)  VS (rz 1 t):			t 0.1331		t 0.1455
-(rz 0 e)  VS (rz 1 e):			w 0.01487		w 0.4688
-(rz 0 i)  VS (rz 1 i):			w 0.001366		w 0.4508
-(random 0 t)  VS (random 1 t):	w 0.3219		w 0.0291
-(random 0 e)  VS (random 1 e):	t 2.2e-16		w 3.016e-11
-(random 0 i)  VS (random 1 i):	w 4.459e-11		w 2.2e-16
+(RZ 0 T)  VS (RZ 1 T):			T 0.1331		T 0.1455
+(RZ 0 E)  VS (RZ 1 E):			w 0.01487		w 0.4688
+(RZ 0 I)  VS (RZ 1 I):			w 0.001366		w 0.4508
+(Random 0 T)  VS (Random 1 T):	w 0.3219		w 0.0291
+(Random 0 E)  VS (Random 1 E):	T 2.2E-16		w 3.016E-11
+(Random 0 I)  VS (Random 1 I):	w 4.459E-11		w 2.2E-16
 
 
 RESULT							100 JOBS ||||||||| 50 JOBS		
-(rz 0 t)  VS (rz 1 t):			w 0.9823		w 0.9882
-(rz 0 e)  VS (rz 1 e):			w 0.7635		w 0.9646
-(rz 0 i)  VS (rz 1 i):			w 0.8776		w 0.7117
-(random 0 t)  VS (random 1 t):	w 0.4671		t 0.7648
-(random 0 e)  VS (random 1 e):	w 0.03318		w 0.2729
-(random 0 i)  VS (random 1 i):	w 0.3158		w 0.4853
+(RZ 0 T)  VS (RZ 1 T):			w 0.9823		w 0.9882
+(RZ 0 E)  VS (RZ 1 E):			w 0.7635		w 0.9646
+(RZ 0 I)  VS (RZ 1 I):			w 0.8776		w 0.7117
+(Random 0 T)  VS (Random 1 T):	w 0.4671		T 0.7648
+(Random 0 E)  VS (Random 1 E):	w 0.03318		w 0.2729
+(Random 0 I)  VS (Random 1 I):	w 0.3158		w 0.4853
 
 #############################
 T VS E VS I	
 			
 EXEC TIME										100 JOBS ||||||||| 50 JOBS	
-(rz 0 t) vs (rz 0 e) vs (rz 0 i)                k 2.2e-16		k 2.2e-16
-(rz 1 t) vs (rz 1 e) vs (rz 1 i)                k 2.2e-16		k 2.2e-16
-(random 0 t) vs (random 0 e) vs (random 0 i)    k 2.2e-16		k 2.2e-16
-(random 1 t) vs (random 1 e) vs (random 1 i)    k 2.2e-16		k 2.2e-16
+(RZ 0 T) vs (RZ 0 E) vs (RZ 0 I)                k 2.2E-16		k 2.2E-16
+(RZ 1 T) vs (RZ 1 E) vs (RZ 1 I)                k 2.2E-16		k 2.2E-16
+(Random 0 T) vs (Random 0 E) vs (Random 0 I)    k 2.2E-16		k 2.2E-16
+(Random 1 T) vs (Random 1 E) vs (Random 1 I)    k 2.2E-16		k 2.2E-16
 
 RESULTS  										100 JOBS ||||||||| 50 JOBS	
-(rz 0 t) vs (rz 0 e) vs (rz 0 i)                k 2.2e-16		k 2.2e-16
-(rz 1 t) vs (rz 1 e) vs (rz 1 i)                k 2.2e-16		k 2.2e-16
-(random 0 t) vs (random 0 e) vs (random 0 i)    k 2.2e-16		k 2.2e-16
-(random 1 t) vs (random 1 e) vs (random 1 i)    k 2.2e-16		k 2.2e-16
+(RZ 0 T) vs (RZ 0 E) vs (RZ 0 I)                k 2.2E-16		k 2.2E-16
+(RZ 1 T) vs (RZ 1 E) vs (RZ 1 I)                k 2.2E-16		k 2.2E-16
+(Random 0 T) vs (Random 0 E) vs (Random 0 I)    k 2.2E-16		k 2.2E-16
+(Random 1 T) vs (Random 1 E) vs (Random 1 I)    k 2.2E-16		k 2.2E-16
 
 E VS I
 
 
 
 EXEC TIME  										100 JOBS ||||||||| 50 JOBS	
-(rz 0 e) vs (rz 0 i)                			w 3.894e-13		t 1.337e-10
-(rz 1 e) vs (rz 1 i)                			w 2.2e-16		w 1.956e-10
-(random 0 e) vs (random 0 i)    				w 2.2e-16		w 3.018e-11
-(random 1 e) vs (random 1 i)    				w 3.018e-11		w 3.018e-11
+(RZ 0 E) vs (RZ 0 I)                			w 3.894E-13		T 1.337E-10
+(RZ 1 E) vs (RZ 1 I)                			w 2.2E-16		w 1.956E-10
+(Random 0 E) vs (Random 0 I)    				w 2.2E-16		w 3.018E-11
+(Random 1 E) vs (Random 1 I)    				w 3.018E-11		w 3.018E-11
      
-RESULTS		 (insert is better)					100 JOBS ||||||||| 50 JOBS	
-(rz 0 e) vs (rz 0 i)                			w 0.4671		w 0.4063
-(rz 1 e) vs (rz 1 i)                			w 0.4581		w 0.5718
-(random 0 e) vs (random 0 i)    				w 0.7123		w 0.8201
-(random 1 e) vs (random 1 i)    				w 0.3504		w 0.4761
+RESULTS		 (InsErT Is bETTEr)					100 JOBS ||||||||| 50 JOBS	
+(RZ 0 E) vs (RZ 0 I)                			w 0.4671		w 0.4063
+(RZ 1 E) vs (RZ 1 I)                			w 0.4581		w 0.5718
+(Random 0 E) vs (Random 0 I)    				w 0.7123		w 0.8201
+(Random 1 E) vs (Random 1 I)    				w 0.3504		w 0.4761
+
+
+
+
+
+##########################
+# VERSION 2 ##############
+
+#RZ VS Random
+
+#100 ExEc
+FI RZ T  VS  FI Random T        --  sh: 0.0006  sh: 0.0382                 	 & 7.873E-15 & 2.984E-11 & 35 & 479
+FI RZ E  VS  FI Random E        --  sh: 0.1261  sh: 0.0151                 	 & 4.888E-22 & 1.691E-17 & 8037 & 112518
+FI RZ I  VS  FI Random I        --  sh: 0.8521  sh: 0.8294                 	 & 1.351E-24 & 3.382E-17 & 19934 & 264573
+BI RZ T  VS  BI Random T        --  sh: 0.0017  sh: 0.1490                 	 & 2.655E-16 & 2.993E-11 & 42 & 513
+BI RZ E  VS  BI Random E        --  sh: 0.8698  sh: 0.1147                 	 & 3.438E-24 & 1.691E-17 & 5635 & 25956
+BI RZ I  VS  BI Random I        --  sh: 0.0533  sh: 0.2896                 	 & 3.503E-26 & 3.018E-11 & 15790 & 58112
+
+#100 rEs
+FI RZ T  VS  FI Random T        --  sh: 0.6094  sh: 0.6928                 	 & 1.429E-24 & 3.382E-17 & 1824292 & 2430299
+FI RZ E  VS  FI Random E        --  sh: 0.4746  sh: 0.3467                 	 & 0.3688 & 0.2665 & 1799166 & 1773177
+FI RZ I  VS  FI Random I        --  sh: 0.3525  sh: 0.3998                 	 & 0.9777 & 0.994 & 1782487 & 1781657
+BI RZ T  VS  BI Random T        --  sh: 0.6199  sh: 0.2885                 	 & 6.529E-25 & 3.382E-17 & 1824528 & 2448812
+BI RZ E  VS  BI Random E        --  sh: 0.6039  sh: 0.3988                 	 & 0.4467 & 0.2939 & 1805389 & 1828532
+BI RZ I  VS  BI Random I        --  sh: 0.7204  sh: 0.5051                 	 & 0.5253 & 0.3817 & 1788360 & 1807937
+
+
+# 50 ExEc
+FI RZ T  VS  FI Random T        --  sh: 0.0004  sh: 0.5428                 	 & 3.082E-17 & 2.827E-11 & 4 & 45
+FI RZ E  VS  FI Random E        --  sh: 0.0436  sh: 0.9053                 	 & 2.426E-25 & 3.018E-11 & 311 & 4692
+FI RZ I  VS  FI Random I        --  sh: 0.0847  sh: 0.8163                 	 & 9.661E-23 & 3.018E-11 & 1177 & 11955
+BI RZ T  VS  BI Random T        --  sh: 0.0117  sh: 0.0107                 	 & 6.434E-16 & 2.843E-11 & 5 & 56
+BI RZ E  VS  BI Random E        --  sh: 0.5333  sh: 0.2627                 	 & 3.367E-29 & 3.016E-11 & 334 & 1554
+BI RZ I  VS  BI Random I        --  sh: 0.3359  sh: 0.4459                 	 & 1.545E-29 & 1.691E-17 & 1051 & 3630
+
+#50 rEs
+FI RZ T  VS  FI Random T        --  sh: 0.6611  sh: 0.0038                 	 & 2.149E-16 & 1.133E-15 & 607710 & 779168
+FI RZ E  VS  FI Random E        --  sh: 0.5698  sh: 0.6582                 	 & 0.6735 & 0.6333 & 602852 & 597765
+FI RZ I  VS  FI Random I        --  sh: 0.5118  sh: 0.4764                 	 & 0.9635 & 0.9707 & 596090 & 595541
+BI RZ T  VS  BI Random T        --  sh: 0.6710  sh: 0.0020                 	 & 1.101E-16 & 1.133E-15 & 607856 & 784192
+BI RZ E  VS  BI Random E        --  sh: 0.4546  sh: 0.8005                 	 & 0.4959 & 0.4147 & 602511 & 610805
+BI RZ I  VS  BI Random I        --  sh: 0.5575  sh: 0.7473                 	 & 0.7032 & 0.6228 & 597906 & 602568
+
+# FI VS BI
+
+#100 ExEc
+FI RZ T  VS 	 BI RZ T        --  		 sh: 0.0006  sh: 0.0017            & 0.1331 & 0.03495 & 35 & 42
+FI RZ E  VS 	 BI RZ E        --  		 sh: 0.1261  sh: 0.8698            & 0.002476 & 0.01487 & 8037 & 5635
+FI RZ I  VS 	 BI RZ I        --  		 sh: 0.8521  sh: 0.0533            & 0.002901 & 0.001366 & 19934 & 15790
+FI Random T  VS  BI Random T        --  sh: 0.0382  sh: 0.1490                 & 0.4315 & 0.3219 & 479 & 513
+FI Random E  VS  BI Random E        --  sh: 0.0151  sh: 0.1147                 & 6.711E-20 & 1.691E-17 & 112518 & 25956
+FI Random I  VS  BI Random I        --  sh: 0.8294  sh: 0.2896                 & 3.489E-23 & 4.459E-11 & 264573 & 58112
+
+#100 rEs
+FI RZ T  VS 	 	BI RZ T        --  		 sh: 0.6094  sh: 0.6199          & 0.9937 & 0.9823 & 1824292 & 1824528
+FI RZ E  VS 	 	BI RZ E        --  		 sh: 0.4746  sh: 0.6039          & 0.8315 & 0.7635 & 1799166 & 1805389
+FI RZ I  VS 	 	BI RZ I        --  		 sh: 0.3525  sh: 0.7204          & 0.8427 & 0.8776 & 1782487 & 1788360
+FI Random T  VS  BI Random T        --  sh: 0.6928  sh: 0.2885                 & 0.6276 & 0.4671 & 2430299 & 2448812
+FI Random E  VS  BI Random E        --  sh: 0.3467  sh: 0.3988                 & 0.06824 & 0.03318 & 1773177 & 1828532
+FI Random I  VS  BI Random I        --  sh: 0.3998  sh: 0.5051                 & 0.3952 & 0.3158 & 1781657 & 1807937
+
+#50 ExEc
+FI RZ T  VS  	 BI RZ T        --  sh: 0.0004  sh: 0.0117                 	 & 0.1455 & 0.1105 & 4 & 5
+FI RZ E  VS  	 BI RZ E        --  sh: 0.0436  sh: 0.5333                 	 & 0.6396 & 0.4688 & 311 & 334
+FI RZ I  VS  	 BI RZ I        --  sh: 0.0847  sh: 0.3359                 	 & 0.273 & 0.4508 & 1177 & 1051
+FI Random T  VS  BI Random T        --  sh: 0.5428  sh: 0.0107                 & 0.009746 & 0.0291 & 45 & 56
+FI Random E  VS  BI Random E        --  sh: 0.9053  sh: 0.2627                 & 3.298E-21 & 3.016E-11 & 4692 & 1554
+FI Random I  VS  BI Random I        --  sh: 0.8163  sh: 0.4459                 & 2.483E-19 & 1.691E-17 & 11955 & 3630
+
+#50 rEs
+FI RZ T  VS  	 BI RZ T        --  sh: 0.6611  sh: 0.6710                 	 & 0.9907 & 0.9882 & 607710 & 607856
+FI RZ E  VS  	 BI RZ E        --  sh: 0.5698  sh: 0.4546                 	 & 0.9775 & 0.9646 & 602852 & 602511
+FI RZ I  VS  	 BI RZ I        --  sh: 0.5118  sh: 0.5575                 	 & 0.8787 & 0.7117 & 596090 & 597906
+FI Random T  VS  BI Random T        --  sh: 0.0038  sh: 0.0020                 & 0.7648 & 0.6438 & 779168 & 784192
+FI Random E  VS  BI Random E        --  sh: 0.6582  sh: 0.8005                 & 0.2855 & 0.2729 & 597765 & 610805
+FI Random I  VS  BI Random I        --  sh: 0.4764  sh: 0.7473                 & 0.5698 & 0.4853 & 595541 & 602568
