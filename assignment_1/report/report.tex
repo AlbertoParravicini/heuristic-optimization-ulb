@@ -326,7 +326,268 @@ As for the results, both options seem to give results that are pretty much equiv
 
 From this initial analysis, it seems that the best algorithms could be \textbf{iterative search} with \textit{RZ} heuristic and \textit{Exchange} function (using \textit{best} or \textit{first} improvement doesn't seem to change much, with the previous parameters) and \textbf{VND} with \textit{Transpose, Insert, Exchange}. \\
 To get a definitive answer, however, more in-depth tests will be required.
+
+\subsection{Summary statistics}
+
+From the collected results, it is possible to compute a number of interesting statistics that will give some additional insight about the performances of the algorithms.\\
+For both algorithms and for each combination of initial settings, it is possible to compute the \textit{mean}, the \textit{median}, the \textit{standard deviation} (and other statistics) relatively to the execution time and to the optimization results.\\
+It is also possible to evaluate how distant the algorithms are from the best possible result.\\
+This can be done by using the \textbf{MAPE} (\textit{mean absolute percentage error}), computed as
+
+$$ MAPE = \frac{100}{n}\sum_{i=1}^n{\left|\frac{B_i - R_i}{B_i}\right|}$$
+
+where $n$ is the number of instances ($30$ for each number of jobs), $B_i$ is the best possible solution for a given instance, and $R_i$ is the optimization result given by our algorithm.
+
+
+    \begin{table}[H]
+    \centering % centering table    
+    \begin{tabular}{l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{Minimum} & \textcolor{BrickRed}{Median} & \textcolor{BrickRed}{Mean} & \textcolor{BrickRed}{Maximum} & \textcolor{BrickRed}{Standard deviation}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{FI, Random, E}     & 76539 & 113272 & 112518 & 185083 & 22342\\ 
+        \textcolor{MidnightBlue}{FI, Random, I}     & 186265 & 262628 & 264573 & 347115 & 39546\\
+        \textcolor{MidnightBlue}{FI, Random, T}     & 224 & 438 & 479 & 911 & 169\\
+        \textcolor{MidnightBlue}{FI, RZ, E}         & 2461 & 8192 & 8037 & 14341 & 3642\\
+        \textcolor{MidnightBlue}{FI, RZ, I}         & 6834  & 19631 & 19934 & 34009 & 5576\\
+        \textcolor{MidnightBlue}{FI, RZ, T}         & 11 & 32 & 34 & 96 & 18\\
+        \textcolor{MidnightBlue}{BI, Random, E}     & 19544 & 25040 & 25956 & 35471 & 4474\\
+        \textcolor{MidnightBlue}{BI, Random, I}     & 40502 & 59755 & 58112 & 72690 & 8897\\
+        \textcolor{MidnightBlue}{BI, Random, T}     & 267 & 497 & 512 & 898 & 158\\
+        \textcolor{MidnightBlue}{BI, RZ, E}         & 1706 & 5626 & 5635 & 10429 & 1869\\
+        \textcolor{MidnightBlue}{BI, RZ, I}         & 9219 & 15135 & 15790 & 25937 & 4692\\
+        \textcolor{MidnightBlue}{BI, RZ, T}         & 11 & 42 & 42 & 106 & 17\\
+        \textcolor{MidnightBlue}{VND, TIE}         & 6122    &   10150 &  10120   &   18170  & 3143\\
+        \textcolor{MidnightBlue}{VND, TEI}         & 8292    &   12060 &  12860   &   23600  & 4006
+        \\[1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:100-exec}Summary statistics of the \textbf{execution times} (in milliseconds) of the \textbf{iterative improvement} and \textbf{VND} algorithms, with different initial parameters.}
+    \end{table} 
+
+    \begin{table}[H]
+    \centering % centering table    
+    \begin{tabular}{l l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{Minimum} & \textcolor{BrickRed}{Median} & \textcolor{BrickRed}{Mean} & \textcolor{BrickRed}{Maximum} & \textcolor{BrickRed}{Standard deviation}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{Ideal result}      & 1449000 & 1754000 &  1745000 & 1992000 & 109155 \\   
+        \textcolor{MidnightBlue}{FI, Random, E} 	& 1474000 & 1783000 & 1773000 & 2029000 & 110586 \\  
+        \textcolor{MidnightBlue}{FI, Random, I}     & 1484000 & 1791000 & 1782000 & 2027000 & 114707 \\
+        \textcolor{MidnightBlue}{FI, Random, T}     & 2071000 & 2462000 & 2430000 & 2687000 & 145989 \\
+        \textcolor{MidnightBlue}{FI, RZ, E}         & 1501000 & 1799000 & 1799000 & 2059000 & 111644 \\
+        \textcolor{MidnightBlue}{FI, RZ, I}         & 1482000 & 1776000 & 1782000 & 2032000 & 111849 \\
+        \textcolor{MidnightBlue}{FI, RZ, T}         & 1513000 & 1827000 & 1824000 & 2087000 & 114101 \\
+        \textcolor{MidnightBlue}{BI, Random, E}     & 1508000 & 1837000 & 1829000 & 2086000 & 119963 \\
+        \textcolor{MidnightBlue}{BI, Random, I}     & 1506000 & 1810000 & 1808000 & 2099000 & 120916 \\
+        \textcolor{MidnightBlue}{BI, Random, T}     & 2075000 & 2490000 & 2449000 & 2675000 & 148046 \\
+        \textcolor{MidnightBlue}{BI, RZ, E}         & 1504000 & 1805000 & 1805000 & 2078000 & 113938 \\
+        \textcolor{MidnightBlue}{BI, RZ, I}         & 1502000 & 1793000 & 1788000 & 2063000 & 116300 \\
+        \textcolor{MidnightBlue}{BI, RZ, T}         & 1513000 & 1828000 & 1825000 & 2088000 & 114601 \\
+        \textcolor{MidnightBlue}{VND, TIE}         & 1488000    &   1791000 &  1784000   &   2062000  & 113651\\
+        \textcolor{MidnightBlue}{VND, TEI}         & 1487000    &   1789000 &  1782000   &   2031000  & 110927\\
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:100-res}Summary statistics of the \textbf{optimization results} of the \textbf{iterative improvement} and \textbf{VND} algorithms, with different initial parameters, and instances with \textbf{100 jobs}.}
+    \end{table} 
+
+
+    \begin{table}[H]
+        \centering % centering table    
+        \begin{tabular}{l l l l l l} % creating eight columns
+            \hline
+            \hline 
+            \\[-1.5ex]
+            \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{Minimum} & \textcolor{BrickRed}{Median} & \textcolor{BrickRed}{Mean} & \textcolor{BrickRed}{Maximum} & \textcolor{BrickRed}{Standard deviation}\\ [0.5ex]
+            \hline % inserts single-line
+            \\[-1.5ex]
+           \textcolor{MidnightBlue}{FI, Random, E} 	 &   2900  &   4571  &  4692 &   5177 &  779 \\
+           \textcolor{MidnightBlue}{FI, Random, I}    &   6794  &  12020  & 11950 &  13260 &  2265 \\
+           \textcolor{MidnightBlue}{FI, Random, T}    &  21.00  &  45.50  & 45.17 &  53.25 &  13 \\
+           \textcolor{MidnightBlue}{FI, RZ, E}        &   40.0  &  265.0  & 310.5 &  400.5 &  200 \\
+           \textcolor{MidnightBlue}{FI, RZ, I}        &  349.0  & 1095.0  &1177.0 & 1433.0 &  505 \\
+           \textcolor{MidnightBlue}{FI, RZ, T}        &  1.000  &  3.000  & 3.967 &  5.000 &  3 \\
+           \textcolor{MidnightBlue}{BI, Random, E}    &   1191  &   1534  &  1554 &   1698 &  235 \\
+           \textcolor{MidnightBlue}{BI, Random, I}    &   2772  &   3563  &  3630 &   3902 &  490 \\
+           \textcolor{MidnightBlue}{BI, Random, T}    &  30.00  &  49.50  & 56.13 &  70.00 &  18 \\
+           \textcolor{MidnightBlue}{BI, RZ, E}        &   37.0  &  329.0  & 333.8 &  425.2 &  182 \\
+           \textcolor{MidnightBlue}{BI, RZ, I}        &  462.0  &  985.5  &1051.0 & 1285.0 &  363 \\
+           \textcolor{MidnightBlue}{BI, RZ, T}        &  1.000  &  4.500  & 5.167 &  6.750 &  3 \\
+           \textcolor{MidnightBlue}{VND, TIE}         & 236.0    &   549.0 &  611.2    &   1393.0   & 269\\
+           \textcolor{MidnightBlue}{VND, TEI}         & 382.0    &   914.0 &  899.2   &   2178.0   & 408
+            \\[1ex] % [1ex] adds vertical space
+            \hline % inserts single-line
+        \end{tabular}
+        \caption{\label{tab:50-exec}Summary statistics of the \textbf{execution times} (in milliseconds) of the \textbf{iterative improvement} and \textbf{VND} algorithms, with different initial parameters, and instances with \textbf{50 jobs}.}
+    \end{table} 
+
+
+
+    \begin{table}[H]
+        \centering % centering table    
+        \begin{tabular}{l l l l l l} % creating eight columns
+            \hline
+            \hline 
+            \\[-1.5ex]
+            \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{Minimum} & \textcolor{BrickRed}{Median} & \textcolor{BrickRed}{Mean} & \textcolor{BrickRed}{Maximum} & \textcolor{BrickRed}{Standard deviation}\\ [0.5ex]
+            \hline % inserts single-line
+            \\[-1.5ex]
+            \textcolor{MidnightBlue}{Ideal result}  & 465500  &  590300 & 586200  &  666600 & 44161\\
+            \textcolor{MidnightBlue}{FI, Random, E}  & 472200 & 601300 & 597800  &  679600 & 46274\\
+            \textcolor{MidnightBlue}{FI, Random, I}  & 467700 & 599900 & 595500  &  673100 & 47417\\
+            \textcolor{MidnightBlue}{FI, Random, T}  & 639500 & 770900 & 779200  & 1006000 & 64347\\
+            \textcolor{MidnightBlue}{FI, RZ, E}      & 474600 & 608800 & 602900  &  686200 & 46776\\
+            \textcolor{MidnightBlue}{FI, RZ, I}      & 478200 & 603900 & 596100  &  675500 & 45197\\
+            \textcolor{MidnightBlue}{FI, RZ, T}      & 480100 & 612900 & 607700  &  696500 & 47827\\
+            \textcolor{MidnightBlue}{BI, Random, E}  & 482200 & 616800 & 610800  &  706900 & 47422\\
+            \textcolor{MidnightBlue}{BI, Random, I}  & 474700 & 599600 & 602600  &  689700 & 47814\\
+            \textcolor{MidnightBlue}{BI, Random, T}  & 640600 & 773700 & 784200  & 1017000 & 65121\\
+            \textcolor{MidnightBlue}{BI, RZ, E}      & 474600 & 608600 & 602500  &  680200 & 46325\\
+            \textcolor{MidnightBlue}{BI, RZ, I}      & 473000 & 604800 & 597900  &  679000 & 46515\\
+            \textcolor{MidnightBlue}{BI, RZ, T}      & 480100 & 612900 & 607900  &  696500 & 48075\\
+            \textcolor{MidnightBlue}{VND, TIE}         & 478200   &   598400 &  597300    &   674900   & 45947\\
+            \textcolor{MidnightBlue}{VND, TEI}         & 477600    &   599700 &  596700   &   676500   & 45846
+            
+            \\[1ex] % [1ex] adds vertical space
+            \hline % inserts single-line
+        \end{tabular}
+        \caption{\label{tab:50-res}Summary statistics of the \textbf{optimization results} of the \textbf{iterative improvement} and \textbf{VND} algorithms, with different initial parameters, and instances with \textbf{50 jobs}.}
+    \end{table} 
+
+    \begin{table}[H]
+        \centering % centering table    
+        \begin{tabular}{l l l l} % creating eight columns
+            \hline
+            \hline 
+            \\[-1.5ex]
+            \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{100 Jobs} & \textcolor{BrickRed}{50 Jobs} & \textcolor{BrickRed}{Mean}\\ [0.5ex]
+            \hline % inserts single-line
+            \\[-1.5ex]
+            \textcolor{MidnightBlue}{FI, Random, E} & 1.607625   & 1.9744         & 1.791012    \\
+            \textcolor{MidnightBlue}{FI, Random, I} & 2.019402   &  1.578662      & 1.799032    \\
+            \textcolor{MidnightBlue}{FI, Random, T} & 39.3606    &  33.03201      & 36.1963     \\
+            \textcolor{MidnightBlue}{FI, RZ, E}     & 3.099908   &  2.840713      & 2.97031  \\
+            \textcolor{MidnightBlue}{FI, RZ, I}     & 2.137591   &   1.702044     & 1.919817    \\
+            \textcolor{MidnightBlue}{FI, RZ, T}     & 4.53555    &    3.664744    & 4.100149    \\
+            \textcolor{MidnightBlue}{BI, Random, E} & 4.760639   &   4.20176      & 4.4812    \\
+            \textcolor{MidnightBlue}{BI, Random, I} & 3.573396   &    2.780781    & 3.177088   \\
+            \textcolor{MidnightBlue}{BI, Random, T} & 40.41302   &   33.88196     & 37.14749    \\
+            \textcolor{MidnightBlue}{BI, RZ, E}     & 3.450056   &   2.787234     & 3.118645   \\
+            \textcolor{MidnightBlue}{BI, RZ, I}     & 2.462845   &  1.994742      & 2.228794   \\
+            \textcolor{MidnightBlue}{BI, RZ, T}     & 4.547392   &   3.686519     & 4.116955   \\ 
+            \textcolor{MidnightBlue}{VND, TIE}     & 2.210744   &   1.9007523    & 2.055748  \\ 
+            \textcolor{MidnightBlue}{VND, TEI}     & 2.11388   &   1.8048572     & 1.959371  
+            \\[1ex] % [1ex] adds vertical space
+            \hline % inserts single-line
+        \end{tabular}
+        \caption{\label{tab:mape}\textbf{Mean average percentage error} for the various algorithms, computed with respect to the best possible solution.}
+    \end{table} 
+    
+\newpage
+
+From the previous tables, it seems that the best results are given by \textbf{first improvement} with \textbf{random} start and \textbf{exchange} or \textbf{insert}.\\
+These combinations are however the slowest ones, while \textbf{VND} with \textbf{transpose, exchange, insert} seems to give similar results at much higher speed.
+Moreover, a difference of $0.1\%$ might not even be significant from a statistical point of view. We will analyse this more in details in the next section.  
+
+\subsection{Inferential statistical tests - Introduction}
+From the previous plots and tables it seems quite clear that some algorithms perform better than others.\\
+However, some of these differences might not be \textit{significant} from a statistical point of view, and be instead caused by randomness in the test instances or in the algorithms.
+
+In this section, the previous algorithms are compared to each other, to understand which ones are better in terms of speed and result quality.
+
+Before performing any test, a few considerations about the testing methodology should be made.\\
+First, the instances with 50 and 100 jobs should  be treated separately, as they clearly compose different populations.\\
+Moreover, the tests to be performed are heavily dependent on the distributions of the populations that are considered.\\
+Most tests assume that the samples from a given population are \textit{independent and identically distributed} (\textbf{I.I.D.}): the first condition can be considered true as all the instances are considered separately, without any of them having influences on the others; the second condition is harder to verify, but can be considered true as long as instances with 50 and 100 jobs are considered separately.
+
+\textbf{Paired t-test} also assumes the populations to be \textit{normally distributed}, and to have the same \textit{variance}. The latter constraint can be removed by using \textbf{Welch's t-test}, which is provided by default by \textbf{R} \cite{welch1947generalization}. \\
+The \textit{normality} of the distribution can be checked in several ways, among which the \textbf{Shapiro-Wilk} test is one of the most common. \cite{shapiro1965analysis}
+The test assumes normality of the distribution as \textit{null hypothesis}.
+
+If the normality condition isn't verified, it is necessary to resort to \textit{non-parametric} tests, such as the \textbf{Wilcoxon signed-rank test} \cite{wilcoxon1945individual} for comparing the mean of two populations, or the \textbf{Kruskal-Wallis} test to compare more than two populations \cite{kruskal1952use}. The latter test assumes as null hypothesis that all the populations have the same mean, similarly to \textbf{ANOVA}.
+
+One last remark is that using \textit{t-test} to compare more than two populations is generally ill-advised (\href{http://www.stat.berkeley.edu/~mgoldman/Section0402.pdf}{http://www.stat.berkeley.edu/~mgoldman/Section0402.pdf}). One way to overcome the issue is to employ the so-called \textbf{Bonferroni correction}, which can however give rather conservative estimates. \\   
+A better approach is to initially compare the populations with \textbf{ANOVA} or \textbf{Kruskal-Wallis}, and then proceed with pairwise tests if necessary.
+
+\subsection{Tests on VND}
+
+We can compare the results of \textbf{VND}, and see which combination of initial parameters is superior.
+
+$\bullet$ First, we should check the normality of the distributions.
+
+\begin{table}[H]
+    \centering % centering table    
+    \begin{tabular}{l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{p-value, Execution time} & \textcolor{BrickRed}{p-value, Result} \\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{VND, TIE, 100 Jobs}  & 0.03005 & 0.5337    \\
+        \textcolor{MidnightBlue}{VND, TIE, 50 Jobs}   & 0.00832  & 0.5934   \\
+        \textcolor{MidnightBlue}{VND, TEI, 100 Jobs}  & 0.005474  & 0.4946    \\
+        \textcolor{MidnightBlue}{VND, TEI, 50 Jobs}   & 0.005752  &  0.6878  \\
+        \textcolor{MidnightBlue}{Ideal result, 100 Jobs}   & & 0.4312\\       
+        \textcolor{MidnightBlue}{Ideal result, 50 Jobs}        & & 0.6698    
+        \\[1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:shapiro}\textbf{p-values} of the \textbf{Shapiro-Wilk} test for the various algorithms.}
+\end{table} 
+
+We can safely infer that the optimization results follow a normal distribution, while the execution times do not.\\
+As such, they will be compared using the \textbf{Wilcoxon signed-rank test}.
+
+\begin{table}[H]
+    \centering % centering table    
+    \begin{tabular}{l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{p-value, Execution time} & \textcolor{BrickRed}{Mean TIE} & \textcolor{BrickRed}{Mean TEI}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{VND, 100 Jobs}  & 0.00665 & 10120 & 12860\\
+        \textcolor{MidnightBlue}{VND, 50 Jobs}   & 0.002688  & 611.2 &  899.2  
+        \\[1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:vnd-exec}\textbf{p-values} of the \textbf{Wilcoxon signed-rank test} test for the \textbf{execution time} of the various algorithms.}
+\end{table} 
+
+From the result we can infer that using \textbf{Transpose, Insert, Exchange} is the faster option.
+
+$\bullet$ Then, we can compare the optimization results, keeping into account the optimal results too. As we have 3 populations (for each instance size), which we have verified to be gaussian, we can use the \textbf{ANOVA} test.
+
+\begin{table}[H]
+    \centering % centering table    
+    \begin{tabular}{l l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{p-value, Optimization result} & \textcolor{BrickRed}{Mean TIE} & \textcolor{BrickRed}{Mean TEI} & \textcolor{BrickRed}{Mean Ideal}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{VND, 100 Jobs}  & 0.3259 & 1784000 & 1782000 & 1745000\\
+        \textcolor{MidnightBlue}{VND, 50 Jobs}   & 0.5677  & 597300 &  596700 & 586200  
+        \\[1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:vnd-res}\textbf{p-values} of the \textbf{ANOVA test} test for the \textbf{optimization results} of the various algorithms.}
+\end{table} 
+
+It seems that there is no statistical difference not only between the 2 algorithms, but also with respect to the optimal solution.\\
+As such, the choice of initial parameters will be based on the \textbf{execution speed}; as we have seen, the fastest option is \textbf{Transpose, Insert, Exchange}.
+
 \bibliographystyle{plainurl}
-\bibliography{bibliography}
+\bibliography{bibliography}\textbf{}
 
 \end{document}

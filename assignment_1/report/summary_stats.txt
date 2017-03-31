@@ -1,0 +1,73 @@
+\textcolor{MidnightBlue}{FI, Random, E} 	& 1474000 & 1783000 & 1773000 & 2029000 & 110586 \\  
+\textcolor{MidnightBlue}{FI, Random, I}     & 1484000 & 1791000 & 1782000 & 2027000 & 114707 \\
+\textcolor{MidnightBlue}{FI, Random, T}     & 2071000 & 2462000 & 2430000 & 2687000 & 145989 \\
+\textcolor{MidnightBlue}{FI, RZ, E}         & 1501000 & 1799000 & 1799000 & 2059000 & 111644 \\
+\textcolor{MidnightBlue}{FI, RZ, I}         & 1482000 & 1776000 & 1782000 & 2032000 & 111849 \\
+\textcolor{MidnightBlue}{FI, RZ, T}         & 1513000 & 1827000 & 1824000 & 2087000 & 114101 \\
+\textcolor{MidnightBlue}{BI, Random, E}     & 1508000 & 1837000 & 1829000 & 2086000 & 119963 \\
+\textcolor{MidnightBlue}{BI, Random, I}     & 1506000 & 1810000 & 1808000 & 2099000 & 120916 \\
+\textcolor{MidnightBlue}{BI, Random, T}     & 2075000 & 2490000 & 2449000 & 2675000 & 148046 \\
+\textcolor{MidnightBlue}{BI, RZ, E}         & 1504000 & 1805000 & 1805000 & 2078000 & 113938 \\
+\textcolor{MidnightBlue}{BI, RZ, I}         & 1502000 & 1793000 & 1788000 & 2063000 & 116300 \\
+\textcolor{MidnightBlue}{BI, RZ, T}         & 1513000 & 1828000 & 1825000 & 2088000 & 114601 \\
+
+
+
+
+
+
+\textcolor{MidnightBlue}{FI, Random, E} 	 &   2900  &  4329 &   4571  &  4692 &   5177 &   6649 & 779
+\textcolor{MidnightBlue}{FI, Random, I}    &   6794  & 10470 &  12020  & 11950 &  13260 &  16100 & 2265
+\textcolor{MidnightBlue}{FI, Random, T}    &  21.00  & 38.00 &  45.50  & 45.17 &  53.25 &  83.00 & 13
+\textcolor{MidnightBlue}{FI, RZ, E}        &   40.0  & 165.8 &  265.0  & 310.5 &  400.5 &  753.0 & 200
+\textcolor{MidnightBlue}{FI, RZ, I}        &  349.0  & 827.5 & 1095.0  &1177.0 & 1433.0 & 2225.0 & 505
+\textcolor{MidnightBlue}{FI, RZ, T}        &  1.000  & 2.000 &  3.000  & 3.967 &  5.000 & 14.000 & 3
+\textcolor{MidnightBlue}{BI, Random, E}    &   1191  &  1324 &   1534  &  1554 &   1698 &   2164 & 235
+\textcolor{MidnightBlue}{BI, Random, I}    &   2772  &  3237 &   3563  &  3630 &   3902 &   4869 & 490
+\textcolor{MidnightBlue}{BI, Random, T}    &  30.00  & 42.25 &  49.50  & 56.13 &  70.00 & 113.00 & 18
+\textcolor{MidnightBlue}{BI, RZ, E}        &   37.0  & 228.2 &  329.0  & 333.8 &  425.2 &  724.0 & 182
+\textcolor{MidnightBlue}{BI, RZ, I}        &  462.0  & 802.0 &  985.5  &1051.0 & 1285.0 & 2076.0 & 363
+\textcolor{MidnightBlue}{BI, RZ, T}        &  1.000  & 3.000 &  4.500  & 5.167 &  6.750 & 13.000 & 3
+
+
+ 
+
+\textcolor{MidnightBlue}{FI, Random, E}  & 472200 & 601300 & 597800  &  679600 & 46274
+\textcolor{MidnightBlue}{FI, Random, I}  & 467700 & 599900 & 595500  &  673100 & 47417
+\textcolor{MidnightBlue}{FI, Random, T}  & 639500 & 770900 & 779200  & 1006000 & 64347
+\textcolor{MidnightBlue}{FI, RZ, E}      & 474600 & 608800 & 602900  &  686200 & 46776
+\textcolor{MidnightBlue}{FI, RZ, I}      & 478200 & 603900 & 596100  &  675500 & 45197
+\textcolor{MidnightBlue}{FI, RZ, T}      & 480100 & 612900 & 607700  &  696500 & 47827
+\textcolor{MidnightBlue}{BI, Random, E}  & 482200 & 616800 & 610800  &  706900 & 47422
+\textcolor{MidnightBlue}{BI, Random, I}  & 474700 & 599600 & 602600  &  689700 & 47814
+\textcolor{MidnightBlue}{BI, Random, T}  & 640600 & 773700 & 784200  & 1017000 & 65121
+\textcolor{MidnightBlue}{BI, RZ, E}      & 474600 & 608600 & 602500  &  680200 & 46325
+\textcolor{MidnightBlue}{BI, RZ, I}      & 473000 & 604800 & 597900  &  679000 & 46515
+\textcolor{MidnightBlue}{BI, RZ, T}      & 480100 & 612900 & 607900  &  696500 & 48075
+
+
+
+
+ 
+\textcolor{MidnightBlue}{FI, Random, E} & 1.607625   & 1.9744         & 1.607625
+\textcolor{MidnightBlue}{FI, Random, I} & 2.019402   &  1.578662      & 2.019402
+\textcolor{MidnightBlue}{FI, Random, T} & 39.3606    &  33.03201      & 39.3606
+\textcolor{MidnightBlue}{FI, RZ, E}     & 3.099908   &  2.840713      & 3.099908
+\textcolor{MidnightBlue}{FI, RZ, I}     & 2.137591   &   1.702044     & 2.137591
+\textcolor{MidnightBlue}{FI, RZ, T}     & 4.53555    &    3.664744    & 4.535555
+\textcolor{MidnightBlue}{BI, Random, E} & 4.760639   &   4.20176      & 4.760639
+\textcolor{MidnightBlue}{BI, Random, I} & 3.573396   &    2.780781    & 3.573396
+\textcolor{MidnightBlue}{BI, Random, T} & 40.41302   &   33.88196     & 40.41302
+\textcolor{MidnightBlue}{BI, RZ, E}     & 3.450056   &   2.787234     & 3.450056
+\textcolor{MidnightBlue}{BI, RZ, I}     & 2.462845   &  1.994742      & 2.462845
+\textcolor{MidnightBlue}{BI, RZ, T}     & 4.547392   &   3.686519     & 4.547392
+
+
+
+ 
+
+
+
+      
+       
+      

@@ -71,6 +71,9 @@ ii_50_res_algo <- subset(results_ii, number_of_jobs==50, select=c(use_best_impro
 vnd_100_res_best <- rbind(vnd_100_res[, 0:2], best_100)
 vnd_50_res_best <- rbind(vnd_50_res[, 0:2], best_50)
 
+vnd_100 <- subset(results_vnd, number_of_jobs==100)
+vnd_50 <- subset(results_vnd, number_of_jobs==50)
+
 # Merge the combinations of parameters of II into one column
 results_ii$initial_params <- paste(results_ii$use_best_improvement, results_ii$initial_state, results_ii$neighbour_function)
 
@@ -158,10 +161,24 @@ multiplot(p7, p8, cols=1)
 ###########################
 
 # Is there a statistical difference between tie and tei?
-t1 <- t.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==100, select=execution_time.ms),
-       subset(results_vnd, neighbour_vector=="tei" & number_of_jobs==100, select=execution_time.ms))
-t2 <- t.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==50, select=execution_time.ms),
-             subset(results_vnd, neighbour_vector=="tei" & number_of_jobs==50, select=execution_time.ms))
+shapiro.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==100)$execution_time.ms)
+shapiro.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==50)$execution_time.ms)
+shapiro.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==100)$result)
+shapiro.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==50)$result)
+
+shapiro.test(subset(results_vnd, neighbour_vector=="tei" & number_of_jobs==100)$execution_time.ms)
+shapiro.test(subset(results_vnd, neighbour_vector=="tei" & number_of_jobs==50)$execution_time.ms)
+shapiro.test(subset(results_vnd, neighbour_vector=="tei" & number_of_jobs==100)$result)
+shapiro.test(subset(results_vnd, neighbour_vector=="tei" & number_of_jobs==50)$result)
+
+shapiro.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==100)$best_result)
+shapiro.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==50)$best_result)
+
+t1 <- wilcox.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==100)$execution_time.ms,
+       subset(results_vnd, neighbour_vector=="tei" & number_of_jobs==100)$execution_time.ms)
+t2 <- wilcox.test(subset(results_vnd, neighbour_vector=="tie" & number_of_jobs==50)$execution_time.ms,
+             subset(results_vnd, neighbour_vector=="tei" & number_of_jobs==50)$execution_time.ms)
+# ANOVA
 t3 <- summary(lm(result ~ neighbour_vector, data=vnd_100_res_best))
 t4 <- summary(lm(result ~ neighbour_vector, data=vnd_50_res_best))
 
@@ -285,6 +302,101 @@ for (i in 1:4) {
   print(n2)
   print(t)
   print(w)
+  print("----------------")
+}
+
+
+
+###########################
+# SUMMARY STATISTICS ######
+###########################
+
+# 100 jobs
+summary(ii_100$best_result)
+sd(ii_100$best_result)
+ii_100$initial_params <- as.factor(ii_100$initial_params)
+cols <- c("result")
+print("----------------\n")
+for (i in levels(ii_100$initial_params))
+{
+  
+  print(i)
+  print(summary(ii_100[ii_100$initial_params == i, cols]))
+  print(paste("std: ", sqrt(var(ii_100[ii_100$initial_params == i, cols]))))
+  print("----------------")
+}
+
+# 50 jobs
+summary(ii_50$best_result)
+sd(ii_50$best_result)
+ii_50$initial_params <- as.factor(ii_50$initial_params)
+cols <- c("result")
+print("----------------\n")
+for (i in levels(ii_50$initial_params))
+{
+  
+  print(i)
+  print(summary(ii_50[ii_50$initial_params == i, cols]))
+  print(paste("std: ", sqrt(var(ii_50[ii_50$initial_params == i, cols]))))
+  print("----------------")
+}
+
+# MAPE
+
+for (i in levels(ii_100$initial_params))
+{
+  
+  print(i)
+  mape <- 100 * mean(abs((ii_100[ii_100$initial_params == i, ]$best_result - ii_100[ii_100$initial_params == i, ]$result) / ii_100[ii_100$initial_params == i, ]$best_result))
+  print(mape)
+  print("----------------")
+}
+
+for (i in levels(ii_50$initial_params))
+{
+  
+  print(i)
+  mape_50 <- 100 * mean(abs((ii_50[ii_50$initial_params == i, ]$best_result - ii_50[ii_50$initial_params == i, ]$result) / ii_50[ii_50$initial_params == i, ]$best_result))
+  mape_100 <- 100 * mean(abs((ii_100[ii_100$initial_params == i, ]$best_result - ii_100[ii_100$initial_params == i, ]$result) / ii_100[ii_100$initial_params == i, ]$best_result))
+  
+  print((mape_50 + mape_100)/2)
+  print("----------------")
+}
+
+
+# VND
+vnd_100$neighbour_vector <- as.factor(vnd_100$neighbour_vector)
+cols <- c("execution_time.ms")
+print("----------------\n")
+for (i in levels(vnd_100$neighbour_vector))
+{
+  
+  print(i)
+  print(summary(vnd_100[vnd_100$neighbour_vector == i, cols]))
+  print(paste("std: ", sqrt(var(vnd_100[vnd_100$neighbour_vector == i, cols]))))
+  print("----------------")
+}
+
+vnd_50$neighbour_vector <- as.factor(vnd_50$neighbour_vector)
+cols <- c("result")
+print("----------------\n")
+for (i in levels(vnd_100$neighbour_vector))
+{
+  
+  print(i)
+  print(summary(vnd_50[vnd_50$neighbour_vector == i, cols]))
+  print(paste("std: ", sqrt(var(vnd_50[vnd_50$neighbour_vector == i, cols]))))
+  print("----------------")
+}
+
+for (i in levels(vnd_50$neighbour_vector))
+{
+  
+  print(i)
+  mape_50 <- 100 * mean(abs((vnd_50[vnd_50$neighbour_vector == i, ]$best_result - vnd_50[vnd_50$neighbour_vector == i, ]$result) / vnd_50[vnd_50$neighbour_vector == i, ]$best_result))
+  mape_100 <- 100 * mean(abs((vnd_100[vnd_100$neighbour_vector == i, ]$best_result - vnd_100[vnd_100$neighbour_vector == i, ]$result) / vnd_100[vnd_100$neighbour_vector == i, ]$best_result))
+  
+  print(paste(mape_100, mape_50, (mape_50 + mape_100)/2))
   print("----------------")
 }
 
