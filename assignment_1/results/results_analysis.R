@@ -93,7 +93,7 @@ ii_50_res_best <- rbind(ii_50_res_best, data.frame(result=best_50$result, initia
 # PLOTS ###################
 ###########################
 
-# Plot a quick boxplot for execution time and results of vnd
+# Plot a boxplot for execution time and results of vnd
 p1 <- ggplot(vnd_100_time, aes(neighbour_vector, execution_time.ms, col=neighbour_vector, fill=neighbour_vector)) +
         geom_boxplot(alpha=0.5) + 
         labs(title ="Execution time, VND, 100 jobs", x = "Neighbourhood vector ", y = "Execution time [ms]") + 
@@ -155,6 +155,20 @@ p8 <-ggplot(ii_50_res_best, aes(initial_params, result, col=initial_params, fill
         theme(legend.position="none")
 
 multiplot(p7, p8, cols=1)
+
+p9 <- ggplot(ii_100[!(ii_100$initial_params %in% c("0 random i", "0 random e")), ], aes(initial_params, execution_time.ms, col=initial_params, fill=initial_params)) +
+  geom_boxplot(alpha=0.5) + 
+  labs(title ="Execution time, II, 100 jobs", x = "Initial parameters", y = "Execution time [ms]") +
+  theme_minimal() +
+  scale_x_discrete(labels=c("FI, Random, T", "FI, RZ, E", "FI, RZ, I", "FI, RZ, T", "BI, Random, E", "BI, Random, I", "BI, Random, T", "BI, RZ, E", "BI, RZ, I", "BI, RZ, T")) +
+  theme(legend.position="none")
+p10 <-ggplot(ii_50[!(ii_50$initial_params %in% c("0 random i", "0 random e")), ], aes(initial_params, execution_time.ms, col=initial_params, fill=initial_params)) +
+  geom_boxplot(alpha=0.5) + 
+  labs(title ="Execution time, II, 50 jobs", x = "Initial parameters", y = "Execution time [ms]") +
+  theme_minimal() +
+  scale_x_discrete(labels=c("FI, Random, T", "FI, RZ, E", "FI, RZ, I", "FI, RZ, T", "BI, Random, E", "BI, Random, I", "BI, Random, T", "BI, RZ, E", "BI, RZ, I", "BI, RZ, T")) +
+  theme(legend.position="none")
+multiplot(p9, p10, cols=1)
 
 
 ###########################
@@ -296,9 +310,9 @@ tests_1_lab = c("FI, RZ, T", "BI, RZ, T", "FI, Random, T", "BI, Random, T")
 tests_2_lab = c("FI, RZ, E", "BI, RZ, E", "FI, Random, E", "BI, Random, E")
 tests_3_lab = c("FI, RZ, I", "BI, RZ, I", "FI, Random, I", "BI, Random, I")
 for (i in 1:4) {
-  d1 <- subset(ii_100, initial_params==tests_1[i])$execution_time.ms
-  d2 <- subset(ii_100, initial_params==tests_2[i])$execution_time.ms
-  d3 <- subset(ii_100, initial_params==tests_3[i])$execution_time.ms
+  d1 <- subset(ii_50, initial_params==tests_1[i])$execution_time.ms
+  d2 <- subset(ii_50, initial_params==tests_2[i])$execution_time.ms
+  d3 <- subset(ii_50, initial_params==tests_3[i])$execution_time.ms
   n1 <- shapiro.test(d1)
   n2 <- shapiro.test(d2)
   n3 <- shapiro.test(d3)
