@@ -116,7 +116,7 @@ footinclude]{article}
 \end{itemize}
 \subsection{\textbf{Compilation}}
 \begin{itemize}
-   \item Move to the \textit{build} folder\\
+   \item Move to the \textit{build} folder (delete its content if it's not empty)\\
     \-\quad\texttt{cd build}
    \item Run \textit{cmake}\\
     \-\quad\texttt{cmake ../src}
@@ -242,6 +242,10 @@ The functions that compute the initial candidate solution are also provided here
 They take a problem instance as input, and output a candidate solution.\\
 It should be noted that all the neighbours of a given state are generated, and they are evaluated only later.\\
 Evaluating them straight away would improve the performances of \textit{Iterative Improvement}: however it will be shown later that the speed-up are very small, if the algorithm is combined with the \textit{RZ heuristic} (which is what would be done in a real-case usage).
+
+$\bullet$ \texttt{engine.h, engine.cpp}:\\
+abstract implementation of an optimization engine, it contains a reference to a \textit{problem} to be optimized, and a virtual function to perform the search.\\
+It also holds the optimal solution found by the search, and its score.
 
 $\bullet$ \texttt{ii\_engine.h, ii\_engine.cpp}:\\
 this class holds the implementation of the \textbf{iterative improvement} algorithm.\\

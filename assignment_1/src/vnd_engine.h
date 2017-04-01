@@ -3,25 +3,23 @@
 
 #include "pfsp_problem.h"
 #include "pfsp_state.h"
+#include "engine.h"
 
-class VndEngine
+/*
+* VndEngine:
+*   Variable Neighbour Descent engine, it can take as input a vector
+*   of neighbourhood generator functions, and use them to search on increasingly large 
+*   neighbourhoods.
+*/
+class VndEngine : public Engine
 {
   private:
-    PfspProblem* m_pcProblem;
-    PfspState* m_pcResult;
-    long int m_dResultValue;
+    // Vector of function pointers, store the neighbourhood generator functions to be used.
     std::vector<GetNeighbourFunctionPfsp> m_vecNeighbourFunctions;
 
   public:
     VndEngine(PfspProblem& c_problem, std::vector<GetNeighbourFunctionPfsp>& vec_neighbour_functions);
     ~VndEngine();
-
-    // Get the result of the search, as state and value.
-    const long int GetResultValue() const;
-    PfspState& GetResultState();
-
-    // Get the problem associated to the optimization.
-    PfspProblem& GetProblem();
 
     // Get the vector of neighbourhood functions;
     std::vector<GetNeighbourFunctionPfsp>& GetNeighbourFunctions();

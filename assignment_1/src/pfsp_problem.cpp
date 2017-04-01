@@ -12,7 +12,7 @@ PfspProblem::PfspProblem(char *instance_filename, GetNeighbourFunctionPfsp neigh
     std::cout << "ERROR PARSING THE FILE!" << std::endl;
 
   // this->m_cInitialState = PfspState(m_cProblemInstance.GetNumberOfJobs());
-  this->m_cInitialState = init_state(this->m_cProblemInstance);
+  this->m_cInitialState = init_state(*this);
 }
 
 /****************************************/

@@ -6,6 +6,13 @@
 #include <armadillo>
 #include <limits>
 
+/*
+* PfspState:
+*   This class wraps the implementation of the candidate solutions
+*   for the PFSP problem.
+*   It can also store the score of the candidate solution,
+*   which could be useful in some algorithms.
+*/
 class PfspState //: public State
 {
   private:
@@ -19,6 +26,8 @@ class PfspState //: public State
     ~PfspState();
 
     arma::Col<int>& GetState();
+    long int GetStateValue();
+    void SetStateValue(long int n_new_value);
 };
 
 #endif

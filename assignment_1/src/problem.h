@@ -7,7 +7,7 @@
 
 class Problem;
 
-using GetNeighbourFunction = std::vector<State *> &(*)(State &c_state);
+using GetNeighbourFunction = std::vector<State *> &(*)(Problem &c_problem, State &c_state);
 using EvaluateStateFunction = const long int (*)(Problem &c_problem, State &c_state);
 
 class Problem

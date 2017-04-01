@@ -19,30 +19,6 @@ VndEngine::~VndEngine()
 /****************************************/
 /****************************************/
 
-PfspProblem &VndEngine::GetProblem()
-{
-  return *(this->m_pcProblem);
-}
-
-/****************************************/
-/****************************************/
-
-PfspState &VndEngine::GetResultState()
-{
-  return *(this->m_pcResult);
-}
-
-/****************************************/
-/****************************************/
-
-const long int VndEngine::GetResultValue() const
-{
-  return m_dResultValue;
-}
-
-/****************************************/
-/****************************************/
-
 std::vector<GetNeighbourFunctionPfsp> &VndEngine::GetNeighbourFunctions()
 {
   return this->m_vecNeighbourFunctions;
@@ -53,13 +29,14 @@ std::vector<GetNeighbourFunctionPfsp> &VndEngine::GetNeighbourFunctions()
 
 void VndEngine::PerformSearch()
 {
+  // Store the current state, i.e. the current candidate solution.
   PfspState *cCurrentState = &(this->m_pcProblem->GetInitialState());
-  //std::cout << cCurrentState->GetState().t() << std::endl;
   bool bKeepSearching = true;
   bool bImprovementFound = false;
 
   // Initial score;
   long int nBestResultValue = this->m_pcProblem->EvaluateState(*(this->m_pcProblem), *cCurrentState);
+  // Keep searching until a local optimum is found.
   while (bKeepSearching)
   {
     // Compute the neighbourhoods with multiple functions.
@@ -67,14 +44,13 @@ void VndEngine::PerformSearch()
     // then move to the others if no improvement was found.
     for (GetNeighbourFunctionPfsp fNeighFunction : m_vecNeighbourFunctions)
     {
-      std::vector<PfspState *> vecNeighbours = fNeighFunction(*cCurrentState);
-      //std::cout << "current state: " << cCurrentState->GetState().t() << std::endl;
+      std::vector<PfspState *> vecNeighbours = fNeighFunction(*(this->m_pcProblem), *cCurrentState);
+
       bImprovementFound = false;
       // Evaluate the neighbours.
       for (PfspState *cNeigh : vecNeighbours)
       {
         long int nTempScore = m_pcProblem->EvaluateState(*(this->m_pcProblem), *cNeigh);
-        //std::cout << "neigh: " << cNeigh->GetState().t() << std::endl;
 
         // Minimization;
         // If the current neighbourhood function finds an improvement,
@@ -84,6 +60,8 @@ void VndEngine::PerformSearch()
           nBestResultValue = nTempScore;
           cCurrentState = cNeigh;
           bImprovementFound = true;
+          // A better candindate solution is found,
+          // move to the next step.
           break;
         }
       }

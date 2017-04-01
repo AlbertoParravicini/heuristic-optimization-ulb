@@ -39,6 +39,22 @@
     "xmemory": "cpp",
     "xmemory0": "cpp",
     "chrono": "cpp",
-    "ratio": "cpp"
+    "ratio": "cpp",
+    "algorithm": "cpp",
+    "iterator": "cpp",
+    "list": "cpp",
+    "locale": "cpp",
+    "map": "cpp",
+    "memory": "cpp",
+    "regex": "cpp",
+    "sstream": "cpp",
+    "tuple": "cpp",
+    "unordered_set": "cpp",
+    "xhash": "cpp",
+    "xlocbuf": "cpp",
+    "xlocmes": "cpp",
+    "xlocmon": "cpp",
+    "xloctime": "cpp",
+    "xtree": "cpp"
   }
 }

@@ -1,16 +1,34 @@
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/option.hpp>
-using namespace std;
+#include <stdint.h>
 #include <iostream>
+#include <memory>
+#include <boost/coroutine2/all.hpp>
 
-namespace po = boost::program_options;
+typedef boost::coroutines2::coroutine<std::pair<uint16_t, uint16_t>> coro_t;
 
-int main(int argc, char** argv) {
+void pair_sequence(coro_t::push_type& yield)
+{
+    uint16_t i = 0;
+    uint16_t j = 0;
+    for (;;) {
+        for (;;) {
+            yield(std::make_pair(i, j));
+            if (++j == 0)
+                break;
+        }
+        if (++i == 0)
+            break;
+    }
+}
 
-    po::options_description desc("Allowed options");
-    desc.add_options()
-        ("help", "produce help message")
-        ;
-
-    return 0;
+int main()
+{
+    coro_t::pull_type seq(boost::coroutines2::fixedsize_stack(),
+                          pair_sequence);
+    for (auto pair : seq) {
+        //std::cout << pair.first << "-" << pair.second <<std::endl;
+    }
+    //while (seq) {
+    //    print_pair(seq.get());
+    //    seq();
+    //}
 }

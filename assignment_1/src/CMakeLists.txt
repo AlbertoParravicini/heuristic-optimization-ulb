@@ -22,6 +22,7 @@ include_directories("${PROJECT_SOURCE_DIR}")
 set(HEADER_FILES
 	#state.h
 	#problem.h
+	engine.h
 	pfspinstance.h
 	pfsp_state.h
 	pfsp_problem.h	
@@ -34,6 +35,7 @@ set(HEADER_FILES
 set(SOURCE_FILES
 	${HEADER_FILES}
 	flowshop.cpp
+	engine.cpp
 	#state.cpp
 	#problem.cpp
 	pfspinstance.cpp	

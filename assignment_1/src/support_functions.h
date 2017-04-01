@@ -8,20 +8,35 @@
 
 #include <armadillo>
 
+
+/****************************************/
+/****************************************/
+
+// NEIGHBOURHOOD GENERATOR FUNCTIONS:
 // Used to find the neighbours of a state.
-std::vector<PfspState *> &GetNeighboursTest(PfspState &c_state);
 
-std::vector<PfspState *> &GetNeighboursTranspose(PfspState &c_state);
+// Just a test.
+std::vector<PfspState *> &GetNeighboursTest(PfspProblem &c_problem, PfspState &c_state);
+// Generate neighbours by transposition.
+std::vector<PfspState *> &GetNeighboursTranspose(PfspProblem &c_problem, PfspState &c_state);
+// Generate neighbours by exchange.
+std::vector<PfspState *> &GetNeighboursExchange(PfspProblem &c_problem, PfspState &c_state);
+// Generate neighbours by insertion.
+std::vector<PfspState *> &GetNeighboursInsert(PfspProblem &c_problem, PfspState &c_state);
 
-std::vector<PfspState *> &GetNeighboursExchange(PfspState &c_state);
 
-std::vector<PfspState *> &GetNeighboursInsert(PfspState &c_state);
+/****************************************/
+/****************************************/
 
-// Evaluation functions;
-const long int EvaluateStateTest(PfspState &c_state);
+// EVALUATION FUNCITON:
+// Used to evaluate the score of a state.
 
+// Just a test.
+const long int EvaluateStateTest(PfspProblem &c_problem, PfspState &c_state);
+// Compute the weighted completion time, given a state and the parameters specified by the problem.
 const long int ComputeWCT(PfspProblem &c_problem, PfspState &c_state);
-
+// Compute the weighted completion time, given a state and the explicit parameters.
+// This function can be used if some of the parameters differ from the ones contained in the problem.
 const long int ComputeWCTInternals(
     const arma::Col<int> &solution,
     int n_number_of_jobs,
@@ -29,12 +44,19 @@ const long int ComputeWCTInternals(
     arma::Mat<long int> &c_processing_time_matrix,
     arma::Col<long int> &vec_priorities);
 
+
+    
+/****************************************/
+/****************************************/
+
+// FIRST STATE GENERATION:
 // Used to initialize the first state;
+
+// Generate a random initial solution, returns it as a vector.
 arma::Col<int> RandomPermutation(int number_of_jobs);
-
-PfspState RandomInitialState(PfspInstance &c_instance);
-
+// Generate a random initial solution, returns it as a state.
+PfspState RandomInitialState(PfspProblem &c_problem);
 // Simplified RZ heuristic
-PfspState RZHeuristic(PfspInstance &c_instance);
+PfspState RZHeuristic(PfspProblem &c_problem);
 
 #endif

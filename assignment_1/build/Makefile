@@ -123,6 +123,33 @@ flowshop/fast:
 	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/build
 .PHONY : flowshop/fast
 
+engine.o: engine.cpp.o
+
+.PHONY : engine.o
+
+# target to build an object file
+engine.cpp.o:
+	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/engine.cpp.o
+.PHONY : engine.cpp.o
+
+engine.i: engine.cpp.i
+
+.PHONY : engine.i
+
+# target to preprocess a source file
+engine.cpp.i:
+	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/engine.cpp.i
+.PHONY : engine.cpp.i
+
+engine.s: engine.cpp.s
+
+.PHONY : engine.s
+
+# target to generate assembly for a file
+engine.cpp.s:
+	$(MAKE) -f CMakeFiles/flowshop.dir/build.make CMakeFiles/flowshop.dir/engine.cpp.s
+.PHONY : engine.cpp.s
+
 flowshop.o: flowshop.cpp.o
 
 .PHONY : flowshop.o
@@ -321,6 +348,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... flowshop"
+	@echo "... engine.o"
+	@echo "... engine.i"
+	@echo "... engine.s"
 	@echo "... flowshop.o"
 	@echo "... flowshop.i"
 	@echo "... flowshop.s"

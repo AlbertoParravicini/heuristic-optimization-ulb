@@ -6,6 +6,16 @@
 
 #IncludeRegexTransform: 
 
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/engine.cpp
+engine.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/engine.h
+
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/engine.h
+pfsp_problem.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/pfsp_problem.h
+pfsp_state.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/pfsp_state.h
+
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/flowshop.cpp
 iostream
 -
@@ -33,6 +43,8 @@ state.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/state.h
 problem.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/problem.h
+engine.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/engine.h
 include/cxxopts.hpp
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/include/cxxopts.hpp
 
@@ -47,6 +59,8 @@ pfsp_problem.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/pfsp_problem.h
 pfsp_state.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/pfsp_state.h
+engine.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/engine.h
 
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/include/cxxopts.hpp
 cstring
@@ -139,4 +153,6 @@ pfsp_problem.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/pfsp_problem.h
 pfsp_state.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/pfsp_state.h
+engine.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/engine.h
 

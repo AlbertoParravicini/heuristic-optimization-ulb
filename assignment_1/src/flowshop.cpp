@@ -4,7 +4,6 @@
 #include <ctime>
 #include <fstream>
 
-
 #include "pfspinstance.h"
 #include "pfsp_state.h"
 #include "pfsp_problem.h"
@@ -13,6 +12,7 @@
 #include "support_functions.h"
 #include "state.h"
 #include "problem.h"
+#include "engine.h"
 
 #include "include/cxxopts.hpp"
 
@@ -37,6 +37,12 @@ int main(int argc, char *argv[])
   // Use First improvement of Best improvement, in Iterative Improvement;
   int bBestImprovement = 0;
 
+  // PFSP Problem, to be instantiated later based on the input parameters;
+  PfspProblem *cProblem = NULL;
+
+  // Optimization engine, to be set later based on the input parameters;
+  Engine *cSearchEngine = NULL;
+
   /****************************************/
   /****************************************/
 
@@ -45,14 +51,7 @@ int main(int argc, char *argv[])
   {
     cxxopts::Options options("Flowshop optimizer", "Optimize the flowshop scheduling problem using Iterative Improvement and VND.");
 
-    options.add_options()
-      ("f,filename", "Specify the instance filename.", cxxopts::value<std::string>(sFileName))
-      ("a,algorithm", "Set the optimization algorithm.", cxxopts::value<std::string>()->default_value("ii"))
-      ("r,random_seed", "Set the random seed of the algorithm.", cxxopts::value<int>(nRngSeed))
-      ("n,neighbourhood_function", "Set how the neighbours of a state are generated.", cxxopts::value<std::string>()->default_value("t"))
-      ("i,initial_state_function", "Set how the initial state is computed.", cxxopts::value<std::string>()->default_value("rz"))
-      ("b,use_best_improvement", "Set of the Iterative Improvement Algorithm should use best increment", cxxopts::value<int>(bBestImprovement))
-      ("v,neigh_vector", "Set of sequence of neighbourhood functions used by VND", cxxopts::value<std::string>()->default_value("tei"));
+    options.add_options()("f,filename", "Specify the instance filename.", cxxopts::value<std::string>(sFileName))("a,algorithm", "Set the optimization algorithm.", cxxopts::value<std::string>()->default_value("ii"))("r,random_seed", "Set the random seed of the algorithm.", cxxopts::value<int>(nRngSeed))("n,neighbourhood_function", "Set how the neighbours of a state are generated.", cxxopts::value<std::string>()->default_value("t"))("i,initial_state_function", "Set how the initial state is computed.", cxxopts::value<std::string>()->default_value("rz"))("b,use_best_improvement", "Set of the Iterative Improvement Algorithm should use best increment", cxxopts::value<int>(bBestImprovement))("v,neigh_vector", "Set of sequence of neighbourhood functions used by VND", cxxopts::value<std::string>()->default_value("tei"));
     options.parse(argc, argv);
 
     // Need an instance filename!
@@ -122,37 +121,9 @@ int main(int argc, char *argv[])
       // Read data from file;
       std::vector<char> writableFileName(sFileName.begin(), sFileName.end());
       writableFileName.push_back('\0');
-      PfspProblem cProblem(&writableFileName[0], &GetNeighboursTranspose, &ComputeWCT, &RZHeuristic);
-      VndEngine cSearchEngine(cProblem, vecNeighs);
-      
-      // Measure execution time.
-      std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-      cSearchEngine.PerformSearch();
-      std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-
-      auto nExecTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-      std::cout << "\tRESULTS VND" << std::endl;
-      std::cout << "Value:" << cSearchEngine.GetResultValue() << std::endl;
-      std::cout << "Execution time:" << nExecTime << std::endl;
-      std::cout << "-----------------------------------" << std::endl;
-
-      std::ofstream output_file;
-      output_file.open("./results/results_vnd.csv", std::ios_base::app);
-
-      // Write results
-      output_file << sFileName << ", " << 
-        cProblem.GetProblemInstance().GetNumberOfJobs() << ", " << 
-        cProblem.GetProblemInstance().GetNumberOfMachines() << ", " << 
-        sAlgoType << ", " << 
-        bBestImprovement << ", " <<
-        sInitType << ", " << 
-        sNeighType << ", " << 
-        nRngSeed << ", " << 
-        sVecNeighType << ", " << 
-        nExecTime << ", " << 
-        cSearchEngine.GetResultValue() << std::endl; 
-    
-      output_file.close(); 
+      // Initialize the engine;
+      cProblem = new PfspProblem(&writableFileName[0], &GetNeighboursTranspose, &ComputeWCT, &RZHeuristic);
+      cSearchEngine = new VndEngine(*cProblem, vecNeighs);
     }
     else
     {
@@ -180,88 +151,44 @@ int main(int argc, char *argv[])
       // Read data from file;
       std::vector<char> writableFileName(sFileName.begin(), sFileName.end());
       writableFileName.push_back('\0');
-      PfspProblem cProblem(&writableFileName[0], fNeighFunction, &ComputeWCT, fInitialState);
-      IIEngine cSearchEngine(cProblem, bBestImprovement);
-
-            // Measure execution time.
-      std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-      cSearchEngine.PerformSearch();
-      std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-
-      long int nExecTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-      std::cout << "\tRESULTS II" << std::endl;
-      std::cout << "Value:" << cSearchEngine.GetResultValue() << std::endl;
-      std::cout << "Execution time:" << nExecTime << std::endl;
-      std::cout << "-----------------------------------" << std::endl;
-
-      std::ofstream output_file;
-      output_file.open("./results/results_ii.csv", std::ios_base::app);
-
-      // Write results
-      output_file << sFileName << ", " << 
-        cProblem.GetProblemInstance().GetNumberOfJobs() << ", " << 
-        cProblem.GetProblemInstance().GetNumberOfMachines() << ", " << 
-        sAlgoType << ", " << 
-        bBestImprovement << ", " <<
-        sInitType << ", " << 
-        sNeighType << ", " << 
-        nRngSeed << ", " << 
-        sVecNeighType << ", " << 
-        nExecTime << ", " << 
-        cSearchEngine.GetResultValue() << std::endl;
-
-      output_file.close(); 
+      // Initialize the engine;
+      cProblem = new PfspProblem(&writableFileName[0], fNeighFunction, &ComputeWCT, fInitialState);
+      cSearchEngine = new IIEngine(*cProblem, bBestImprovement);
     }
 
-    // if (argc == 1)
-    // {
-    //   std::cout << "\nUsage: ./flowshop <instance_file> -algorithm -starting_state -algorithms_parameters" << std::endl;
-    //   std::cout << "-------------------------\n";
-    //   std::cout << "-algorithm:"
-    //             << "\n\t-ls: Local Search (default)"
-    //             << "\n\t-vnd: Variable Neighbourhood Search" << std::endl;
-    //   std::cout << "-starting-state:"
-    //             << "\n\t-random: Randomized Initial State"
-    //             << "\n\t-rz: Simplified RZ Heuristic (default)\n";
-    //   std::cout << "-algorithms_parameters:"
-    //             << "\n\t-f: First Improvement Local Search (default) (only for Local Search)";
-    //   std::cout << "\n\t-b: Best Improvement Local Search (only for Local Search)";
-    //   std::cout << "\n\n\t-tei: Use <Transpose, Exchange, Insert> in VND (default)";
-    //   std::cout << "\n\t-tie: Use <Transpose, Insert, Exchange> in VND";
-    //   std::cout << "\n-------------------------\n"
-    //             << std::endl;
-    // }
+    /****************************************/
+    /****************************************/
 
-    // // APPLICATION CODE
+    // Perform the optimization;
 
-    // // initialize random seed;
-    // arma::arma_rng::set_seed_random();
+    // Measure execution time.
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    cSearchEngine->PerformSearch();
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-    // // Create instance object;
-    // PfspInstance instance;
+    long int nExecTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+    std::cout << "\tRESULTS II" << std::endl;
+    std::cout << "Value:" << cSearchEngine->GetResultValue() << std::endl;
+    std::cout << "Execution time:" << nExecTime << std::endl;
+    std::cout << "-----------------------------------" << std::endl;
 
-    // // Read data from file;
-    // if (!instance.ReadDataFromFile(argv[1]))
-    //   return 1;
+    std::ofstream output_file;
+    output_file.open("./results/results_ii.csv", std::ios_base::app);
 
-    // // Create problem instance;
-    // PfspProblem problem(argv[1], &GetNeighboursInsert, &ComputeWCT, &RZHeuristic);
+    // Write results
+    output_file << sFileName << ", " 
+      << cProblem->GetProblemInstance().GetNumberOfJobs() << ", " 
+      << cProblem->GetProblemInstance().GetNumberOfMachines() << ", " 
+      << sAlgoType << ", " 
+      << bBestImprovement << ", " 
+      << sInitType << ", " 
+      << sNeighType << ", " 
+      << nRngSeed << ", " 
+      << sVecNeighType << ", " 
+      << nExecTime << ", " 
+      << cSearchEngine->GetResultValue() << std::endl;
 
-    // // Vector of neighboorhood functions to be used by VND.
-    // std::vector<GetNeighbourFunction> vecNeighs = {&GetNeighboursTranspose, &GetNeighboursExchange, &GetNeighboursInsert};
-
-    // // Create a new search engine5
-    // VndEngine local_search(problem, vecNeighs);
-
-    // local_search.PerformSearch();
-    // std::cout << "initial state\n"
-    //           << local_search.GetProblem().GetInitialState().GetState().t() << std::endl;
-    // std::cout << "initial score\n"
-    //           << local_search.GetProblem().EvaluateState(local_search.GetProblem(), local_search.GetProblem().GetInitialState()) << std::endl;
-    // std::cout << "best state\n"
-    //           << local_search.GetResultState().GetState().t() << std::endl;
-    // std::cout << "best res\n"
-    //           << local_search.GetResultValue() << std::endl;
+    output_file.close();
 
     return 0;
   }

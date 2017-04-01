@@ -42,4 +42,18 @@ arma::Col<int>& PfspState::GetState()
   return this->m_vecState;
 }
 
+/****************************************/
+/****************************************/
 
+long int PfspState::GetStateValue()
+{
+  return this->m_nStateValue;
+}
+
+/****************************************/
+/****************************************/
+
+void PfspState::SetStateValue(long int n_new_value)
+{
+  this->m_nStateValue = n_new_value;
+}
