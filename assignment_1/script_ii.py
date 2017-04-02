@@ -6,12 +6,19 @@ from os.path import isfile, join
 
 instances_path = "./instances"
 instances = [f for f in listdir(instances_path) if isfile(join(instances_path, f))]
+
+instances = instances[:30]
+
 print(instances)
 
 
-start_list = ["random", "rz"]
-best_improvement = ["0", "1"]
-neigh_list = ["t", "e", "i"]
+# start_list = ["random", "rz"]
+# best_improvement = ["0", "1"]
+# neigh_list = ["t", "e", "i"]
+
+start_list = ["rz"]
+best_improvement = ["0"]
+neigh_list = ["e"]
 
 
 for instance in instances:

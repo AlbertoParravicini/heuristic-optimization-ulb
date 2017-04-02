@@ -109,12 +109,12 @@ int main(int argc, char *argv[])
       if (sVecNeighType == "tie")
       {
         std::cout << "Using neighbourhood functions: Transpose, Insert, Exchange" << std::endl;
-        vecNeighs = {&GetNeighboursTranspose, &GetNeighboursInsert, &GetNeighboursExchange};
+        vecNeighs = {&GetNeighboursTransposeFI, &GetNeighboursInsertFI, &GetNeighboursExchangeFI};
       }
       else
       {
         std::cout << "Using neighbourhood functions: Transpose, Exchange, Insert" << std::endl;
-        vecNeighs = {&GetNeighboursTranspose, &GetNeighboursExchange, &GetNeighboursInsert};
+        vecNeighs = {&GetNeighboursTransposeFI, &GetNeighboursExchangeFI, &GetNeighboursInsertFI};
       }
       std::cout << "-----------------------------------" << std::endl;
 
@@ -131,21 +131,43 @@ int main(int argc, char *argv[])
       std::cout << "Using Best Improvement: " << bBestImprovement << std::endl;
 
       // Pick the appropriate neighbourhood function.
-      if (sNeighType == "e")
+      if (bBestImprovement)
       {
-        std::cout << "Using neighbourhood function: Exchange" << std::endl;
-        fNeighFunction = &GetNeighboursExchange;
-      }
-      else if (sNeighType == "i")
-      {
-        std::cout << "Using neighbourhood function: Insert" << std::endl;
-        fNeighFunction = &GetNeighboursInsert;
+        if (sNeighType == "e")
+        {
+          std::cout << "Using neighbourhood function: Exchange" << std::endl;
+          fNeighFunction = &GetNeighboursExchange;
+        }
+        else if (sNeighType == "i")
+        {
+          std::cout << "Using neighbourhood function: Insert" << std::endl;
+          fNeighFunction = &GetNeighboursInsert;
+        }
+        else
+        {
+          std::cout << "Using neighbourhood function: Transpose" << std::endl;
+          fNeighFunction = &GetNeighboursTranspose;
+        }
       }
       else
       {
-        std::cout << "Using neighbourhood function: Transpose" << std::endl;
-        fNeighFunction = &GetNeighboursTranspose;
+        if (sNeighType == "e")
+        {
+          std::cout << "Using neighbourhood function: Exchange" << std::endl;
+          fNeighFunction = &GetNeighboursExchangeFI;
+        }
+        else if (sNeighType == "i")
+        {
+          std::cout << "Using neighbourhood function: Insert" << std::endl;
+          fNeighFunction = &GetNeighboursInsertFI;
+        }
+        else
+        {
+          std::cout << "Using neighbourhood function: Transpose" << std::endl;
+          fNeighFunction = &GetNeighboursTransposeFI;
+        }
       }
+      
       std::cout << "-----------------------------------" << std::endl;
 
       // Read data from file;

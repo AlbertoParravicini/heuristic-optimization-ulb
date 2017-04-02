@@ -244,7 +244,7 @@ It should be noted that all the neighbours of a given state are generated, and t
 Evaluating them straight away would improve the performances of \textit{Iterative Improvement}: however it will be shown later that the speed-up are very small, if the algorithm is combined with the \textit{RZ heuristic} (which is what would be done in a real-case usage).
 
 $\bullet$ \texttt{engine.h, engine.cpp}:\\
-abstract implementation of an optimization engine, it contains a reference to a \textit{problem} to be optimized, and a virtual function to perform the search.\\
+abstractm implementation of an optimization engine, it contains a reference to a \textit{problem} to be optimized, and a virtual function to perform the search.\\
 It also holds the optimal solution found by the search, and its score.
 
 $\bullet$ \texttt{ii\_engine.h, ii\_engine.cpp}:\\
@@ -907,6 +907,42 @@ This last section will compare the different ways to generate neighbours. As the
 The results of these tables are quite interesting: if the \textbf{RZ} heuristic is used, there is no statistical evidence that one way to generate \textbf{neighbours} is better than another. As such, taking the fastest option, i.e. \textbf{transpose}, seems to be the best idea.
 
 Combining all the previous results together, we can conclude that \textbf{best improvement, RZ heuristic, transpose} is the overall best combination. It's one of the fastest combinations, and its results cannot be said to be worse than the ones of other, slower, combinations.
+
+
+\section{Addendum: improvement on Iterative search}
+From the previous results, it emerges how \textbf{first improvement} can be substantially slower than other combinations, if certain input parameters are set.\\
+The main reason is that the entire set of neighbours of a state is generated, while in practice it would suffice to generate neighbours as long as an improving state (i.e. one with lower \textit{weighted completion time}) is found.
+
+To reduce the computation time of \textbf{first improvement}, the neighbourhood generator functions have been modified, so that no unnecessary neighbours are created.
+
+Below are reported some examples of how this modification can improve execution time.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth, center, keepaspectratio=1]{{"improved_ii"}.pdf}
+    \caption{\emph{Differences in \textbf{execution time} between the \textit{old} and \textit{new} version of \textbf{First improvement}. \textbf{Random, Insert} are compared above, while \textbf{RZ, Exchange} are compared below.}}
+\end{figure}
+
+
+\begin{table}[H]
+    \hspace*{-2.2cm}
+    \begin{tabular}{l l l l} % creating eight columns
+        \hline
+        \hline 
+        \\[-1.5ex]
+        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{t-test} & \textcolor{BrickRed}{Mean New} & \textcolor{BrickRed}{Mean Old}\\ [0.5ex]
+        \hline % inserts single-line
+        \\[-1.5ex]
+        \textcolor{MidnightBlue}{FI, Random, I}  & 2e-22 & 63216.50 & 264573.10  \\ 
+        \textcolor{MidnightBlue}{BI, RZ, E}     & 0.2992 & 7204.5 & 8037.0  \\ 
+        [1ex] % [1ex] adds vertical space
+        \hline % inserts single-line
+    \end{tabular}
+    \caption{\label{tab:ii-imp}\textbf{p-values} of the \textbf{t-tests} for the \textbf{execution times} on \textbf{100 jobs} instances. Old and new versions of \textbf{First improvement} are compared.}
+\end{table} 
+
+It can be seen how the improvements in execution time are strongly related to the initial parameters that are set. While there is a big improvement in the case of \textbf{Random, Insert} (a \textit{speed-up} of 320\%), in the case of \textbf{RZ, E} there's no statistical evidence of any improvement.
 
 \newpage
 \bibliographystyle{plainurl}

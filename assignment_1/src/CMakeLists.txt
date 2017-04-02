@@ -7,6 +7,10 @@ set (CMAKE_CXX_STANDARD 11)
 # Project's name
 project(assignment_1)
 
+find_package(Boost)
+include_directories (${Boost_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARY_DIR})
+
 find_package(Armadillo REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIRS})
 
@@ -51,4 +55,5 @@ add_executable(flowshop
 	)
 	
 target_link_libraries(flowshop 
-	${ARMADILLO_LIBRARIES})
+	${ARMADILLO_LIBRARIES}
+	${Boost_LIBRARIES})

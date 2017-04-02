@@ -55,7 +55,7 @@ std::vector<PfspState *> &GetNeighboursInsert(PfspProblem &c_problem, PfspState 
   int nNumberOfJobs = c_state.GetState().n_elem;
 
   std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>();
-  // Each neighbour is built by removing an element from the vector, 
+  // Each neighbour is built by removing an element from the vector,
   // then re-adding it somewhere else.
   for (int i = 0; i < nNumberOfJobs; i++)
   {
@@ -75,6 +75,107 @@ std::vector<PfspState *> &GetNeighboursInsert(PfspProblem &c_problem, PfspState 
     }
   }
 
+  return *vecNeighbours;
+}
+
+/****************************************/
+/****************************************/
+
+std::vector<PfspState *> &GetNeighboursTransposeFI(PfspProblem &c_problem, PfspState &c_state)
+{
+  PfspState *cCurrBest = &c_state;
+  // Each neighbour is built by swapping the value of element i with the next element i+1
+  for (int i = 0; i < c_state.GetState().n_elem - 1; i++)
+  {
+    arma::Col<int> c_Neigh(c_state.GetState());
+    c_Neigh.swap_rows(i, i + 1);
+
+    PfspState *cTempNeigh = new PfspState(c_Neigh);
+    cTempNeigh->SetStateValue(c_problem.EvaluateState(c_problem, *cTempNeigh));
+    // A better candidate solution has been found, break the cycle.
+    if (cTempNeigh->GetStateValue() < cCurrBest->GetStateValue())
+    {
+      cCurrBest = cTempNeigh;
+      break;
+    }
+  }
+  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>(1);
+  (*vecNeighbours)[0] = cCurrBest;
+  return *vecNeighbours;
+}
+
+/****************************************/
+/****************************************/
+
+std::vector<PfspState *> &GetNeighboursExchangeFI(PfspProblem &c_problem, PfspState &c_state)
+{
+  PfspState *cCurrBest = &c_state;
+
+  int nNumberOfJobs = c_state.GetState().n_elem;
+
+  // Similar to transpose, but here we swap every combination of elements.
+  for (int i = 0; i < nNumberOfJobs - 1; i++)
+  {
+    for (int j = i + 1; j < nNumberOfJobs; j++)
+    {
+      arma::Col<int> c_Neigh(c_state.GetState());
+      c_Neigh.swap_rows(i, j);
+
+      PfspState *cTempNeigh = new PfspState(c_Neigh);
+      cTempNeigh->SetStateValue(c_problem.EvaluateState(c_problem, *cTempNeigh));
+      // A better candidate solution has been found, break the cycle.
+      if (cTempNeigh->GetStateValue() < cCurrBest->GetStateValue())
+      {
+        cCurrBest = cTempNeigh;
+        break;
+      }
+    }
+  }
+
+  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>(1);
+  (*vecNeighbours)[0] = cCurrBest;
+  return *vecNeighbours;
+}
+
+/****************************************/
+/****************************************/
+
+std::vector<PfspState *> &GetNeighboursInsertFI(PfspProblem &c_problem, PfspState &c_state)
+{
+  PfspState *cCurrBest = &c_state;
+
+  int nNumberOfJobs = c_state.GetState().n_elem;
+
+  // Each neighbour is built by removing an element from the vector,
+  // then re-adding it somewhere else.
+  for (int i = 0; i < nNumberOfJobs; i++)
+  {
+    // Save the element to move.
+    arma::Col<int> vecElemToInsert = {c_state.GetState()(i)};
+    for (int j = 0; j < nNumberOfJobs; j++)
+    {
+      if (j != i)
+      {
+        arma::Col<int> c_Neigh(c_state.GetState());
+        // Remove the element i.
+        c_Neigh.shed_row(i);
+        // Re-add the element in position j.
+        c_Neigh.insert_rows(j, vecElemToInsert);
+
+        PfspState *cTempNeigh = new PfspState(c_Neigh);
+        cTempNeigh->SetStateValue(c_problem.EvaluateState(c_problem, *cTempNeigh));
+        // A better candidate solution has been found, break the cycle.
+        if (cTempNeigh->GetStateValue() < cCurrBest->GetStateValue())
+        {
+          cCurrBest = cTempNeigh;
+          break;
+        }
+      }
+    }
+  }
+
+  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>(1);
+  (*vecNeighbours)[0] = cCurrBest;
   return *vecNeighbours;
 }
 
@@ -101,7 +202,7 @@ const long int ComputeWCT(PfspProblem &c_problem, PfspState &c_state)
   arma::Col<long int> vecPriorities = c_instance.GetPriorities();
 
   // Evaluate the WCT.
-  long int result =  ComputeWCTInternals(solution, nNumberOfJobs, nNumberOfMachines, cProcessingTimeMatrix, vecPriorities);
+  long int result = ComputeWCTInternals(solution, nNumberOfJobs, nNumberOfMachines, cProcessingTimeMatrix, vecPriorities);
   // Store the value inside the state.
   c_state.SetStateValue(result);
   return result;
@@ -123,7 +224,7 @@ const long int ComputeWCTInternals(const arma::Col<int> &solution, int n_number_
   // 1st Machine;
   vecPreviousMachineEndTimes(0) = c_processing_time_matrix(solution(0), 0);
 
-  // Compute the completion times for the first machine. 
+  // Compute the completion times for the first machine.
   // The first machine can start to work on a job as soon as it ends processing the previous one,
   // So we can just do a rolling sum.
   for (int j = 1; j < n_number_of_jobs; j++)
@@ -136,13 +237,12 @@ const long int ComputeWCTInternals(const arma::Col<int> &solution, int n_number_
   {
     // The first job will start the next phase as soon as the previous is over.
     vecPreviousMachineEndTimes(0) += c_processing_time_matrix(solution(0), m);
-    // A job can start to be processed by a machine if it ended the previous phase, and the next machine is ready. 
+    // A job can start to be processed by a machine if it ended the previous phase, and the next machine is ready.
     for (int j = 1; j < n_number_of_jobs; j++)
     {
       vecPreviousMachineEndTimes(j) = c_processing_time_matrix(solution(j), m) + std::max(vecPreviousMachineEndTimes(j - 1), vecPreviousMachineEndTimes(j));
     }
   }
-
 
   // Compute the weighted completion time.
   for (int j = 0; j < n_number_of_jobs; j++)
@@ -235,7 +335,7 @@ PfspState RZHeuristic(PfspProblem &c_problem)
     // Evaluate the temporay candidates to find the best partial candidate;
     long int nCurrentBestValue = std::numeric_limits<long int>::max();
     for (arma::Col<int> vecTempCand : vecCandidates)
-    {   
+    {
       long int nTempValue = ComputeWCTInternals(
           vecTempCand,
           vecTempCand.n_elem,

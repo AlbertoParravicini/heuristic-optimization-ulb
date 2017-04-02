@@ -19,7 +19,7 @@ source("multiplot.R")
 
 # Read iterative improvement results
 results_ii <- read_csv(
-      "~/heuristic-optimization-ulb/assignment_1/results/results_ii.csv",
+      "~/heuristic-optimization-ulb/assignment_1/results/results_ii_1.csv",
       col_types = cols(
         algorithm = col_skip(),
         initial_state = col_factor(levels = c("random", "rz")),
@@ -444,5 +444,70 @@ for (i in levels(vnd_50$neighbour_vector))
   print(paste(mape_100, mape_50, (mape_50 + mape_100)/2))
   print("----------------")
 }
+
+
+
+
+
+###########################
+# IMPROVED II ANALYSIS ####
+###########################
+
+library(readr)
+res_ii_imp_100 <- read_csv("~/heuristic-optimization-ulb/assignment_1/results/results_ii_imp.csv", 
+                       col_names = FALSE, col_types = cols(X2 = col_skip(), 
+                                                           X3 = col_skip(), X8 = col_skip(), 
+                                                           X9 = col_skip()))
+res_ii_imp_100$improved = TRUE
+res_ii_imp_100 <- plyr::rename(res_ii_imp_100, replace=c("X10"="execution_time.ms"))
+res_ii_base_100 <- data.frame(improved = FALSE, execution_time.ms = ii_100[ii_100$initial_params == "0 random i", "execution_time.ms"])
+res_ii_100_exec = rbind(res_ii_imp_100[, c("improved", "execution_time.ms")], res_ii_base_100)
+
+res_ii_imp_100_2 <- read_csv("~/heuristic-optimization-ulb/assignment_1/results/results_ii.csv", 
+                           col_names = FALSE, col_types = cols(X2 = col_skip(), 
+                                                               X3 = col_skip(), X8 = col_skip(), 
+                                                               X9 = col_skip()))
+res_ii_imp_100_2$improved = TRUE
+res_ii_imp_100_2 <- plyr::rename(res_ii_imp_100_2, replace=c("X10"="execution_time.ms"))
+res_ii_base_100_2 <- data.frame(improved = FALSE, execution_time.ms = ii_100[ii_100$initial_params == "0 rz e", "execution_time.ms"])
+res_ii_100_exec_2 = rbind(res_ii_imp_100_2[, c("improved", "execution_time.ms")], res_ii_base_100_2)
+
+p1 <- ggplot(res_ii_100_exec, aes(improved, execution_time.ms, col=improved, fill=improved)) +
+  geom_boxplot(alpha=0.5) + 
+  labs(title ="Ex. time, II, 100 jobs, First improvement, Random, Insert", x = "Old VS New", y = "Execution time [ms]") +
+  theme_minimal() +
+  scale_x_discrete(labels=c("Base", "Improved")) +
+  theme(legend.position="none")
+p2 <-ggplot(res_ii_100_exec_2, aes(improved, execution_time.ms, col=improved, fill=improved)) +
+  geom_boxplot(alpha=0.5) + 
+  labs(title ="Ex. time, II, 100 jobs, First improvement, RZ, Exchange", x = "Old VS New", y = "Execution time [ms]") +
+  theme_minimal() +
+  scale_x_discrete(labels=c("Base", "Improved")) +
+  theme(legend.position="none")
+
+multiplot(p1, p2, cols=1)
+
+
+
+test_result <- data.frame(improved=character(), sh1=numeric(0), sh2=numeric(0), t=numeric(0), w=numeric(0), m1=numeric(0), m2=numeric(0))
+
+
+d1 <- res_ii_imp_100_2$execution_time.ms
+d2 <- res_ii_base_100_2$execution_time.ms
+n1 <- shapiro.test(d1)
+n2 <- shapiro.test(d2)
+t <- t.test(d1, d2)
+w <- wilcox.test(d1, d2)
+  
+test_result <- rbind(test_result, data.frame("FI RANDOM E, NEW", "FI RANDOM E, OLD", 
+                                               n1$p.value,
+                                               n2$p.value,
+                                               t$p.value,
+                                               w$p.value,
+                                               mean(d1),
+                                               mean(d2)))
+
+print(test_result)
+xtable(test_result,display = c("s", "s", "s", "f", "f", "g", "g", "f", "f"))
 
 
