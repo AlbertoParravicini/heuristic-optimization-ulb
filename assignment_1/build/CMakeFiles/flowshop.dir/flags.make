@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/local/boost_1_61_0 -I/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src 
+CXX_INCLUDES = -I/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src 
 

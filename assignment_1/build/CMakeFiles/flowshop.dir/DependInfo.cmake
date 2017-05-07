@@ -17,7 +17,6 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/local/boost_1_61_0"
   "/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src"
   )
 
