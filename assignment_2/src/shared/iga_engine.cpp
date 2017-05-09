@@ -127,8 +127,8 @@ void IgaEngine::PerformSearch()
       cIncumbentValue = cLocalSearchValue;
       if (cLocalSearchValue < m_dResultValue) 
       {
-        m_pcResult = &cLocalSearchState;
-        m_dResultValue = cLocalSearchValue;
+        this->m_pcResult = &cLocalSearchState;
+        this->m_dResultValue = cLocalSearchValue;
         nPlateauSize = 0;
       }
       nPlateauSize++;

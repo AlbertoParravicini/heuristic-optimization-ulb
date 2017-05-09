@@ -10,8 +10,6 @@
 #include "ii_engine.h"
 #include "vnd_engine.h"
 #include "support_functions.h"
-#include "state.h"
-#include "problem.h"
 #include "engine.h"
 
 #include "include/cxxopts.hpp"
@@ -54,7 +52,14 @@ int main(int argc, char *argv[])
   {
     cxxopts::Options options("Flowshop optimizer", "Optimize the flowshop scheduling problem using Iterative Improvement and VND.");
 
-    options.add_options()("f,filename", "Specify the instance filename.", cxxopts::value<std::string>(sFileName))("a,algorithm", "Set the optimization algorithm.", cxxopts::value<std::string>()->default_value("ii"))("r,random_seed", "Set the random seed of the algorithm.", cxxopts::value<int>(nRngSeed))("n,neighbourhood_function", "Set how the neighbours of a state are generated.", cxxopts::value<std::string>()->default_value("t"))("i,initial_state_function", "Set how the initial state is computed.", cxxopts::value<std::string>()->default_value("rz"))("b,use_best_improvement", "Set of the Iterative Improvement Algorithm should use best increment", cxxopts::value<int>(bBestImprovement))("v,neigh_vector", "Set of sequence of neighbourhood functions used by VND", cxxopts::value<std::string>()->default_value("tei"));
+    options.add_options()
+      ("f,filename", "Specify the instance filename.", cxxopts::value<std::string>(sFileName))
+      ("a,algorithm", "Set the optimization algorithm.", cxxopts::value<std::string>()->default_value("ii"))
+      ("r,random_seed", "Set the random seed of the algorithm.", cxxopts::value<int>(nRngSeed))
+      ("n,neighbourhood_function", "Set how the neighbours of a state are generated.", cxxopts::value<std::string>()->default_value("t"))
+      ("i,initial_state_function", "Set how the initial state is computed.", cxxopts::value<std::string>()->default_value("rz"))
+      ("b,use_best_improvement", "Set of the Iterative Improvement Algorithm should use best increment", cxxopts::value<int>(bBestImprovement))
+      ("v,neigh_vector", "Set of sequence of neighbourhood functions used by VND", cxxopts::value<std::string>()->default_value("tei"));
     options.parse(argc, argv);
 
     // Need an instance filename!

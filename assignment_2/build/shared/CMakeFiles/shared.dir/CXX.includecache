@@ -16,6 +16,22 @@ pfsp_problem.h
 pfsp_state.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/pfsp_state.h
 
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/gen_engine.cpp
+gen_engine.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/gen_engine.h
+
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/gen_engine.h
+pfsp_problem.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/pfsp_problem.h
+pfsp_state.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/pfsp_state.h
+engine.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/engine.h
+ii_engine.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/ii_engine.h
+support_functions.h
+/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/support_functions.h
+
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/iga_engine.cpp
 iga_engine.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/iga_engine.h

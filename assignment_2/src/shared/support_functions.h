@@ -81,4 +81,44 @@ PfspState DefaultDestrConstr(PfspProblem &c_problem, PfspState &c_initial_state,
 // Used in IGA; 
 float DefaultTemperature(PfspProblem &c_problem, const float lambda);
 
+
+/****************************************/
+/****************************************/
+
+
+// DISTRIBUTION WEIGHTS
+// Used in Genetic Algorithms: given a vector with the scores of the states,
+// these functions compute a vector with weights that will be used in a discrete probability.
+// States with high score will have higher probability to be picked for crossover and mutation.
+
+// Probability of being picked is directly proportional to the scores.
+arma::Col<float> UniformWeights(arma::Col<float> vec_states_scores);
+// Apply softmax to the weights, the probabilities associated to better states will be amplified.
+arma::Col<float> SoftMaxWeights(arma::Col<float> vec_states_scores);
+// Similar to uniform, but with more amplification towards better states;
+arma::Col<float> UniformWeights10(arma::Col<float> vec_states_scores);
+
+
+
+/****************************************/
+/****************************************/
+
+
+// CROSSOVER FUNCTION
+// Used in Genetic Algorithms: given 2 parent states,
+// create 2 new states by combining the parents.
+std::vector<PfspState> PMXCrossover(PfspState &c_parent_1, PfspState &c_parent_2);
+
+
+/****************************************/
+/****************************************/
+
+
+// MUTATION FUNCTION
+// Used in Genetic Algorithms: given a state,
+// create a new state by modifying the original one.
+
+// Swap the position of 2 jobs at random;
+PfspState TransposeMutation(PfspState &c_state);
+
 #endif

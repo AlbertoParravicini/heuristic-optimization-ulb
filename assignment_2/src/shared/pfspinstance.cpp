@@ -136,7 +136,7 @@ const bool PfspInstance::ReadDataFromFile(char *fileName)
     bEverythingOk = false;
   }
 
-  std::cout << "-----------------------------------";
+  std::cout << "-----------------------------------" << std::endl;
 
   return bEverythingOk;
 }

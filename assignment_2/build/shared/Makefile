@@ -152,6 +152,33 @@ engine.cpp.s:
 	cd /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/build && $(MAKE) -f shared/CMakeFiles/shared.dir/build.make shared/CMakeFiles/shared.dir/engine.cpp.s
 .PHONY : engine.cpp.s
 
+gen_engine.o: gen_engine.cpp.o
+
+.PHONY : gen_engine.o
+
+# target to build an object file
+gen_engine.cpp.o:
+	cd /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/build && $(MAKE) -f shared/CMakeFiles/shared.dir/build.make shared/CMakeFiles/shared.dir/gen_engine.cpp.o
+.PHONY : gen_engine.cpp.o
+
+gen_engine.i: gen_engine.cpp.i
+
+.PHONY : gen_engine.i
+
+# target to preprocess a source file
+gen_engine.cpp.i:
+	cd /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/build && $(MAKE) -f shared/CMakeFiles/shared.dir/build.make shared/CMakeFiles/shared.dir/gen_engine.cpp.i
+.PHONY : gen_engine.cpp.i
+
+gen_engine.s: gen_engine.cpp.s
+
+.PHONY : gen_engine.s
+
+# target to generate assembly for a file
+gen_engine.cpp.s:
+	cd /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/build && $(MAKE) -f shared/CMakeFiles/shared.dir/build.make shared/CMakeFiles/shared.dir/gen_engine.cpp.s
+.PHONY : gen_engine.cpp.s
+
 iga_engine.o: iga_engine.cpp.o
 
 .PHONY : iga_engine.o
@@ -326,6 +353,9 @@ help:
 	@echo "... engine.o"
 	@echo "... engine.i"
 	@echo "... engine.s"
+	@echo "... gen_engine.o"
+	@echo "... gen_engine.i"
+	@echo "... gen_engine.s"
 	@echo "... iga_engine.o"
 	@echo "... iga_engine.i"
 	@echo "... iga_engine.s"

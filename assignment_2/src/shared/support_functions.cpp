@@ -432,3 +432,86 @@ float DefaultTemperature(PfspProblem &c_problem, const float lambda)
     return lambda * arma::accu(c_problem.GetProblemInstance().GetProcessingTimeMatrix()) / (10 * nNumberOfJobs * nNumberOfMachines);
 }
 
+/****************************************/
+/****************************************/
+
+arma::Col<float> UniformWeights(arma::Col<float> vec_states_scores)
+{
+  return (1 / vec_states_scores) / arma::sum(1 / vec_states_scores);
+}
+
+/****************************************/
+/****************************************/
+
+arma::Col<float> SoftMaxWeights(arma::Col<float> vec_states_scores)
+{
+  arma::Col<double> v = arma::conv_to<arma::Col<double>>::from(vec_states_scores);
+  return arma::conv_to<arma::Col<float>>::from((1 / arma::exp(v)) / arma::sum(1 / arma::exp(v)));
+}
+
+/****************************************/
+/****************************************/
+
+arma::Col<float> UniformWeights10(arma::Col<float> vec_states_scores)
+{
+  return (1 / arma::pow(vec_states_scores, 10)) / arma::as_scalar(arma::sum(1 / arma::pow(vec_states_scores, 10)));
+}
+
+/****************************************/
+/****************************************/
+
+std::vector<PfspState> PMXCrossover(PfspState &c_parent_1, PfspState &c_parent_2)
+{
+  arma::Col<int> vecParent1 = arma::Col<int>(c_parent_1.GetState());
+  arma::Col<int> vecParent2 = arma::Col<int>(c_parent_2.GetState());
+
+  // Pick a random crossover point;
+  int nXOverPoint = (rand() % (int)(vecParent1.n_elem + 1));
+
+  // Generate (empty) offsprings;
+  arma::Col<int> vecOffspring1 = arma::zeros<arma::Col<int>>(vecParent1.n_elem);
+  arma::Col<int> vecOffspring2 = arma::zeros<arma::Col<int>>(vecParent1.n_elem);
+
+  // Build offspring 1;
+  for (int i = 0; i < nXOverPoint; i++)
+  {
+    vecOffspring1(i) = vecParent2(i);
+    // Swap the elements;
+    vecParent1.elem(arma::find(vecParent1 == vecParent2(i))).fill(vecParent1(i));
+  }
+  for (int i = nXOverPoint; i < vecOffspring1.n_elem; i++)
+  {
+    vecOffspring1(i) = vecParent1(i);
+  }
+
+  // Build offspring 2;
+  vecParent1 = arma::Col<int>(c_parent_1.GetState());
+  vecParent2 = arma::Col<int>(c_parent_2.GetState());
+  for (int i = 0; i < nXOverPoint; i++)
+  {
+    vecOffspring2(i) = vecParent1(i);
+    // Swap the elements;
+    vecParent2.elem(arma::find(vecParent2 == vecParent1(i))).fill(vecParent2(i));
+  }
+  for (int i = nXOverPoint; i < vecOffspring2.n_elem; i++)
+  {
+    vecOffspring2(i) = vecParent2(i);
+  }
+
+  return {PfspState(vecOffspring1), PfspState(vecOffspring2)};
+}
+
+/****************************************/
+/****************************************/
+
+PfspState TransposeMutation(PfspState &c_state)
+{
+  PfspState cMutatedState = PfspState(c_state.GetState());
+  // Pick 2 random elements;
+  int i = (rand() % (int)(cMutatedState.GetState().n_elem)); 
+  int j = (rand() % (int)(cMutatedState.GetState().n_elem)); 
+  cMutatedState.GetState().swap_rows(i, j);
+
+  return cMutatedState;
+}
+

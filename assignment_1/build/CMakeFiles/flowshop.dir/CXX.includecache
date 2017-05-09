@@ -39,10 +39,6 @@ vnd_engine.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/vnd_engine.h
 support_functions.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/support_functions.h
-state.h
-/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/state.h
-problem.h
-/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/problem.h
 engine.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/engine.h
 include/cxxopts.hpp
@@ -117,16 +113,6 @@ fstream
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/pfspinstance.h
 armadillo
 -
-
-/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/problem.h
-state.h
-/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/state.h
-vector
--
-iostream
--
-
-/mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/state.h
 
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_1/src/support_functions.cpp
 support_functions.h

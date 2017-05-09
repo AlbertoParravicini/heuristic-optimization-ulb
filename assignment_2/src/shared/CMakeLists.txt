@@ -18,6 +18,7 @@ set(SHARED_HEADER_FILES
 	support_functions.h
 	ii_engine.h
 	iga_engine.h
+	gen_engine.h
   )
   
   # Set header files
@@ -30,6 +31,7 @@ set(SHARED_SOURCE_FILES
 	support_functions.cpp
 	ii_engine.cpp
 	iga_engine.cpp
+	gen_engine.cpp
   )
 
 add_library(shared STATIC ${SHARED_SOURCE_FILES})
