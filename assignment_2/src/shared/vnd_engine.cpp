@@ -30,7 +30,7 @@ std::vector<GetNeighbourFunctionPfsp> &VndEngine::GetNeighbourFunctions()
 void VndEngine::PerformSearch()
 {
   // Store the current state, i.e. the current candidate solution.
-  PfspState *cCurrentState = &(this->m_pcProblem->GetInitialState());
+  std::shared_ptr<PfspState>cCurrentState = &(this->m_pcProblem->GetInitialState());
   bool bKeepSearching = true;
   bool bImprovementFound = false;
 
@@ -44,11 +44,11 @@ void VndEngine::PerformSearch()
     // then move to the others if no improvement was found.
     for (GetNeighbourFunctionPfsp fNeighFunction : m_vecNeighbourFunctions)
     {
-      std::vector<PfspState *> vecNeighbours = fNeighFunction(*(this->m_pcProblem), *cCurrentState);
+      std::vector<std::shared_ptr<PfspState>> vecNeighbours = fNeighFunction(*(this->m_pcProblem), *cCurrentState);
 
       bImprovementFound = false;
       // Evaluate the neighbours.
-      for (PfspState *cNeigh : vecNeighbours)
+      for (std::shared_ptr<PfspState>cNeigh : vecNeighbours)
       {
         long int nTempScore = m_pcProblem->EvaluateState(*(this->m_pcProblem), *cNeigh);
 

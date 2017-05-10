@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.3.19)  1 MAY 2017 23:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.3.19)  10 MAY 2017 13:47
 entering extended mode
 **report.tex input
 (report.tex
@@ -1636,244 +1636,98 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 [1
 
 {C:/Users/albyr/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 131--140
+Underfull \hbox (badness 10000) in paragraph at lines 131--139
 
  []
 
-
-Overfull \hbox (17.7001pt too wide) in paragraph at lines 152--154
-\T1/cmtt/m/n/12 ./flowshop -f ../instances/50_20_10 -a ii --use_best_improvemen
-t=1 -i rz 
- []
-
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 12.50409pt on input line 144.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 144.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 144.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 12.50409pt on input line 144.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 144.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 144.
 [2]
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 12.50409pt on input line 169.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 169.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 169.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 12.50409pt on input line 169.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 169.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 169.
- [3] [4] [5] [6]
-<./figures/"II_execution_time".pdf, id=108, 794.97pt x 614.295pt>
+Underfull \hbox (badness 10000) in paragraph at lines 158--169
+
+ []
+
+[3] [4] [5] [6] [7]
+<./figures/"II_execution_time".pdf, id=114, 794.97pt x 614.295pt>
 File: ./figures/"II_execution_time".pdf Graphic file (type pdf)
 
 <use ./figures/"II_execution_time".pdf>
 Package pdftex.def Info: ./figures/"II_execution_time".pdf used on input line 3
-05.
+34.
 (pdftex.def)             Requested size: 554.83005pt x 428.74753pt.
- [7]
-<./figures/"ii_exec_zoom".pdf, id=114, 722.7pt x 505.89pt>
+ [8]
+<./figures/"ii_exec_zoom".pdf, id=119, 722.7pt x 505.89pt>
 File: ./figures/"ii_exec_zoom".pdf Graphic file (type pdf)
 
 <use ./figures/"ii_exec_zoom".pdf>
-Package pdftex.def Info: ./figures/"ii_exec_zoom".pdf used on input line 311.
+Package pdftex.def Info: ./figures/"ii_exec_zoom".pdf used on input line 340.
 (pdftex.def)             Requested size: 554.83005pt x 388.38632pt.
- [8 <./figures/II_execution_time.pdf>]
-<./figures/"II_results".pdf, id=129, 939.51pt x 614.295pt>
+ [9 <./figures/II_execution_time.pdf>]
+<./figures/"II_results".pdf, id=134, 939.51pt x 614.295pt>
 File: ./figures/"II_results".pdf Graphic file (type pdf)
 
 <use ./figures/"II_results".pdf>
-Package pdftex.def Info: ./figures/"II_results".pdf used on input line 320.
+Package pdftex.def Info: ./figures/"II_results".pdf used on input line 349.
 (pdftex.def)             Requested size: 554.83005pt x 362.76834pt.
- [9 <./figures/ii_exec_zoom.pdf>]
-<./figures/"vnd_boxplot".pdf, id=145, 433.62pt x 433.62pt>
+ [10 <./figures/ii_exec_zoom.pdf>]
+<./figures/"vnd_boxplot".pdf, id=150, 433.62pt x 433.62pt>
 File: ./figures/"vnd_boxplot".pdf Graphic file (type pdf)
 
 <use ./figures/"vnd_boxplot".pdf>
-Package pdftex.def Info: ./figures/"vnd_boxplot".pdf used on input line 330.
+Package pdftex.def Info: ./figures/"vnd_boxplot".pdf used on input line 359.
 (pdftex.def)             Requested size: 426.79135pt x 426.81056pt.
- [10 <./figures/II_results.pdf>] [11 <./figures/vnd_boxplot.pdf>]
-Overfull \hbox (28.12854pt too wide) in paragraph at lines 354--378
+ [11 <./figures/II_results.pdf>] [12 <./figures/vnd_boxplot.pdf>]
+Overfull \hbox (28.12854pt too wide) in paragraph at lines 383--407
  [][] 
  []
 
 
-Overfull \hbox (35.22055pt too wide) in paragraph at lines 383--408
+Overfull \hbox (35.22055pt too wide) in paragraph at lines 412--437
  [][] 
  []
 
-[12]
-Overfull \hbox (25.12854pt too wide) in paragraph at lines 414--438
+[13]
+Overfull \hbox (25.12854pt too wide) in paragraph at lines 443--467
  [][] 
  []
 
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.449 ...}{Mean} & \textcolor{BrickRed}{Maximum} &
-                                                   \textcolor{BrickRed}{Stan...
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
 
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.452 ...& 465500  &  590300 & 586200  &  666600 &
-                                                   44161\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.453 ...  & 472200 & 601300 & 597800  &  679600 &
-                                                   46274\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.454 ...  & 467700 & 599900 & 595500  &  673100 &
-                                                   47417\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.455 ...  & 639500 & 770900 & 779200  & 1006000 &
-                                                   64347\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.456 ...  & 474600 & 608800 & 602900  &  686200 &
-                                                   46776\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.457 ...  & 478200 & 603900 & 596100  &  675500 &
-                                                   45197\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.458 ...  & 480100 & 612900 & 607700  &  696500 &
-                                                   47827\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.459 ...  & 482200 & 616800 & 610800  &  706900 &
-                                                   47422\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.460 ...  & 474700 & 599600 & 602600  &  689700 &
-                                                   47814\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.461 ...  & 640600 & 773700 & 784200  & 1017000 &
-                                                   65121\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.462 ...  & 474600 & 608600 & 602500  &  680200 &
-                                                   46325\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.463 ...  & 473000 & 604800 & 597900  &  679000 &
-                                                   46515\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.464 ...  & 480100 & 612900 & 607900  &  696500 &
-                                                   48075\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.465 ...   &   598400 &  597300    &   674900   &
-                                                   45947\\
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-! Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.466 ...    &   599700 &  596700   &   676500   &
-                                                   45846
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-
-Overfull \hbox (36.65309pt too wide) in paragraph at lines 445--471
+Overfull \hbox (28.12854pt too wide) in paragraph at lines 474--500
  [][] 
  []
 
-[13] [14] [15] [16]
-Overfull \hbox (27.49251pt too wide) in paragraph at lines 582--594
+[14] [15] [16]
+Overfull \hbox (27.49251pt too wide) in paragraph at lines 611--623
  [][] 
  []
 
 [17] [18] [19] [20] [21]
-Overfull \hbox (56.86948pt too wide) in paragraph at lines 826--842
+Overfull \hbox (56.86948pt too wide) in paragraph at lines 855--871
  []|  [] 
  []
 
 
-Overfull \hbox (66.37665pt too wide) in paragraph at lines 847--863
+Overfull \hbox (66.37665pt too wide) in paragraph at lines 876--892
  []|  [] 
  []
 
 
-Overfull \hbox (39.44547pt too wide) in paragraph at lines 868--884
+Overfull \hbox (39.44547pt too wide) in paragraph at lines 897--913
  []|  [] 
  []
 
 [22]
-Overfull \hbox (56.91257pt too wide) in paragraph at lines 889--904
+Overfull \hbox (56.91257pt too wide) in paragraph at lines 918--933
  []|  [] 
  []
 
@@ -1881,30 +1735,30 @@ Overfull \hbox (56.91257pt too wide) in paragraph at lines 889--904
 File: ./figures/"improved_ii".pdf Graphic file (type pdf)
 
 <use ./figures/"improved_ii".pdf>
-Package pdftex.def Info: ./figures/"improved_ii".pdf used on input line 923.
+Package pdftex.def Info: ./figures/"improved_ii".pdf used on input line 952.
 (pdftex.def)             Requested size: 341.43437pt x 455.26811pt.
  [23] [24 <./figures/improved_ii.pdf>]
 [25] (report.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 951.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 980.
  [26]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 951.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 980.
  (report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 951.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 951.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 980.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 980.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 1E03EAAB94E05D353281723E36CC8FAE;1216.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 951.
+(rerunfilecheck)             Checksum: 09E3AE4A969B4A4EBBB132916B674BBB;1217.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 980.
  )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 22084 strings out of 493333
- 375716 string characters out of 3139194
- 743863 words of memory out of 3000000
+ 22114 strings out of 493333
+ 375986 string characters out of 3139194
+ 741861 words of memory out of 3000000
  24797 multiletter control sequences out of 15000+200000
- 97400 words of font info for 405 fonts, out of 3000000 for 9000
+ 99106 words of font info for 429 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
  57i,21n,79p,959b,6196s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc} <C:\U
@@ -1920,9 +1774,9 @@ am Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files/MiKTe
 X 2.9/fonts/type1/urw/palatino/uplbi8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/palatino/uplr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palat
 ino/uplri8a.pfb>
-Output written on report.pdf (26 pages, 237637 bytes).
+Output written on report.pdf (26 pages, 242810 bytes).
 PDF statistics:
- 377 PDF objects out of 1000 (max. 8388607)
+ 381 PDF objects out of 1000 (max. 8388607)
  75 named destinations out of 1000 (max. 500000)
  58018 words of extra memory for PDF output out of 61914 (max. 10000000)
 

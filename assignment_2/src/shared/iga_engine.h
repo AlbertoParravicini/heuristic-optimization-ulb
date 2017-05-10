@@ -21,7 +21,9 @@ class IgaEngine : public Engine
     int m_nDestrVectorSize;
     float m_nLambdaTemp;
     TemperatureFunction GetTemperature;
-    long int m_nMaxSteps;
+    long int m_nMaxTime;
+    bool m_bWriteTempData;
+
     
 
   public:
@@ -29,9 +31,10 @@ class IgaEngine : public Engine
               PfspProblem &c_problem,
               InitialStateFunctionPfsp heuristic_state,
               TemperatureFunction temperature_function,
-              long int n_max_steps,
+              long int n_max_time,
               int n_destr_vector_size = 3,
-              float lambda_temp = 3
+              float lambda_temp = 3,
+              bool b_write_data = false
              );
     ~IgaEngine();
 
@@ -41,11 +44,11 @@ class IgaEngine : public Engine
     // Getter/Setter for the parameters.
     const int GetDestrVectorSize() const;
     const float GetLambdaTemp() const;
-    const long int GetMaxSteps() const;
+    const long int GetMaxTime() const;
 
     void SetDestrVectorSize(const int n_destr_vector_size);
     void SetLambdaTemp(const float lambda_temp);
-    void SetMaxSteps(const long int n_max_steps);
+    void SetMaxTime(const long int n_max_time);
 
 
 };

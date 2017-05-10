@@ -7,7 +7,7 @@
 #include "ii_engine.h"
 
 #include <armadillo>
-
+#include <memory>
 
 /****************************************/
 /****************************************/
@@ -16,19 +16,19 @@
 // Used to find the neighbours of a state.
 
 // Just a test.
-std::vector<PfspState *> &GetNeighboursTest(PfspProblem &c_problem, PfspState &c_state);
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursTest(PfspProblem &c_problem, PfspState &c_state);
 // Generate neighbours by transposition.
-std::vector<PfspState *> &GetNeighboursTranspose(PfspProblem &c_problem, PfspState &c_state);
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursTranspose(PfspProblem &c_problem, PfspState &c_state);
 // Generate neighbours by exchange.
-std::vector<PfspState *> &GetNeighboursExchange(PfspProblem &c_problem, PfspState &c_state);
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursExchange(PfspProblem &c_problem, PfspState &c_state);
 // Generate neighbours by insertion.
-std::vector<PfspState *> &GetNeighboursInsert(PfspProblem &c_problem, PfspState &c_state);
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursInsert(PfspProblem &c_problem, PfspState &c_state);
 // Generate neighbours by transposition.
-std::vector<PfspState *> &GetNeighboursTransposeFI(PfspProblem &c_problem, PfspState &c_state);
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursTransposeFI(PfspProblem &c_problem, PfspState &c_state);
 // Generate neighbours by exchange.
-std::vector<PfspState *> &GetNeighboursExchangeFI(PfspProblem &c_problem, PfspState &c_state);
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursExchangeFI(PfspProblem &c_problem, PfspState &c_state);
 // Generate neighbours by insertion.
-std::vector<PfspState *> &GetNeighboursInsertFI(PfspProblem &c_problem, PfspState &c_state);
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursInsertFI(PfspProblem &c_problem, PfspState &c_state);
 
 
 /****************************************/

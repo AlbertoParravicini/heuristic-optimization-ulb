@@ -34,7 +34,7 @@ PfspInstance &PfspProblem::GetProblemInstance()
 /****************************************/
 /****************************************/
 
-PfspState &PfspProblem::GetInitialState()
+PfspState PfspProblem::GetInitialState()
 {
   return this->m_cInitialState;
 }

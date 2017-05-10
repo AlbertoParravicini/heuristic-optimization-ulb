@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     std::cout << "Using algorithm: GENETIC" << std::endl;
 
     // Parse the weights type.
-    if (sWeightsType == "sf")
+    if (sWeightsType == "sm")
     {
       std::cout << "Using weights type: SOFTMAX" << std::endl;
       fWeightsType = &SoftMaxWeights;
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 
     // Compute the max execution time used in the algorithm, if it hasn't been manually set.
     if (nMaxTime <= 0) {
-      nMaxTime = cProblem->GetProblemInstance().GetNumberOfJobs() <= 50 ? 500 * 600 : 500 * 1000;
+      nMaxTime = cProblem->GetProblemInstance().GetNumberOfJobs() <= 50 ? 500 * 600 : 500 * 10000;
     }
 
     cSearchEngine = new GenEngine(*cProblem, nMaxTime, &RandomInitialState, fWeightsType, &PMXCrossover, fMutationType, nPopulationSize, nCrossoverProb, nMutationProb, bWriteTrace);
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     std::cout << "-----------------------------------" << std::endl;
 
     std::ofstream output_file;
-    output_file.open("../results/results_gen.csv", std::ios_base::app);
+    output_file.open("./results/results_gen.csv", std::ios_base::app);
 
     // Write results
     output_file << sFileName << ", " 
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
       << nMutationProb << ", "
       << sWeightsType << ", "
       << sMutationType << ", "
-      << nMaxTime << ", "
+      << nMaxTime
       << std::endl;
 
 

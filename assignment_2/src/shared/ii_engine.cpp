@@ -43,27 +43,27 @@ void IIEngine::SetBestImprovementValue(bool best_improvement)
 void IIEngine::PerformSearch()
 {
   // Store the current state, i.e. the current candidate solution.
-  PfspState* cCurrentState = &(this->m_pcProblem->GetInitialState());
+  PfspState cCurrentState = this->m_pcProblem->GetInitialState();
   bool bKeepSearching = true;
   bool bImprovementFound = false;
 
+
   // Initial score;
-  long int nBestResultValue = this->m_pcProblem->EvaluateState(*(this->m_pcProblem), *cCurrentState);
+  long int nBestResultValue = this->m_pcProblem->EvaluateState(*(this->m_pcProblem), cCurrentState);
   // Keep searching until a local optimum is found.
   while (bKeepSearching)
   {
-    std::vector<PfspState*> vecNeighbours = m_pcProblem->GetNeighbours(*(this->m_pcProblem), *cCurrentState);
+    auto& vecNeighbours = m_pcProblem->GetNeighbours(*(this->m_pcProblem), cCurrentState);
     bImprovementFound = false;
     // Evaluate the neighbours.
-    for (PfspState* cNeigh : vecNeighbours)
+    for (auto& cNeigh : vecNeighbours)
     {
       long int nTempScore = m_pcProblem->EvaluateState(*(this->m_pcProblem), *cNeigh);
-
       // Minimization
       if (nTempScore < nBestResultValue)
       {
         nBestResultValue = nTempScore;
-        cCurrentState = cNeigh;
+        cCurrentState = *cNeigh;
         bImprovementFound = true;
         // A better candindate solution is found,
         // move to the next step.
@@ -80,6 +80,6 @@ void IIEngine::PerformSearch()
     }
   }
   // Store the result.
-  m_pcResult = cCurrentState;
+  m_cResult = cCurrentState;
   m_dResultValue = nBestResultValue;
 }

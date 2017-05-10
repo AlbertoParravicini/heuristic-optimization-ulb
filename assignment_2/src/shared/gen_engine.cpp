@@ -61,14 +61,14 @@ void GenEngine::PerformSearch()
   // Count the elaples time, in milliseconds;
   long int nElapsedTime = 0;
   // Stop the algorithm if we don't improve after a certain amount of steps;
-  // This number is m_nMaxTime / 10;
+  // This number is m_nMaxTime / 50;
   int nPlateauSize = 0;
   // Keep track of whether an improvement was found in the current iteration;
   bool bImprovementFound = false;
 
   // Initialize the result to a random state;
-  this->m_pcResult = &(this->m_pcProblem->GetInitialState());
-  this->m_dResultValue = this->m_pcProblem->EvaluateState(*this->m_pcProblem, *this->m_pcResult);
+  this->m_cResult = this->m_pcProblem->GetInitialState();
+  this->m_dResultValue = this->m_pcProblem->EvaluateState(*this->m_pcProblem, this->m_cResult);
 
   // Initialize local search engine;
   IIEngine* cLocalEngine = new IIEngine(*this->m_pcProblem, true);
@@ -97,7 +97,7 @@ void GenEngine::PerformSearch()
     // Check if any of the random initial states is the new best state;
     if (nStateValue < this->m_dResultValue)
     {
-      this->m_pcResult = &vecPopulation[i];
+      this->m_cResult = vecPopulation[i];
       this->m_dResultValue = nStateValue;
     }
   }
@@ -115,7 +115,7 @@ void GenEngine::PerformSearch()
   // MAIN LOOP
   /****************************************/
 
-  while ((nElapsedTime < m_nMaxTime) && (nPlateauSize < m_nMaxTime / 10))
+  while ((nElapsedTime < m_nMaxTime) && (nPlateauSize < m_nMaxTime / 50))
   {
     // Measure time
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
@@ -153,28 +153,49 @@ void GenEngine::PerformSearch()
       // Set the states values.
       vecCrossoverPop[i].SetStateValue(this->m_pcProblem->EvaluateState(*this->m_pcProblem, vecCrossoverPop[i]));
       vecCrossoverPop[i + 1].SetStateValue(this->m_pcProblem->EvaluateState(*this->m_pcProblem, vecCrossoverPop[i + 1]));
-      vecCrossProb(i) = vecCrossoverPop[i].GetStateValue();
-      vecCrossProb(i + 1) = vecCrossoverPop[i + 1].GetStateValue();
+    }
 
-      // Check if any of the children is the new best state;
-      if (vecCrossoverPop[i].GetStateValue() < this->m_dResultValue)
+
+    /****************************************/
+    // LOCAL SEARCH, TRANSPOSE
+    /****************************************/
+    // Apply local search to each of the states of the current population.
+    // The results will be the new population.
+
+    // Vector that is used to store the results of local search.
+    std::vector<PfspState> vecLocalSearchPop(this->m_nPopulationSize);
+    // Vector that is used to compute the probabilities associated to the mutated states;
+    arma::Col<float> vecLocalSearchProb = arma::zeros<arma::Col<float>>(this->m_nPopulationSize);
+
+    // Set Transpose as neighbourhood generator for local search;
+    this->m_pcProblem->GetNeighbours = &GetNeighboursTranspose;
+
+    // Local search.
+    // Set the problem state as the one computed above, before doing the sub-search.
+    std::cout << "DOING LOCAL SEARCH: [";
+    for (int i = 0; i < this->m_nPopulationSize; i++)
+    {
+      std::cout << "-";
+      this->m_pcProblem->SetInitialState(vecCrossoverPop[i]);
+      cLocalEngine->PerformSearch();
+
+      vecLocalSearchPop[i] = cLocalEngine->GetResultState();
+      vecLocalSearchPop[i].SetStateValue(cLocalEngine->GetResultValue());
+      vecLocalSearchProb(i) = cLocalEngine->GetResultValue();
+
+      // Check if any of the new states is the new best candidate;
+      if (vecLocalSearchPop[i].GetStateValue() < this->m_dResultValue)
       {
-        std::cout << "FOUND IMPROVEMENT: -- value: " << vecCrossoverPop[i].GetStateValue() << std::endl;
-        this->m_pcResult = &vecCrossoverPop[i];
-        this->m_dResultValue = vecCrossoverPop[i].GetStateValue();
-        bImprovementFound = true;
-      }
-      if (vecCrossoverPop[i + 1].GetStateValue() < this->m_dResultValue)
-      {
-        std::cout << "FOUND IMPROVEMENT: -- value: " << vecCrossoverPop[i + 1].GetStateValue() << std::endl;
-        this->m_pcResult = &vecCrossoverPop[i + 1];
-        this->m_dResultValue = vecCrossoverPop[i + 1].GetStateValue();
+        std::cout << "FOUND IMPROVEMENT: -- value: " << vecLocalSearchPop[i].GetStateValue() << std::endl;
+        this->m_cResult = vecLocalSearchPop[i];
+        this->m_dResultValue = vecLocalSearchPop[i].GetStateValue();
         bImprovementFound = true;
       }
     }
+    std::cout << "]" << std::endl;
 
     // Generate the weights for the distribution;
-    vecCrossProb = this->ComputeDistrWeights(vecCrossProb);
+    vecCrossProb = this->ComputeDistrWeights(vecLocalSearchProb);
     // Generate a discrete distribution based on the scores of the population;
     std::discrete_distribution<int> cDistributionCross (vecCrossProb.begin(), vecCrossProb.end());
 
@@ -195,7 +216,7 @@ void GenEngine::PerformSearch()
     for (int i = 0; i < m_nPopulationSize; i++) 
     {
       // Pick a random element from the population.
-      PfspState cCandidateState = vecCrossoverPop[cDistributionCross(cGenerator)];
+      PfspState cCandidateState = vecLocalSearchPop[cDistributionCross(cGenerator)];
       if (((double) rand() / (RAND_MAX)) < m_nMutationProb)
       {
         vecMutatedPop[i] = this->MutationFunction(cCandidateState);
@@ -210,20 +231,25 @@ void GenEngine::PerformSearch()
     }
 
     /****************************************/
-    // LOCAL SEARCH
+    // LOCAL SEARCH, Exchange
     /****************************************/
     // Apply local search to each of the states of the current population.
     // The results will be the new population.
 
     // Vector that is used to store the results of local search.
-    std::vector<PfspState> vecLocalSearchPop(this->m_nPopulationSize);
+    vecLocalSearchPop = std::vector<PfspState>(this->m_nPopulationSize);
     // Vector that is used to compute the probabilities associated to the mutated states;
-    arma::Col<float> vecLocalSearchProb = arma::zeros<arma::Col<float>>(this->m_nPopulationSize);
+    vecLocalSearchProb = arma::zeros<arma::Col<float>>(this->m_nPopulationSize);
+
+    // Set Insert as neighbourhood generator for local search;
+    this->m_pcProblem->GetNeighbours = &GetNeighboursExchange;
 
     // Local search.
     // Set the problem state as the one computed above, before doing the sub-search.
+    std::cout << "DOING LOCAL SEARCH: [";
     for (int i = 0; i < this->m_nPopulationSize; i++)
     {
+      std::cout << "-";
       this->m_pcProblem->SetInitialState(vecMutatedPop[i]);
       cLocalEngine->PerformSearch();
 
@@ -234,20 +260,20 @@ void GenEngine::PerformSearch()
       // Check if any of the new states is the new best candidate;
       if (vecLocalSearchPop[i].GetStateValue() < this->m_dResultValue)
       {
-        std::cout << "FOUND IMPROVEMENT: -- value: " << vecLocalSearchPop[i].GetStateValue() << std::endl;
-        this->m_pcResult = &vecLocalSearchPop[i];
+        std::cout << " FOUND IMPROVEMENT: " << vecLocalSearchPop[i].GetStateValue();
+        this->m_cResult = vecLocalSearchPop[i];
         this->m_dResultValue = vecLocalSearchPop[i].GetStateValue();
         bImprovementFound = true;
       }
     }
-    
+    std::cout << "]" << std::endl;
 
 
     std::cout << nStepCount << ") " 
       << "TIME: " << nElapsedTime << " / " << this->m_nMaxTime 
       << " - AVG QUALITY:" <<  arma::sum(vecLocalSearchProb) / this->m_nPopulationSize 
       << " - BEST: " << this->m_dResultValue 
-      << " - plateau: " << nPlateauSize << " out of " << this->m_nMaxTime / 10
+      << " - plateau: " << nPlateauSize << " out of " << this->m_nMaxTime / 50
       <<  std::endl;
 
     // Generate the weights for the distribution;

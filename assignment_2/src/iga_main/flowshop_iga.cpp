@@ -35,6 +35,11 @@ int main(int argc, char *argv[])
   // Optimization engine, to be set later based on the input parameters;
   Engine *cSearchEngine = NULL;
   
+  // Max execution time, in milliseconds;
+  long int nMaxTime = 0;
+
+  // If true, write the algorithm execution trace on a file;
+  int bWriteTrace = false;
 
   /****************************************/
   /****************************************/
@@ -48,7 +53,9 @@ int main(int argc, char *argv[])
       ("f,filename", "Specify the instance filename.", cxxopts::value<std::string>(sFileName))
       ("r,random_seed", "Set the random seed of the algorithm.", cxxopts::value<int>(nRngSeed))
       ("d,distr_vec_size", "Set the number of elements that are perturbated by Distruction/Construction.", cxxopts::value<int>(nDistrVecSize))
-      ("l,lambda", "Set the temperature coefficient of the algorithm", cxxopts::value<float>(nLambdaTemp));
+      ("l,lambda", "Set the temperature coefficient of the algorithm", cxxopts::value<float>(nLambdaTemp))
+      ("t,max_time", "Set the maximum execution time, in milliseconds", cxxopts::value<long int>(nMaxTime))
+      ("e,write_exec_trace", "If true, write the execution trace on a file [0, 1]", cxxopts::value<int>(bWriteTrace));
     options.parse(argc, argv);
 
     // Need an instance filename!
@@ -85,8 +92,10 @@ int main(int argc, char *argv[])
     // Initialize the engine;
     cProblem = new PfspProblem(&writableFileName[0], &GetNeighboursTranspose, &ComputeWCT, &RandomInitialState);
 
-    // Compute the max number of steps used in the algorithm;
-    const long int nMaxSteps = 10 * cProblem->GetProblemInstance().GetNumberOfJobs() * cProblem->GetProblemInstance().GetNumberOfMachines();
+    // Compute the max execution time used in the algorithm, if it hasn't been manually set.
+    if (nMaxTime <= 0) {
+      nMaxTime = cProblem->GetProblemInstance().GetNumberOfJobs() <= 50 ? 500 * 600 : 500 * 10000;
+    }
 
     // Safety check on the value of nDistrVecSize;
     if (nDistrVecSize > cProblem->GetProblemInstance().GetNumberOfJobs())
@@ -95,7 +104,7 @@ int main(int argc, char *argv[])
       nDistrVecSize = cProblem->GetProblemInstance().GetNumberOfJobs();
     }
 
-    cSearchEngine = new IgaEngine(*cProblem, &RZHeuristic, &DefaultTemperature, nMaxSteps, nDistrVecSize, nLambdaTemp);
+    cSearchEngine = new IgaEngine(*cProblem, &RZHeuristic, &DefaultTemperature, nMaxTime, nDistrVecSize, nLambdaTemp, bWriteTrace);
     
     
     /****************************************/
@@ -115,7 +124,7 @@ int main(int argc, char *argv[])
     std::cout << "-----------------------------------" << std::endl;
 
     std::ofstream output_file;
-    output_file.open("../results/results_iga.csv", std::ios_base::app);
+    output_file.open("./results/results_iga.csv", std::ios_base::app);
 
     // Write results
     output_file << sFileName << ", " 
@@ -124,7 +133,12 @@ int main(int argc, char *argv[])
       << "iga" << ", " 
       << nRngSeed << ", " 
       << nExecTime << ", " 
-      << cSearchEngine->GetResultValue() << std::endl;
+      << cSearchEngine->GetResultValue() << ", "
+      << nLambdaTemp << ", "
+      << nDistrVecSize << ", "
+      << nMaxTime
+      << std::endl;
+
 
     output_file.close();
 

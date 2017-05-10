@@ -15,7 +15,7 @@ class Engine {
     // and functions that will be used to guide the optimization process.
     PfspProblem* m_pcProblem;
     // Best solution state found by the optimization process.
-    PfspState* m_pcResult;
+    PfspState m_cResult;
     // Score associated to the best state found in the optimization.
     long int m_dResultValue;
 

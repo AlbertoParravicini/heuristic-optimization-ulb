@@ -4,6 +4,7 @@
 #include "pfsp_problem.h"
 #include "pfsp_state.h"
 #include "engine.h"
+#include <memory>
 
 /*
 * VndEngine:

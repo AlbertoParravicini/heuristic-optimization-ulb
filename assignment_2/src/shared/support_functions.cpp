@@ -3,25 +3,25 @@
 /****************************************/
 /****************************************/
 
-std::vector<PfspState *> &GetNeighboursTest(PfspProblem &c_problem, PfspState &c_state)
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursTest(PfspProblem &c_problem, PfspState &c_state)
 {
   std::cout << "GetNeighTest" << std::endl;
-  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>;
+  std::vector<std::unique_ptr<PfspState>> *vecNeighbours = new std::vector<std::unique_ptr<PfspState>>;
   return *vecNeighbours;
 }
 
 /****************************************/
 /****************************************/
 
-std::vector<PfspState *> &GetNeighboursTranspose(PfspProblem &c_problem, PfspState &c_state)
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursTranspose(PfspProblem &c_problem, PfspState &c_state)
 {
-  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>(c_state.GetState().n_elem - 1);
+  std::vector<std::unique_ptr<PfspState>> *vecNeighbours = new std::vector<std::unique_ptr<PfspState>>(c_state.GetState().n_elem - 1);
   // Each neighbour is built by swapping the value of element i with the next element i+1
   for (int i = 0; i < c_state.GetState().n_elem - 1; i++)
   {
     arma::Col<int> c_Neigh(c_state.GetState());
     c_Neigh.swap_rows(i, i + 1);
-    (*vecNeighbours)[i] = new PfspState(c_Neigh);
+    (*vecNeighbours)[i] = std::unique_ptr<PfspState>(new PfspState(c_Neigh));
   }
   return *vecNeighbours;
 }
@@ -29,11 +29,11 @@ std::vector<PfspState *> &GetNeighboursTranspose(PfspProblem &c_problem, PfspSta
 /****************************************/
 /****************************************/
 
-std::vector<PfspState *> &GetNeighboursExchange(PfspProblem &c_problem, PfspState &c_state)
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursExchange(PfspProblem &c_problem, PfspState &c_state)
 {
   int nNumberOfJobs = c_state.GetState().n_elem;
   // number of neighbours: n * (n - 1) / 2;
-  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>();
+  std::vector<std::unique_ptr<PfspState>> *vecNeighbours = new std::vector<std::unique_ptr<PfspState>>();
   // Similar to transpose, but here we swap every combination of elements.
   for (int i = 0; i < nNumberOfJobs - 1; i++)
   {
@@ -41,7 +41,7 @@ std::vector<PfspState *> &GetNeighboursExchange(PfspProblem &c_problem, PfspStat
     {
       arma::Col<int> c_Neigh(c_state.GetState());
       c_Neigh.swap_rows(i, j);
-      (*vecNeighbours).push_back(new PfspState(c_Neigh));
+      (*vecNeighbours).push_back(std::unique_ptr<PfspState>(new PfspState(c_Neigh)));
     }
   }
   return *vecNeighbours;
@@ -50,11 +50,11 @@ std::vector<PfspState *> &GetNeighboursExchange(PfspProblem &c_problem, PfspStat
 /****************************************/
 /****************************************/
 
-std::vector<PfspState *> &GetNeighboursInsert(PfspProblem &c_problem, PfspState &c_state)
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursInsert(PfspProblem &c_problem, PfspState &c_state)
 {
   int nNumberOfJobs = c_state.GetState().n_elem;
 
-  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>();
+  std::vector<std::unique_ptr<PfspState>> *vecNeighbours = new std::vector<std::unique_ptr<PfspState>>();
   // Each neighbour is built by removing an element from the vector,
   // then re-adding it somewhere else.
   for (int i = 0; i < nNumberOfJobs; i++)
@@ -70,7 +70,7 @@ std::vector<PfspState *> &GetNeighboursInsert(PfspProblem &c_problem, PfspState 
         vecNeighVec.shed_row(i);
         // Re-add the element in position j.
         vecNeighVec.insert_rows(j, vecElemToInsert);
-        (*vecNeighbours).push_back(new PfspState(vecNeighVec));
+        (*vecNeighbours).push_back(std::unique_ptr<PfspState>(new PfspState(vecNeighVec)));
       }
     }
   }
@@ -81,35 +81,35 @@ std::vector<PfspState *> &GetNeighboursInsert(PfspProblem &c_problem, PfspState 
 /****************************************/
 /****************************************/
 
-std::vector<PfspState *> &GetNeighboursTransposeFI(PfspProblem &c_problem, PfspState &c_state)
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursTransposeFI(PfspProblem &c_problem, PfspState &c_state)
 {
-  PfspState *cCurrBest = &c_state;
+  std::unique_ptr<PfspState> cCurrBest(&c_state);
   // Each neighbour is built by swapping the value of element i with the next element i+1
   for (int i = 0; i < c_state.GetState().n_elem - 1; i++)
   {
     arma::Col<int> c_Neigh(c_state.GetState());
     c_Neigh.swap_rows(i, i + 1);
 
-    PfspState *cTempNeigh = new PfspState(c_Neigh);
+    std::unique_ptr<PfspState>cTempNeigh = std::unique_ptr<PfspState>(new PfspState(c_Neigh));
     cTempNeigh->SetStateValue(c_problem.EvaluateState(c_problem, *cTempNeigh));
     // A better candidate solution has been found, break the cycle.
     if (cTempNeigh->GetStateValue() < cCurrBest->GetStateValue())
     {
-      cCurrBest = cTempNeigh;
+      cCurrBest = std::move(cTempNeigh);
       break;
     }
   }
-  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>(1);
-  (*vecNeighbours)[0] = cCurrBest;
+  std::vector<std::unique_ptr<PfspState>> *vecNeighbours = new std::vector<std::unique_ptr<PfspState>>(1);
+  (*vecNeighbours)[0] = std::move(cCurrBest);
   return *vecNeighbours;
 }
 
 /****************************************/
 /****************************************/
 
-std::vector<PfspState *> &GetNeighboursExchangeFI(PfspProblem &c_problem, PfspState &c_state)
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursExchangeFI(PfspProblem &c_problem, PfspState &c_state)
 {
-  PfspState *cCurrBest = &c_state;
+  std::unique_ptr<PfspState> cCurrBest(&c_state);
 
   int nNumberOfJobs = c_state.GetState().n_elem;
 
@@ -121,28 +121,28 @@ std::vector<PfspState *> &GetNeighboursExchangeFI(PfspProblem &c_problem, PfspSt
       arma::Col<int> c_Neigh(c_state.GetState());
       c_Neigh.swap_rows(i, j);
 
-      PfspState *cTempNeigh = new PfspState(c_Neigh);
+      std::unique_ptr<PfspState>cTempNeigh = std::unique_ptr<PfspState>(new PfspState(c_Neigh));
       cTempNeigh->SetStateValue(c_problem.EvaluateState(c_problem, *cTempNeigh));
       // A better candidate solution has been found, break the cycle.
       if (cTempNeigh->GetStateValue() < cCurrBest->GetStateValue())
       {
-        cCurrBest = cTempNeigh;
+        cCurrBest = std::move(cTempNeigh);
         break;
       }
     }
   }
 
-  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>(1);
-  (*vecNeighbours)[0] = cCurrBest;
+  std::vector<std::unique_ptr<PfspState>> *vecNeighbours = new std::vector<std::unique_ptr<PfspState>>(1);
+  (*vecNeighbours)[0] = std::move(cCurrBest);
   return *vecNeighbours;
 }
 
 /****************************************/
 /****************************************/
 
-std::vector<PfspState *> &GetNeighboursInsertFI(PfspProblem &c_problem, PfspState &c_state)
+std::vector<std::unique_ptr<PfspState>> &GetNeighboursInsertFI(PfspProblem &c_problem, PfspState &c_state)
 {
-  PfspState *cCurrBest = &c_state;
+  std::unique_ptr<PfspState> cCurrBest(&c_state);
 
   int nNumberOfJobs = c_state.GetState().n_elem;
 
@@ -162,20 +162,20 @@ std::vector<PfspState *> &GetNeighboursInsertFI(PfspProblem &c_problem, PfspStat
         // Re-add the element in position j.
         c_Neigh.insert_rows(j, vecElemToInsert);
 
-        PfspState *cTempNeigh = new PfspState(c_Neigh);
+        std::unique_ptr<PfspState>cTempNeigh = std::unique_ptr<PfspState>(new PfspState(c_Neigh));
         cTempNeigh->SetStateValue(c_problem.EvaluateState(c_problem, *cTempNeigh));
         // A better candidate solution has been found, break the cycle.
         if (cTempNeigh->GetStateValue() < cCurrBest->GetStateValue())
         {
-          cCurrBest = cTempNeigh;
+          cCurrBest = std::move(cTempNeigh);
           break;
         }
       }
     }
   }
 
-  std::vector<PfspState *> *vecNeighbours = new std::vector<PfspState *>(1);
-  (*vecNeighbours)[0] = cCurrBest;
+  std::vector<std::unique_ptr<PfspState>> *vecNeighbours = new std::vector<std::unique_ptr<PfspState>>(1);
+  (*vecNeighbours)[0] = std::move(cCurrBest);
   return *vecNeighbours;
 }
 

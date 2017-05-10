@@ -4,6 +4,7 @@
 #include "pfsp_problem.h"
 #include "pfsp_state.h"
 #include "engine.h"
+#include <memory>
 
 /*
 * IIEngine:
@@ -16,7 +17,7 @@ class IIEngine : public Engine
     bool m_bBestImprovement;
 
   public:
-    IIEngine(PfspProblem& c_problem, bool best_improvement = false);
+    IIEngine(PfspProblem& c_problem, bool best_improvement = true);
     ~IIEngine();
 
     // Get/Set whether to use Best improvement.

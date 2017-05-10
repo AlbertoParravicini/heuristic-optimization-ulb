@@ -4,12 +4,13 @@
 // #include "problem.h"
 #include "pfsp_state.h"
 #include "pfspinstance.h"
+#include <memory>
 
 class PfspProblem;
 
 // Define the function pointer that represent the functions to
 // generate neighbours, evaluate states, and create the initial state.
-using GetNeighbourFunctionPfsp = std::vector<PfspState *> &(*)(PfspProblem &c_problem, PfspState &c_state);
+using GetNeighbourFunctionPfsp = std::vector<std::unique_ptr<PfspState>> &(*)(PfspProblem &c_problem, PfspState &c_state);
 using EvaluateStateFunctionPfsp = const long int (*)(PfspProblem &c_problem, PfspState &c_state);
 using InitialStateFunctionPfsp = PfspState (*)(PfspProblem &c_problem);
 
@@ -36,7 +37,7 @@ public:
   // the state evaluation function, the initial state function.
   PfspProblem(
     char *instance_filename,
-    std::vector<PfspState*>& (*neigh_fct)(PfspProblem&, PfspState&),
+    std::vector<std::unique_ptr<PfspState>>& (*neigh_fct)(PfspProblem&, PfspState&),
     const long int (*eval_fct)(PfspProblem&, PfspState&),
     InitialStateFunctionPfsp init_state);
   ~PfspProblem();
@@ -49,7 +50,7 @@ public:
   // Evaluate the score of a given state.
   EvaluateStateFunctionPfsp EvaluateState;
   // Returns the initial state.
-  PfspState& GetInitialState();
+  PfspState GetInitialState();
   // Manually set the initial state.
   void SetInitialState(PfspState& new_state);
 };

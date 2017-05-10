@@ -61,6 +61,8 @@ pfsp_state.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/pfsp_state.h
 engine.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/engine.h
+memory
+-
 
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/pfsp_problem.cpp
 pfsp_problem.h
@@ -71,6 +73,8 @@ pfsp_state.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/pfsp_state.h
 pfspinstance.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/pfspinstance.h
+memory
+-
 
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/pfsp_state.cpp
 pfsp_state.h
@@ -108,5 +112,7 @@ pfsp_problem.h
 ii_engine.h
 /mnt/c/Users/albyr/Documents/heuristic-optimization-ulb/assignment_2/src/shared/ii_engine.h
 armadillo
+-
+memory
 -
 

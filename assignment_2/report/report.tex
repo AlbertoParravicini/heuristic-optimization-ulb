@@ -78,7 +78,7 @@ footinclude]{article}
 
 
 \pagestyle{plain}
-\title{\textbf{Heuristic Optimization \\ Implementation Exercise 1}}
+\title{\textbf{Heuristic Optimization \\ Implementation Exercise 2}}
 \author{{Alberto Parravicini}}
 \date{}	% default \today
 
@@ -124,75 +124,67 @@ footinclude]{article}
     \-\quad\texttt{make}
 \end{itemize}
 
-The executable will be located in the \textit{build} folder, and is called \textbf{flowshop}.
+The executables will be located in the \textit{build} folder, and are called \textbf{flowshop\_iga} (for \textbf{Iterated Greedy}) and \textbf{flowshop\_gen} (for the \textbf{Memetic Algorithm}).
 
 \newpage
-\subsection{\textbf{How to run the program}}
-The generic syntax to run the program is\\
-\-\quad\texttt{./flowshop} \\
+\subsection{\textbf{How to run the programs}}
+The generic syntax to run the \textbf{Iterated Greedy Algorithm} is\\
+\-\quad\texttt{./flowshop\_iga} \\
 \-\quad\quad\texttt{-{}-filename ../instances/instance\_name} \\
-\-\quad\quad\texttt{-{}-algorithm [ii|vnd]} \\
 \-\quad\quad\texttt{-{}-random\_seed 42} \\
-\-\quad\quad\texttt{-{}-neighbourhood\_function [t|e|i]} \\
-\-\quad\quad\texttt{-{}-initial\_state\_function [random|rz]} \\
-\-\quad\quad\texttt{-{}-use\_best\_improvement [0|1]} \\
-\-\quad\quad\texttt{-{}-neigh\_vector [tei|tie]} \\
+\-\quad\quad\texttt{-{}-distr\_vec\_size 6} \\
+\-\quad\quad\texttt{-{}-lambda 2} \\
+\-\quad\quad\texttt{-{}-max\_time [msec]} \\
+\-\quad\quad\texttt{-{}-write\_exec\_trace [0|1]} \\
 
 
 \begin{itemize}
     \item \texttt{-{}-filename}, \texttt{-f}: path to the instance file to be used.
-    \item \texttt{-{}-algorithm}, \texttt{-a}: algorithm to be used, either \textbf{ii}, \textit{Iterative improvement} (default), or \textbf{vnd}, \textit{Variable neighbour descent}.
     \item \texttt{-{}-random\_seed}, \texttt{-r}: integer number, used as seed for random number generation by the program. If omitted, the seed is randomized.
-    \item \texttt{-{}-neighbourhood\_function}, \texttt{-n}: how the neighbours of a given candidate solution are computed, either \textbf{t}, \textit{Transpose} (default), \textbf{e}, \textit{Exchange}, or \textbf{i}, \textit{Insert}.
-    \item \texttt{-{}-initial\_state\_function}, \texttt{-i}: how the initial candidate solution is computed, either \textbf{random}, \textit{randomly}, or \textbf{rz}, using the \textit{Simplified RZ heuristic} (default).
-    \item \texttt{-{}-use\_best\_improvement}, \texttt{-b}: either \textbf{0} or \textbf{1} (default), set if the \textit{iterative improvement} algorithm should use \textit{First improvement} or \textit{Best improvement}. Ignored if the algorithm is set to \textbf{vnd}.
-    \item \texttt{-{}-neigh\_vector}, \texttt{-v}: set the sequence of neighbourhood functions to be used by the \textbf{vnd} algorithm, either \textbf{tei}, \textit{Transpose, Exchange, Insert} (default) or \textbf{tie}, \textit{Transpose, Insert, Exchange}. Ignored if the algorithm is set to \textbf{ii}.
+    \item \texttt{-{}-distr\_vec\_size}, \texttt{-d}: how many elements in the candidate solutions should be considered in the \textit{Destruction/Construction} procedure. Should be a value between $0$ and the number of jobs ($3$ is the default).
+    \item \texttt{-{}-lambda}, \texttt{-l}: parameter that influences the temperature of the algorithm. Lower values of $\lambda$ will slow the convergence. 
+    \item \texttt{-{}-max\_time}, \texttt{-t}: maximum amount of time for which the algorithm should run. It is expressed in \textit{milliseconds}.
+    By default it runs for $300$ seconds on $50$ jobs instances and for $5000$ seconds on $100$ jobs instances.
+    \item \texttt{-{}-write\_exec\_trace}, \texttt{-e}: if $1$, the execution trace of the algorithm (i.e. the best current results at a given amount of time) is written to the file \textit{./results/results\_details\_iga.csv} (default $0$).
 \end{itemize}
 
 Example:\\
-\quad\texttt{./flowshop -f ../instances/50\_20\_10 -a ii -{}-use\_best\_improvement=1 -i rz}
+\quad\texttt{./flowshop\_iga -f ../instances/50\_20\_10 -l 2 -d 5}
 
-The algorithm will solve the instance \textbf{50\_20\_10} using \textit{Best improvement iterative search}, with a random seed, \textit{Transpose} neighbour function, and \textit{RZ heuristic}.
-
-
-
-
-% ====================================================
-% =============================================== PFSP
-% ====================================================
+\textbf{IGA} will solve the instance \textbf{50\_20\_10} using \textit{$\lambda = 2$}, with a random seed, maximum time of $300$ seconds, and \textit{destruction vector size} of $5$; no execution trace is written.
 
 
 \newpage
-\section{Introduction to the PFSP}
-In the \textit{Permutation Flow Shop Scheduling} (\textbf{PFSP}) we are given:
+The generic syntax to run the \textbf{Memetic Algorithm} is\\
+\-\quad\texttt{./flowshop\_iga} \\
+\-\quad\quad\texttt{-{}-filename ../instances/instance\_name} \\
+\-\quad\quad\texttt{-{}-random\_seed 42} \\
+\-\quad\quad\texttt{-{}-population\_size 10} \\
+\-\quad\quad\texttt{-{}-crossover\_prob 0.99} \\
+\-\quad\quad\texttt{-{}-mutation\_prob 0.05} \\
+\-\quad\quad\texttt{-{}-weights\_type [uni|uni10|sm]} \\
+\-\quad\quad\texttt{-{}-mutation\-type [tr]} \\
+\-\quad\quad\texttt{-{}-max\_time [msec]} \\
+\-\quad\quad\texttt{-{}-write\_exec\_trace [0|1]} \\
+
+
 \begin{itemize}
-    \item A set of $n$ jobs $J_1,\ \ldots,\ J_n$.
-    \item A set of $m$ machines $M_1\ \ldots,\ M_m$.
-    \item Each job $J_i$ is composed of $m$ different steps, $o_{i1},\ \ldots,\ o_{im}$, and each step must be executed on a different machine.
-    \item Each step $o_{ij}$ has a processing time $p_{ij}$ associated to it.
-    \item All jobs pass through the machines in the same order.
-    \item A machine can process at most $1$ job at a time.
-    \item Each job has a weight $w_i$ associated to it, which represents its importance.
+    \item \texttt{-{}-filename}, \texttt{-f}: path to the instance file to be used.
+    \item \texttt{-{}-random\_seed}, \texttt{-r}: integer number, used as seed for random number generation by the program. If omitted, the seed is randomized.
+    \item \texttt{-{}-population\_size}, \texttt{-p}: positive integer, it controls the population size of the algorithm (default $10$).
+    \item \texttt{-{}-crossover\_prob}, \texttt{-c}: value between 0 and 1. It controls the probability that two candidate solutions are combined together instead of just copying them (default $0.99$).
+    \item \texttt{-{}-mutation\_prob}, \texttt{-m}: value between 0 and 1. It controls the probability that a candidate solution is randomly mutated (default $0.05$)).
+    \item \texttt{-{}-weights\_type}, \texttt{-w}: it controls the probability that each candidate solution is selected by the algorithm (default \texttt{sm}, \textit{Softmax}).
+    \item \texttt{-{}-mutation\-type}, \texttt{-n}: it controls the type of mutation done by the algorithm (default \texttt{tr}, \textit{Transpose}).
+    \item \texttt{-{}-max\_time}, \texttt{-t}: same as \textbf{IGA}.
+    \item \texttt{-{}-write\_exec\_trace}, \texttt{-e}: same as \textbf{IGA}. Results are written to the file \textit{./results/results\_details\_gen.csv} (default $0$).
 \end{itemize}
 
-Assume that the jobs run in the order $j_1,\ \ldots,\ j_n$, and go through the machines in order $M_1,\ \ldots,\ M_m$.
-The completion time of the $i$th operation of job $j_k$ will be given by
+Example:\\
+\quad\texttt{./flowshop\_gen -f ../instances/50\_20\_10 -p 20 -c 0.8}
 
-\[
-    C_{i,j_k}=
-        \begin{cases}
-        \sum_{l=i}^{i}{p_{l,j_1}} & if\ j_k = j_1\ \text{(first job)} \\
-        \sum_{l=1}^{k}{p_{1,j_l}} & if\ i = 1\ \text{(first machine)} \\
-        max(C_{i-1, j_k}, C_{i, j_{k-1}}) + p_{i,j_k} & \text{otherwise}
-        \end{cases}
-\]
+The \textbf{Memetic Algorithm} will solve the instance \textbf{50\_20\_10} using \textit{population size $= 2$}, with a random seed, maximum time of $300$ seconds, \textit{Transpose mutation} with chance $0.05$, \textit{crossover rate} of $0.8$, and \textit{uniform} weights; no execution trace is written.
 
-In short, the completion time of the first job will be given by the sum of the processing times of each of its steps (as $j_1$ will always find all the machines available).\\
-Also, a new job can be processed by the first machine as soon as this is available, hence the second condition.
-
-Our goal is to find the optimal scheduling for the jobs, such that the \textbf{weighted completion time} is minimized.
-
-$$min\ WCT = \sum_{i=1}^n{w_i \cdot C_{m, j_i}}$$
 
 
 
@@ -203,63 +195,47 @@ $$min\ WCT = \sum_{i=1}^n{w_i \cdot C_{m, j_i}}$$
 
 
 \newpage
-\section{Implementation}
+\section{Overview of the implementation}
 This section will focus on the \textbf{C++} implementation of algorithms to solve \textbf{PFSP}. \\
-For each class/file, it is provided a brief description.
+For each class/file, it is provided a brief description. Note that the $2$ new algorithms were built on top of the existing structure used in the previous assignment.
+In this section, the focus will be on new parts that have been added. For a complete overview of the code structure, please refer to the first report. 
 
-$\bullet$ \texttt{flowshop.cpp}:\\
-main access point to the implementation. The input arguments are handled using \textbf{Cxxopts} (\href{https://github.com/jarro2783/cxxopts}{https://github.com/jarro2783/cxxopts}), which provides GNU-style syntax for the input arguments.\\
-It will also measure the execution time, and write the output to a file.
+$\bullet$ \texttt{flowshop\_iga.cpp}:\\
+main access point to \textbf{IGA}. 
 
-The central idea of the optimization algorithms implementation is to create a structure which allows the algorithms to operate transparently to the problem they are solving.\\
-In order to do so, the implementation of the problem instance and of the candidate solutions are wrapped into appropriate classes, which expose to the optimization algorithm a set of functions what work transparently to the underlying implementation of the algorithm.
-
-Even though this architecture can look rather complex, and potentially slow down the optimization process, it is also very versatile and can be extended to any sort of optimization or search problem that can be solved by \textit{local search}
-algorithms.
-
-$\bullet$ \texttt{pfsp\_state.h, pfsp\_state.cpp}: \\
-The \textit{candidate solutions} (also referred to as \textit{states}) are wrapped into a class which allows the optimization algorithms to process the candidates solutions independently from their actual implementation.\\
-The class can also store the value of the state, given by some evaluation function.\\
-This could be useful, for example, if we had to store states in a priority queue sorted according to the state value.
-
-$\bullet$ \texttt{pfps\_problem.h, pfsp\_problem.cpp}:\\
-This class works as a wrapper to the actual problem instance. \\
-A \textit{problem} is modelled as an entity having an initial state, an evaluation function which can be applied to the states, and a function to compute the neighbourhood of a given state. \\
-All these functions are actually function pointers, and their implementations can be set at runtime when the problem is instantiated, or even after, if one wants to dynamically update the evaluation function that is being used (as in \textit{dynamic search}), or update how neighbours are generated (as in \textit{variable neighbourhood descent}).
+$\bullet$ \texttt{flowshop\_gen.cpp}:\\
+main access point to the \textbf{Memetic Algorithm}. Using $2$ separate files (and so $2$ executables) was considered the best option as the $2$ algorithm have very different structure and parameters, and keeping a single executable would make things more confusing. 
 
 $\bullet$ \texttt{support\_function.h, support\_function.cpp}: \\
 this file provides a series of functions that are used by the optimization algorithms.
 These functions are passed as input to the optimization algorithms by using function pointers. \\
-This provide higher flexibility, and makes the algorithms transparent to how candidates solutions are evaluated or generated.
+The file was updated to contain functions that are used by \textbf{IGA} and by the \textbf{Memetic Algorithm}. Operators for \textit{Destruction/Construction}, \textit{Crossover} and \textit{Mutation} are contained here. Please refer to the algorithm description for more details about them.
 
-The evaluation function is decomposed in 2 parts: one is exposed to the optimization algorithm, and has a signature which is independent to the problem which is being solved; the other takes as input some parameters specific to an instance; this was done so that the \textbf{RZ heuristic} can evaluate partial solutions by re-using the existing code. 
-
-\textbf{Armadillo} provides easy-to-use data-structures for matrices and vectors, with a syntax close to \textit{MATLAB}.\\
-This allows for easy manipulations of vectors, and very efficient vectorized operations.
-
-The 3 functions to generate the neighbours of a given candidate solution will return a vector of candidate solutions, which can be inspected by the optimization algorithm.\\
-The functions that compute the initial candidate solution are also provided here. 
-They take a problem instance as input, and output a candidate solution.\\
-It should be noted that all the neighbours of a given state are generated, and they are evaluated only later.\\
-Evaluating them straight away would improve the performances of \textit{Iterative Improvement}: however it will be shown later that the speed-up are very small, if the algorithm is combined with the \textit{RZ heuristic} (which is what would be done in a real-case usage).
-
-$\bullet$ \texttt{engine.h, engine.cpp}:\\
-abstractm implementation of an optimization engine, it contains a reference to a \textit{problem} to be optimized, and a virtual function to perform the search.\\
-It also holds the optimal solution found by the search, and its score.
-
-$\bullet$ \texttt{ii\_engine.h, ii\_engine.cpp}:\\
-this class holds the implementation of the \textbf{iterative improvement} algorithm.\\
-The constructor allows to choose between using \textit{first} or \textit{best} improvement, and to specify a \textit{problem} to be solved, or optimized.
+$\bullet$ \texttt{iga\_engine.h, iga\_engine.cpp, gen\_engine.h, gen\_engine.cpp}:\\
+this class holds the implementation of the \textbf{iterated greedy algorithm} and of the \textbf{memetic algorithm}.\\
+Their constructors allows to choose the different parameters, and to specify a \textit{problem} to be solved, or optimized.
 The result of the search will be stored inside the class, and accessible to the outside.\\
-It is important to note that the algorithm doesn't directly know how the problem instances or the candidate solutions are implemented, and as such the implementation is very flexible and easily extendible to other problems.
+The algorithms don't directly know how the problem instances or the candidate solutions are implemented, and as such the implementations are very flexible and easily extendible to other problems.\\
+The details of the implementations and of the parameters will be given in the next section.
 
-$\bullet$ \texttt{vnd\_engine.h, vnd\_engine.cpp}:
-this class holds the implementation of the \textbf{variable neighbourhood descent} algorithm (\textit{VND}).\\
-The structure of the class is similar to the one of iterative improvement.\\
-In the case of \textit{VND}, we use multiple neighbourhood functions, passed as a vector of function pointers to the class constructor.\\
-As such, it is easily possible to use any combination of neighbourhood functions; moreover, if a single function is given, the algorithm becomes equivalent to \textit{iterative search}. 
-However, it was preferred to keep separate the 2 implementations, for the sake of clarity.
+ 
+% ====================================================
+% ====================================ALGORITHM DETAILS
+% ====================================================
 
+\section{Details of the implementation}
+\subsection{Iterated greedy algorithm}
+The Iterated Greedy Algorithm \textbf{(IGA)} applies \textit{local search} to states that are iteratively generated through \textit{heuristic procedures}.\\
+At each step, the previous candidate solution is modified through an heuristic procedure called \textit{Destruction/Construction}, and then \textit{Local search} is applied to the result.\\
+The proposed implementation is based on the work of \textit{Pan} and \textit{Ruiz} \cite{pan2012local}.
+
+The initial state is generated through the \textbf{RZ heuristic}, already seen in the first assignment.\\
+The subsidiary local search is \textit{Best Improvement} with {Transpose} as neighbourhood function: as seen in the first assignment, this algorithm is able to find good solutions very quickly, as long as the initial state is acceptably good.
+
+
+
+
+\subsection{Memetic algorithm}
 
 
 

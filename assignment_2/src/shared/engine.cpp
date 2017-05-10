@@ -27,7 +27,7 @@ PfspProblem &Engine::GetProblem()
 
 PfspState &Engine::GetResultState()
 {
-  return *(this->m_pcResult);
+  return this->m_cResult;
 }
 
 /****************************************/
