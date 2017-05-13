@@ -39,6 +39,7 @@ results_vnd <- read_csv("~/heuristic-optimization-ulb/assignment_1/results/resul
 # Read ideal solution values
 bestSolutions <- read_csv("~/heuristic-optimization-ulb/assignment_1/results/bestSolutions.txt")
 
+
 # Join and clean the tables
 results_ii <- sqldf("select * from results_ii, bestSolutions where results_ii.filename = bestSolutions.filename")
 results_vnd <- sqldf("select * from results_vnd, bestSolutions where results_vnd.filename = bestSolutions.filename")

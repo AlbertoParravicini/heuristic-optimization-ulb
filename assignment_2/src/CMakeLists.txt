@@ -13,6 +13,10 @@ link_directories(${Boost_LIBRARY_DIR})
 find_package(Armadillo REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIRS})
 
+# Set optimization
+SET(CMAKE_CXX_FLAGS "-O3")
+SET(CMAKE_C_FLAGS "-O3")
+
 # Set the output folder where your program will be created
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/../build/)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})

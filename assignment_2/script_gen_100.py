@@ -19,11 +19,13 @@ weights = ["uni"]
 
 
 for instance in instances:
-	rand_seed = randint(0, 1000000)
-	for c in crossover_rate:	
-		for p in population_size:
-			for w in weights:
-				command_input = "./build/flowshop_gen -f ./instances/" + instance + " -r " + str(rand_seed) + " -c " + c + " -p " + p + " -w " + w + " - e 0"
-				print("\n\nEXECUTING:", command_input)
-				os.system(command_input)
+	for i in range(5):
+		rand_seed = randint(0, 1000000)	
+		print("\n\n INSTANCE:", instance, " -- RUN: ", i, "\n\n")
+		for c in crossover_rate:	
+			for p in population_size:
+				for w in weights:
+					command_input = "./build/flowshop_gen -f ./instances/" + instance + " -r " + str(rand_seed) + " -c " + c + " -p " + p + " -w " + w + " - e 0"
+					print("\n\nEXECUTING:", command_input)
+					os.system(command_input)
 

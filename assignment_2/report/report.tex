@@ -25,9 +25,12 @@ footinclude]{article}
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 \usepackage[utf8]{inputenc} % Required for including letters with accents
 \usepackage{color}
-\usepackage{subcaption}
+
 \usepackage[nochapters, dottedtoc]{classicthesis}
 \usepackage{listings} % For Python code
+\usepackage{float}
+\usepackage[caption = false]{subfig} % For 2x2 grid of images
+
 
 \usepackage[ruled]{algorithm2e} % For pseudo-code
 
@@ -230,13 +233,41 @@ At each step, the previous candidate solution is modified through an heuristic p
 The proposed implementation is based on the work of \textit{Pan} and \textit{Ruiz} \cite{pan2012local}.
 
 The initial state is generated through the \textbf{RZ heuristic}, already seen in the first assignment.\\
-The subsidiary local search is \textit{Best Improvement} with {Transpose} as neighbourhood function: as seen in the first assignment, this algorithm is able to find good solutions very quickly, as long as the initial state is acceptably good.
+The subsidiary local search is \textbf{Best Improvement} with {Transpose} as neighbourhood function: as seen in the first assignment, this algorithm is able to find good solutions very quickly, as long as the initial state is acceptably good.
 
+The \textbf{Destruction/Construction} procedure that is adopted is the same that is described in the article: a certain number of elements is randomly removed from the solution, and then they are re-added one-by-one in the position that gives the best partial result.\\
+As for the number of elements that are removed, $\boldsymbol{10}$, $\boldsymbol{8}$ and $\boldsymbol{6}$ were tested on instances of size $50$, with $10$ being sightly better in terms of solution quality (refer to the specific section for more details).\\
+Instances of size $100$ use a value of $8$, as suggested by \textit{Pan} and \textit{Ruiz}.
 
+As explained in \textit{Pan}, \textit{Ruiz} \cite{pan2012local}, candidate solutions that aren't improving are accepted with a probability that is proportional to their quality. Moreover, this probability is a function of the instance size, and of the parameter $\lambda$.\\
+Higher values of $\lambda$ will increase the acceptance probability, and make the algorithm more prone to \textit{diversification}. Convergence will be slowed down, however. \\
+It was shown that the value of $\lambda$ doesn't have any significant impact on the performances, and as such a value of $\boldsymbol{\lambda = 2}$ was picked, as suggested by the article.
 
+The algorithm stops after a certain amount of time has elapsed; this value was set equal to $500$ times the average execution time of a \textit{Variable Neighbour Descent} algorithm, on similarly sized instances. Concretely, the maximum amount of time on $50$ jobs instances is set to $\boldsymbol{100}$ seconds, while for $100$ jobs instances it is $\boldsymbol{500}$ seconds. \\
+However, the algorithm stops if no improvement has been found for a given amount of time, equal to the maximum allowed time divided by $50$.
+Using a longer window doesn't seem to provide significant improvements in terms of quality, and the chosen value is a good compromise between execution time and result quality.
 
 \subsection{Memetic algorithm}
+\textbf{Memetic algorithms} combine \textit{genetic algorithms} with \textit{local search}. First, a \textbf{crossover} operator is applied to the initial random population.
+Then, local search can be applied to the resulting population, followed by a \textbf{mutation} operator. This second population is then improved by using again \textit{local search}, and the resulting candidate solutions will be used as population for the next iteration.
 
+This type of algorithm has a large number of parameters that can be considered. As a starting point, some of the parameters were picked according to \textbf{Bonarini} \href{http://chrome.ws.dei.polimi.it/images/e/eb/GeneticAlgorithms.pdf}{lecture notes, slide 45}.\\
+The population size was tested with values of $10$ and $20$, but no significant difference was observed.
+
+\textbf{Crossover} and \textbf{Mutation} are done by sampling candidate solutions from the population. Each candidate solution is picked with a probability that is a function of its fitness. \\
+Three different approaches have been tested. In the first, probabilities are simply inversely functional to the fitness; in the second, referred as \texttt{uni10}, we consider the inverse of the $10$-th power of the scores. The idea is to increase the probabilities relative to good solutions, and penalize the others.\\
+As extreme case, the third approach is to use the \textit{softmax} function, which is the inverse of the exponential of the scores.  \\
+Overall, using a simple uniform probability seems to give the best results, probably because it ensures the highest diversification.
+
+Crossover was applied by using the \textbf{PMX} operator \cite{uccoluk2002genetic}, which makes sure that children candidate solutions are valid permutations.
+Pairs of candidate solutions are picked from the population accordingly to their fitness, and are combined through crossover with a probability of $0.99$; lower values were tested, and they gave significantly worse results. 
+
+Mutation is done by swapping $2$ random elements in the candidate solution, with a probability of $0.05$; higher probabilities seems to excessively disrupt good solutions.
+
+In a single iteration of the \textit{memetic algorithm}, \textbf{Best improvement} is applied twice as subsidiary local search procedure: in the first case, after \textit{crossover}, it is used with the \textbf{Transpose} operator, to quickly improve the quality of the population without wasting too much time.\\
+After mutation it is applied again with the \textbf{Exchange} operator, which is slower but significantly improves the quality of the population.
+
+The termination criterion is implemented in the same way as \textbf{IGA}.
 
 
 % ====================================================
@@ -246,20 +277,18 @@ The subsidiary local search is \textit{Best Improvement} with {Transpose} as nei
 \section{Inferential statistical analysis}
 
 \subsection{Introduction}
-The implemented algorithms offer a wide choice of parameters to be set, in terms of how the initial state is computed, how new candidate solutions are generated, and so on.\\
-As such, it is important to evaluate which combinations offer the best performances, both in terms of \textbf{results} (the \textit{weighted completion time} defined above) and \textbf{execution time}.
+The implemented algorithms offer a wide choice of parameters to be set.\\
+Trying all possible combinations would take a huge amount of time, but it is still possible to perform some tests to check how different parameters can impact the performances, both in terms of \textbf{results} (\textit{weighted completion time})  and \textbf{execution time}.
 
 The algorithms were tested on $60$ different problem instances: $30$ instances with $50$ jobs and $30$ instances with $100$ jobs.
-All the instances had $20$ machines. 
-
-2 types of tests were performed:
-\begin{itemize}
-    \item Test the \textit{iterative improvement} algorithm, by trying all different combinations of initial state generation (\textit{random} and \textit{RZ}), neighbourhood generation (\textit{transpose}, \textit{exchange}, \textit{insert}) and first/best improvement, for a total of $12$ different combinations of parameters.
-    
-    \item Test the \textit{variable neighbourhood descent} algorithm, by trying different combinations of neighbourhood generator functions. The algorithm was tested with \textit{Transpose, Exchange, Insert} and with \textit{Transpose, Insert, Exchange}. In both cases, the algorithm was set to use \textit{first improvement} and the \textit{RZ} heuristic for the starting state.
-\end{itemize}
+All the instances had $20$ machines. \\
+In some tests, where indicated, a smaller subset of instances was used. \\
+For each combination of parameters, the same instance has been tested $5$ times, then the \textit{median} execution time and result have been considered. \\
+Compared to the \textit{mean}, the \textit{median} is more robust to outliers, and will give more meaningful results.
 
 To have comparable results across the tests on a single problem instance, the \textbf{seed} used by the \textit{random number generator} was kept fixed across a single instance.
+
+\textbf{Note:} contrary to the previous assignment, this time the code has been compiled by using \texttt{-O3} level optimization. To provide results that are comparable, the previous algorithms have also been recompiled with the same optimization level; then, \textbf{VND} has been tested again, with the same procedure used for the 2 new algorithms, in order to have a meaningful comparison.
 
 The tests were performed on the following machine:
 \begin{itemize}
@@ -268,6 +297,7 @@ The tests were performed on the following machine:
     \item RAM: 4 GB at 1867Mhz
 \end{itemize}
  
+\newpage 
  
 \subsection{Exploratory analysis}
 Before starting any statistical test, it is a good idea to visualize the data, so to see if it's immediately possible to notice any interesting structure in the results.
@@ -275,650 +305,281 @@ Before starting any statistical test, it is a good idea to visualize the data, s
 First of all, it is required to separate the data relative to the instances with $50$ jobs from the ones with $100$ jobs, as the values from the 2 sets are not comparable with each other.
 
 Then, it is possible to plot \textbf{boxplots} that display summary statistics of the \textbf{execution times} and of the \textbf{result values}. Relatively to the optimization results, it is also visualized the boxplot of the \textbf{ideal optimization results}, the values that would be achieved by an exact solver.
+The results obtained by \textbf{Variable Neighbour Descent} with {Transpose, Insert, Exchange} have been also included in the comparisons, as a reference point.
+In the case of $50$ jobs instances, the plots shows also the values for different parameters for \textbf{IGA}. 
+
+\newpage
+In the first 2 plots we can compare the execution times of \textbf{IGA}, \textbf{Memetic algorithm} and \textbf{VND} on instances of size $50$ and $100$.
+On paper, all the algorithms are given the same maximum execution time, but, as said before, an \textit{early stopping} procedure has been adopted, in order to reduce computation time. As such, it is meaningful to compare the execution times, to see how long it takes to the algorithms to reach a stagnation point.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.3\textwidth, center, keepaspectratio=1]{{"II_execution_time"}.pdf}
-    \caption{\emph{Summary statistics of the execution time for \textbf{iterative improvement}, with different parameters.}}
+    \includegraphics[width=1.2\textwidth, center, keepaspectratio=1]{{"exec_time"}.pdf}
+    \caption{\emph{Box plots of the execution times for the various algorithms.}}
 \end{figure}
+
+We can see how the new algorithms are significantly slower that \textbf{VND}, and that modifying $8$ or $10$ elements in the \textit{destruction/construction} procedure leads a faster convergence to a local optimum. This can be explained considering that the \textit{destruction/construction} procedure is very fast, and modifying more elements doesn't slow down the algorithm; on the other hand, it improves more the current solution by using the \textit{destruction/construction} heuristic, and causes a faster convergence.
+
+The optimization results are compared by looking at the \textbf{ARPD}, \textit{average percentage relative deviation}, defined as:
+$$ ARPD = \frac{1}{R}\sum_{i=1}^{R}{\left(\frac{100 \cdot (S_i - S_{best})}{S_{best}}\right)} $$ 
+where $R$ is the number of repetitions of each instance, $S_i$ is the score of a given iteration, and $S_{best}$ is the best known score for the instance (in our case, the optimal solution). Using \textbf{ARPD} prevents the results from being biased by instances with unusually high (or low) scores, and gives more reliable results.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.3\textwidth, center, keepaspectratio=1]{{"ii_exec_zoom"}.pdf}
-    \caption{\emph{Summary statistics of the execution time for \textbf{iterative improvement}, with different parameters. The first 2 combinations were removed to see more in details the other ones.}}
+    \includegraphics[width=0.9\textwidth, center, keepaspectratio=1]{{"arpd"}.pdf}
+    \caption{\emph{Summary statistics of the optimization results for the various algorithms.}}
 \end{figure}
 
-By looking at the execution times of \textbf{iterative improvement}, it is immediately possible to notice how \textit{first improvement} with \textit{random initial state} and \textit{exchange} or \textit{insert} neighbourhood functions is much slower than the other implementations.
-Moreover, it is clear how the \textit{transpose} function is much faster than the other, as the number of generated neighbours is linear with respect to the number of jobs, instead of quadratic.
+\textbf{IGA} shows some improvements over \textbf{VND}, at the cost of slower execution time. Note that the population size of the \textbf{Memetic algorithm} is different between instances with $50$ and $100$ jobs, due to computational constraints. This is probably the reason why the algorithm is seemingly better than \textbf{VND} for smaller instances, but worse on the bigger ones.
+
+
+We can also look more in details at the results of \textbf{IGA}, when $6$, $8$ or $10$ elements are modified in the \textit{destruction/construction} procedure. These tests were done on instances of size $50$. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.3\textwidth, center, keepaspectratio=1]{{"II_results"}.pdf}
-    \caption{\emph{Summary statistics of the optimization results for \textbf{iterative improvement}, with different parameters.}}
+    \includegraphics[width=0.9\textwidth, center, keepaspectratio=1]{{"iga_param"}.pdf}
+    \caption{\emph{Results for \textbf{IGA} where a different number of elements is modified in \textit{destruction/construction}.}}
 \end{figure}
 
-The optimization results given by the algorithms seems to be all very close to each other regardless of the chosen parameters, with the obvious exception of the \textit{transpose} function: despite being faster, it generates a lower amount of new candidate solutions, and it's not surprising to see it perform worse than the other options.\\
-The fact that the results are all quite close to each other means that the choice of initial parameters will be based mostly on execution time, which greatly simplify the problem of picking the "best" algorithm.\\ 
-Moreover, we can see how the results are seemingly very close to the best theoretical results. We will soon evaluate whether there is a statistical difference between the ideal results and the ones provided by our heuristic algorithms.
+A \textit{Kruskal-Wallis} test was performed to check if there is a statistically significant difference between the 3 values.
 
-\begin{figure}[H]
+\begin{table}[H]
     \centering
-    \includegraphics[width=1\textwidth, center, keepaspectratio=1]{{"vnd_boxplot"}.pdf}
-    \caption{\emph{Summary statistics of execution time and optimization results for \textbf{variable neighbourhood descent}, with different parameters.}}
-\end{figure}
+    \begin{tabular}{lrrrr}
+        \hline
+        \\[-1.5ex]
+        Type & p.value & Median, 6 & Median, 8 & Median, 10 \\ 
+        [0.5ex]
+        \hline
+        \\[-1.5ex]
+        Execution time & 3.142e-05 & 6891.00 & 4615.50 & 5268.00 \\ 
+        ARPD & 0.14 & 0.59 & 0.52 & 0.38 \\ 
+        \\[-1.6ex]
+        \hline
+    \end{tabular}
+\end{table}
 
-Relatively to \textit{variable neighbourhood descent}, we can see how \textbf{TIE} (\textit{Transpose, Insert, Exchange}) is generally faster than \textbf{TEI} (\textit{Transpose, Exchange, Insert}). Both options are however very fast, if compared to the times given by some of the variants of  \textit{iterative improvement} algorithms seen above.\\
-As for the results, both options seem to give results that are pretty much equivalent, and once again very close to the theoretical optimum.
+As it is possible to reject the \textit{null hypothesis} that the 3 algorithms have the same execution time, we can perform a further test on the fastest 2, and see if they are different. 
 
-From this initial analysis, it seems that the best algorithms could be \textbf{iterative search} with \textit{RZ} heuristic and \textit{Exchange} function (using \textit{best} or \textit{first} improvement doesn't seem to change much, with the previous parameters) and \textbf{VND} with \textit{Transpose, Insert, Exchange}. \\
-To get a definitive answer, however, more in-depth tests will be required.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lrrrr}
+        \hline
+        \\[-1.5ex]
+        Type & p.value & Median, 8 & Median, 10 \\ 
+        [0.5ex]
+        \hline
+        \\[-1.5ex]
+        Execution time & 0.3147 & 4615.50 & 5268.00 \\ 
+        \\[-1.6ex]
+        \hline
+    \end{tabular}
+\end{table}
+
+
+It is possible to say with good confidence that using a value of $8$ gives a faster algorithm, but in terms of solution quality the 3 options are pretty much equivalent. It is also not possible to say that using $10$ instead of $8$ will give a faster algorithm, in spite of what the plots might suggest. 
+As such, for the remaining part of the report it will be used a value of $8$, accordingly to what was suggested by the article.
+
+We can also compare the results of the \textit{Memetic algorithm} with population size $10$ or $20$.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lrrrr}
+        \hline
+        \\[-1.5ex]
+        Type & p.value & Median, 10 & Median, 20 \\ 
+        [0.5ex]
+        \hline
+        \\[-1.5ex]
+        Execution time & 3.894e-13 & 5174.50 & 7760.50 \\ 
+        ARPD & 0.0008 & 2.16 & 1.82 \\ 
+        \\[-1.6ex]
+        \hline
+    \end{tabular}
+\end{table}
+
+It can be seen how using a smaller population will give a faster algorithm, but worse results. For instances size of $100$ it was preferred to use a population of $10$, while on instances of $50$ jobs a value of $20$ was used, in order to get the best quality/execution-time \textit{tradeoff}.
 
 \subsection{Summary statistics}
 
 From the collected results, it is possible to compute a number of interesting statistics that will give some additional insight about the performances of the algorithms.\\
-For both algorithms and for each combination of initial settings, it is possible to compute the \textit{mean}, the \textit{median}, the \textit{standard deviation} (and other statistics) relatively to the execution time and to the optimization results.\\
-It is also possible to evaluate how distant the algorithms are from the best possible result.\\
-This can be done by using the \textbf{MAPE} (\textit{mean absolute percentage error}), computed as
-
-$$ MAPE = \frac{100}{n}\sum_{i=1}^n{\left|\frac{B_i - R_i}{B_i}\right|}$$
-
-where $n$ is the number of instances ($30$ for each number of jobs), $B_i$ is the best possible solution for a given instance, and $R_i$ is the optimization result given by our algorithm.
+For each algorithm, it is possible to compute the \textit{mean}, the \textit{median}, the \textit{standard deviation} (and other statistics) relatively to the execution time and to the optimization results (using \textbf{ARPD}).\\
 
 
-    \begin{table}[H]
-    \centering % centering table    
-    \begin{tabular}{l l l l l l} % creating eight columns
+\begin{table}[H]
+    \centering
+    \begin{tabular}{rlrrrrr}
         \hline
-        \hline 
         \\[-1.5ex]
-        \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{Minimum} & \textcolor{BrickRed}{Median} & \textcolor{BrickRed}{Mean} & \textcolor{BrickRed}{Maximum} & \textcolor{BrickRed}{Standard deviation}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{FI, Random, E}     & 76539 & 113272 & 112518 & 185083 & 22342\\ 
-        \textcolor{MidnightBlue}{FI, Random, I}     & 186265 & 262628 & 264573 & 347115 & 39546\\
-        \textcolor{MidnightBlue}{FI, Random, T}     & 224 & 438 & 479 & 911 & 169\\
-        \textcolor{MidnightBlue}{FI, RZ, E}         & 2461 & 8192 & 8037 & 14341 & 3642\\
-        \textcolor{MidnightBlue}{FI, RZ, I}         & 6834  & 19631 & 19934 & 34009 & 5576\\
-        \textcolor{MidnightBlue}{FI, RZ, T}         & 11 & 32 & 34 & 96 & 18\\
-        \textcolor{MidnightBlue}{BI, Random, E}     & 19544 & 25040 & 25956 & 35471 & 4474\\
-        \textcolor{MidnightBlue}{BI, Random, I}     & 40502 & 59755 & 58112 & 72690 & 8897\\
-        \textcolor{MidnightBlue}{BI, Random, T}     & 267 & 497 & 512 & 898 & 158\\
-        \textcolor{MidnightBlue}{BI, RZ, E}         & 1706 & 5626 & 5635 & 10429 & 1869\\
-        \textcolor{MidnightBlue}{BI, RZ, I}         & 9219 & 15135 & 15790 & 25937 & 4692\\
-        \textcolor{MidnightBlue}{BI, RZ, T}         & 11 & 42 & 42 & 106 & 17\\
-        \textcolor{MidnightBlue}{VND, TIE}         & 6122    &   10150 &  10120   &   18170  & 3143\\
-        \textcolor{MidnightBlue}{VND, TEI}         & 8292    &   12060 &  12860   &   23600  & 4006
-        \\[1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:100-exec}Summary statistics of the \textbf{execution times} (in milliseconds) of the \textbf{iterative improvement} and \textbf{VND} algorithms, with different initial parameters.}
-    \end{table} 
-
-    \begin{table}[H]
-    \centering % centering table    
-    \begin{tabular}{l l l l l l} % creating eight columns
+        Algorithm & Min & Mean & Median & Max & Standard Deviation \\ 
         \hline
-        \hline 
         \\[-1.5ex]
-        \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{Minimum} & \textcolor{BrickRed}{Median} & \textcolor{BrickRed}{Mean} & \textcolor{BrickRed}{Maximum} & \textcolor{BrickRed}{Standard deviation}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{Ideal result}      & 1449000 & 1754000 &  1745000 & 1992000 & 109155 \\   
-        \textcolor{MidnightBlue}{FI, Random, E} 	& 1474000 & 1783000 & 1773000 & 2029000 & 110586 \\  
-        \textcolor{MidnightBlue}{FI, Random, I}     & 1484000 & 1791000 & 1782000 & 2027000 & 114707 \\
-        \textcolor{MidnightBlue}{FI, Random, T}     & 2071000 & 2462000 & 2430000 & 2687000 & 145989 \\
-        \textcolor{MidnightBlue}{FI, RZ, E}         & 1501000 & 1799000 & 1799000 & 2059000 & 111644 \\
-        \textcolor{MidnightBlue}{FI, RZ, I}         & 1482000 & 1776000 & 1782000 & 2032000 & 111849 \\
-        \textcolor{MidnightBlue}{FI, RZ, T}         & 1513000 & 1827000 & 1824000 & 2087000 & 114101 \\
-        \textcolor{MidnightBlue}{BI, Random, E}     & 1508000 & 1837000 & 1829000 & 2086000 & 119963 \\
-        \textcolor{MidnightBlue}{BI, Random, I}     & 1506000 & 1810000 & 1808000 & 2099000 & 120916 \\
-        \textcolor{MidnightBlue}{BI, Random, T}     & 2075000 & 2490000 & 2449000 & 2675000 & 148046 \\
-        \textcolor{MidnightBlue}{BI, RZ, E}         & 1504000 & 1805000 & 1805000 & 2078000 & 113938 \\
-        \textcolor{MidnightBlue}{BI, RZ, I}         & 1502000 & 1793000 & 1788000 & 2063000 & 116300 \\
-        \textcolor{MidnightBlue}{BI, RZ, T}         & 1513000 & 1828000 & 1825000 & 2088000 & 114601 \\
-        \textcolor{MidnightBlue}{VND, TIE}         & 1488000    &   1791000 &  1784000   &   2062000  & 113651\\
-        \textcolor{MidnightBlue}{VND, TEI}         & 1487000    &   1789000 &  1782000   &   2031000  & 110927\\
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
+        GEN, 20 & 3528.00 & 12028.42 & 7760.50 & 36484.50 & 9926.38 \\ 
+        IGA, 8 & 3081.00 & 9562.20 & 4615.50 & 39951.00 & 11517.58 \\ 
+        VND, tie & 88.00 & 152.93 & 147.00 & 299.00 & 47.64 \\ 
+        \\[-1.6ex]
+        \hline
     \end{tabular}
-    \caption{\label{tab:100-res}Summary statistics of the \textbf{optimization results} of the \textbf{iterative improvement} and \textbf{VND} algorithms, with different initial parameters, and instances with \textbf{100 jobs}.}
-    \end{table} 
+    \caption{\label{tab:50-time}Summary statistics of the \textbf{execution time} of the various algorithms over instances with \textbf{50 jobs}.}
+\end{table}
 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{rlrrrrr}
+        \hline
+        \\[-1.5ex]
+        Algorithm & Min & Mean & Median & Max & Standard Deviation \\ 
+        \hline
+        \\[-1.5ex]
+        GEN, 10 & 30079.00 & 51450.10 & 51113.00 & 67448.00 & 9058.44 \\ 
+        IGA, 8  & 18293.00 & 31509.20 & 30382.00 & 50518.00 & 6801.02 \\ 
+        VND, tie & 899.00 & 1834.03 & 1882.00 & 3038.00 & 534.49 \\ 
+        \\[-1.6ex] 
+        \hline
+    \end{tabular}
+    \caption{\label{tab:100-time}Summary statistics of the \textbf{execution time} of the various algorithms over instances with \textbf{100 jobs}.}
+\end{table}
 
-    \begin{table}[H]
-        \centering % centering table    
-        \begin{tabular}{l l l l l l} % creating eight columns
-            \hline
-            \hline 
-            \\[-1.5ex]
-            \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{Minimum} & \textcolor{BrickRed}{Median} & \textcolor{BrickRed}{Mean} & \textcolor{BrickRed}{Maximum} & \textcolor{BrickRed}{Standard deviation}\\ [0.5ex]
-            \hline % inserts single-line
-            \\[-1.5ex]
-           \textcolor{MidnightBlue}{FI, Random, E} 	 &   2900  &   4571  &  4692 &   5177 &  779 \\
-           \textcolor{MidnightBlue}{FI, Random, I}    &   6794  &  12020  & 11950 &  13260 &  2265 \\
-           \textcolor{MidnightBlue}{FI, Random, T}    &  21.00  &  45.50  & 45.17 &  53.25 &  13 \\
-           \textcolor{MidnightBlue}{FI, RZ, E}        &   40.0  &  265.0  & 310.5 &  400.5 &  200 \\
-           \textcolor{MidnightBlue}{FI, RZ, I}        &  349.0  & 1095.0  &1177.0 & 1433.0 &  505 \\
-           \textcolor{MidnightBlue}{FI, RZ, T}        &  1.000  &  3.000  & 3.967 &  5.000 &  3 \\
-           \textcolor{MidnightBlue}{BI, Random, E}    &   1191  &   1534  &  1554 &   1698 &  235 \\
-           \textcolor{MidnightBlue}{BI, Random, I}    &   2772  &   3563  &  3630 &   3902 &  490 \\
-           \textcolor{MidnightBlue}{BI, Random, T}    &  30.00  &  49.50  & 56.13 &  70.00 &  18 \\
-           \textcolor{MidnightBlue}{BI, RZ, E}        &   37.0  &  329.0  & 333.8 &  425.2 &  182 \\
-           \textcolor{MidnightBlue}{BI, RZ, I}        &  462.0  &  985.5  &1051.0 & 1285.0 &  363 \\
-           \textcolor{MidnightBlue}{BI, RZ, T}        &  1.000  &  4.500  & 5.167 &  6.750 &  3 \\
-           \textcolor{MidnightBlue}{VND, TIE}         & 236.0    &   549.0 &  611.2    &   1393.0   & 269\\
-           \textcolor{MidnightBlue}{VND, TEI}         & 382.0    &   914.0 &  899.2   &   2178.0   & 408
-            \\[1ex] % [1ex] adds vertical space
-            \hline % inserts single-line
-        \end{tabular}
-        \caption{\label{tab:50-exec}Summary statistics of the \textbf{execution times} (in milliseconds) of the \textbf{iterative improvement} and \textbf{VND} algorithms, with different initial parameters, and instances with \textbf{50 jobs}.}
-    \end{table} 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{rlrrrrr}
+        \hline
+        \\[-1.5ex]
+        Algorithm & Min & Mean & Median & Max & Standard Deviation \\ 
+        \hline
+        \\[-1.5ex]        
+        GEN, 20 & 1.32 & 1.91 & 1.82 & 3.13 & 0.42 \\ 
+        IGA, 8 & 0.07 & 0.49 & 0.52 & 1.09 & 0.22 \\ 
+        VND, tie & 1.11 & 2.07 & 2.05 & 3.10 & 0.50 \\ 
+        \\[-1.6ex]
+        \hline
+    \end{tabular}
+    \caption{\label{tab:50-arpd}Summary statistics of the \textbf{ARPD} of the various algorithms over instances with \textbf{50 jobs}.}
+\end{table}
 
-
-
-    \begin{table}[H]
-        \centering % centering table    
-        \begin{tabular}{l l l l l l} % creating eight columns
-            \hline
-            \hline 
-            \\[-1.5ex]
-            \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{Minimum} & \textcolor{BrickRed}{Median} & \textcolor{BrickRed}{Mean} & \textcolor{BrickRed}{Maximum} & \textcolor{BrickRed}{Standard deviation}\\ [0.5ex]
-            \hline % inserts single-line
-            \\[-1.5ex]
-            \textcolor{MidnightBlue}{Ideal result}  & 465500  &  590300 & 586200  &  666600 & 44161\\
-            \textcolor{MidnightBlue}{FI, Random, E}  & 472200 & 601300 & 597800  &  679600 & 46274\\
-            \textcolor{MidnightBlue}{FI, Random, I}  & 467700 & 599900 & 595500  &  673100 & 47417\\
-            \textcolor{MidnightBlue}{FI, Random, T}  & 639500 & 770900 & 779200  & 1006000 & 64347\\
-            \textcolor{MidnightBlue}{FI, RZ, E}      & 474600 & 608800 & 602900  &  686200 & 46776\\
-            \textcolor{MidnightBlue}{FI, RZ, I}      & 478200 & 603900 & 596100  &  675500 & 45197\\
-            \textcolor{MidnightBlue}{FI, RZ, T}      & 480100 & 612900 & 607700  &  696500 & 47827\\
-            \textcolor{MidnightBlue}{BI, Random, E}  & 482200 & 616800 & 610800  &  706900 & 47422\\
-            \textcolor{MidnightBlue}{BI, Random, I}  & 474700 & 599600 & 602600  &  689700 & 47814\\
-            \textcolor{MidnightBlue}{BI, Random, T}  & 640600 & 773700 & 784200  & 1017000 & 65121\\
-            \textcolor{MidnightBlue}{BI, RZ, E}      & 474600 & 608600 & 602500  &  680200 & 46325\\
-            \textcolor{MidnightBlue}{BI, RZ, I}      & 473000 & 604800 & 597900  &  679000 & 46515\\
-            \textcolor{MidnightBlue}{BI, RZ, T}      & 480100 & 612900 & 607900  &  696500 & 48075\\
-            \textcolor{MidnightBlue}{VND, TIE}         & 478200   &   598400 &  597300    &   674900   & 45947\\
-            \textcolor{MidnightBlue}{VND, TEI}         & 477600    &   599700 &  596700   &   676500   & 45846
-            
-            \\[1ex] % [1ex] adds vertical space
-            \hline % inserts single-line
-        \end{tabular}
-        \caption{\label{tab:50-res}Summary statistics of the \textbf{optimization results} of the \textbf{iterative improvement} and \textbf{VND} algorithms, with different initial parameters, and instances with \textbf{50 jobs}.}
-    \end{table} 
-
-    \begin{table}[H]
-        \centering % centering table    
-        \begin{tabular}{l l l l} % creating eight columns
-            \hline
-            \hline 
-            \\[-1.5ex]
-            \textcolor{BrickRed}{Initial Parameters} & \textcolor{BrickRed}{100 Jobs} & \textcolor{BrickRed}{50 Jobs} & \textcolor{BrickRed}{Mean}\\ [0.5ex]
-            \hline % inserts single-line
-            \\[-1.5ex]
-            \textcolor{MidnightBlue}{FI, Random, E} & 1.607625   & 1.9744         & 1.791012    \\
-            \textcolor{MidnightBlue}{FI, Random, I} & 2.019402   &  1.578662      & 1.799032    \\
-            \textcolor{MidnightBlue}{FI, Random, T} & 39.3606    &  33.03201      & 36.1963     \\
-            \textcolor{MidnightBlue}{FI, RZ, E}     & 3.099908   &  2.840713      & 2.97031  \\
-            \textcolor{MidnightBlue}{FI, RZ, I}     & 2.137591   &   1.702044     & 1.919817    \\
-            \textcolor{MidnightBlue}{FI, RZ, T}     & 4.53555    &    3.664744    & 4.100149    \\
-            \textcolor{MidnightBlue}{BI, Random, E} & 4.760639   &   4.20176      & 4.4812    \\
-            \textcolor{MidnightBlue}{BI, Random, I} & 3.573396   &    2.780781    & 3.177088   \\
-            \textcolor{MidnightBlue}{BI, Random, T} & 40.41302   &   33.88196     & 37.14749    \\
-            \textcolor{MidnightBlue}{BI, RZ, E}     & 3.450056   &   2.787234     & 3.118645   \\
-            \textcolor{MidnightBlue}{BI, RZ, I}     & 2.462845   &  1.994742      & 2.228794   \\
-            \textcolor{MidnightBlue}{BI, RZ, T}     & 4.547392   &   3.686519     & 4.116955   \\ 
-            \textcolor{MidnightBlue}{VND, TIE}     & 2.210744   &   1.9007523    & 2.055748  \\ 
-            \textcolor{MidnightBlue}{VND, TEI}     & 2.11388   &   1.8048572     & 1.959371  
-            \\[1ex] % [1ex] adds vertical space
-            \hline % inserts single-line
-        \end{tabular}
-        \caption{\label{tab:mape}\textbf{Mean average percentage error} for the various algorithms, computed with respect to the best possible solution.}
-    \end{table} 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{rlrrrrr}
+        \hline
+        \\[-1.5ex]
+        Algorithm & Min & Mean & Median & Max & Standard Deviation \\ 
+        \hline
+        \\[-1.5ex]
+        GEN, 10 & 2.37 & 3.20 & 3.26 & 3.79 & 0.41 \\ 
+        IGA, 8 & 0.07 & 0.91 & 0.87 & 1.66 & 0.43 \\ 
+        VND, tie & 1.26 & 2.52 & 2.54 & 3.80 & 0.63 \\ 
+        \\[-1.6ex]
+        \hline
+    \end{tabular}
+    \caption{\label{tab:100-arpd}Summary statistics of the \textbf{ARPD} of the various algorithms over instances with \textbf{100 jobs}.}
+\end{table}   
+   
     
-\newpage
+The previous tables confirm what was observed with the plots: \textbf{IGA} is the best algorithms in terms of results, but it is a bit slower that \textbf{VND}. The \textbf{Memetic} algorithm is consistently than the other 2 on instances of size $100$.
 
-From the previous tables, it seems that the best results are given by \textbf{first improvement} with \textbf{random} start and \textbf{exchange} or \textbf{insert}.\\
-These combinations are however the slowest ones, while \textbf{VND} with \textbf{transpose, exchange, insert} seems to give similar results at much higher speed.
-Moreover, a difference of $0.1\%$ might not even be significant from a statistical point of view. We will analyse this more in details in the next section.  
-
-\subsection{Inferential statistical tests - Introduction}
-From the previous plots and tables it seems quite clear that some algorithms perform better than others.\\
-However, some of these differences might not be \textit{significant} from a statistical point of view, and be instead caused by randomness in the test instances or in the algorithms.
-
-In this section, the previous algorithms are compared to each other, to understand which ones are better in terms of speed and result quality.
+\subsection{Inferential tests}
+It seems obvious that there exist significant differences among the various algorithms; to see if this is actually the case, we will perform statistical tests on the observed results.
 
 Before performing any test, a few considerations about the testing methodology should be made.\\
 First, the instances with 50 and 100 jobs should  be treated separately, as they clearly compose different populations.\\
 Moreover, the tests to be performed are heavily dependent on the distributions of the populations that are considered.\\
 Most tests assume that the samples from a given population are \textit{independent and identically distributed} (\textbf{I.I.D.}): the first condition can be considered true as all the instances are considered separately, without any of them having influences on the others; the second condition is harder to verify, but can be considered true as long as instances with 50 and 100 jobs are considered separately.
 
-\textbf{Paired t-test} also assumes the populations to be \textit{normally distributed}, and to have the same \textit{variance}. The latter constraint can be removed by using \textbf{Welch's t-test}, which is provided by default by \textbf{R} \cite{welch1947generalization}. \\
-The \textit{normality} of the distribution can be checked in several ways, among which the \textbf{Shapiro-Wilk} test is one of the most common. \cite{shapiro1965analysis}
-The test assumes normality of the distribution as \textit{null hypothesis}.
-
-If the normality condition isn't verified, it is necessary to resort to \textit{non-parametric} tests, such as the \textbf{Wilcoxon signed-rank test} \cite{wilcoxon1945individual} for comparing the mean of two populations, or the \textbf{Kruskal-Wallis} test to compare more than two populations \cite{kruskal1952use}. The latter test assumes as null hypothesis that all the populations have the same mean, similarly to \textbf{ANOVA}.
-
-One last remark is that using \textit{t-test} to compare more than two populations is generally ill-advised (\href{http://www.stat.berkeley.edu/~mgoldman/Section0402.pdf}{http://www.stat.berkeley.edu/~mgoldman/Section0402.pdf}). One way to overcome the issue is to employ the so-called \textbf{Bonferroni correction}, which can however give rather conservative estimates. \\   
-A better approach is to initially compare the populations with \textbf{ANOVA} or \textbf{Kruskal-Wallis}, and then proceed with pairwise tests if necessary.
-
-\subsection{Tests on VND}
-
-We can compare the results of \textbf{VND}, and see which combination of initial parameters is superior.
-
-$\bullet$ First, we should check the normality of the distributions.
+If the population aren't normally distributed, it is necessary to resort to \textit{non-parametric} tests, such as the \textbf{Wilcoxon signed-rank test} \cite{wilcoxon1945individual} for comparing the mean of two populations, or the \textbf{Kruskal-Wallis} test to compare more than two populations \cite{kruskal1952use}. The latter test assumes as null hypothesis that all the populations have the same mean, similarly to \textbf{ANOVA}.
 
 \begin{table}[H]
-    \centering % centering table    
-    \begin{tabular}{l l l} % creating eight columns
+    \centering
+    \begin{tabular}{rlrrr}
         \hline
-        \hline 
         \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{p-value, Execution time} & \textcolor{BrickRed}{p-value, Result} \\ [0.5ex]
-        \hline % inserts single-line
+        Type & p.value & Mean, IGA 8 & Mean, GEN 20 \\ 
+        \hline
         \\[-1.5ex]
-        \textcolor{MidnightBlue}{VND, TIE, 100 Jobs}  & 0.03005 & 0.5337    \\
-        \textcolor{MidnightBlue}{VND, TIE, 50 Jobs}   & 0.00832  & 0.5934   \\
-        \textcolor{MidnightBlue}{VND, TEI, 100 Jobs}  & 0.005474  & 0.4946    \\
-        \textcolor{MidnightBlue}{VND, TEI, 50 Jobs}   & 0.005752  &  0.6878  \\
-        \textcolor{MidnightBlue}{Ideal result, 100 Jobs}   & & 0.4312\\       
-        \textcolor{MidnightBlue}{Ideal result, 50 Jobs}        & & 0.6698    
-        \\[1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
+        Execution time & 1.931e-05 & 9562.20 & 12028.42 \\ 
+        ARPD & 2.2e-16 & 0.49 & 1.91 \\ 
+        \\[-1.6ex]
+        \hline
     \end{tabular}
-    \caption{\label{tab:shapiro}\textbf{p-values} of the \textbf{Shapiro-Wilk} test for the various algorithms.}
-\end{table} 
-
-We can safely infer that the optimization results follow a normal distribution, while the execution times do not.\\
-As such, they will be compared using the \textbf{Wilcoxon signed-rank test}.
+    \caption{\label{tab:p-50}\textbf{p-values} of the \textbf{Wilcoxon} test for the various algorithms, relatively to \textit{execution time} and $ARPD$ of $50$ jobs instances.}
+\end{table}
 
 \begin{table}[H]
-    \centering % centering table    
-    \begin{tabular}{l l l l} % creating eight columns
+    \centering
+    \begin{tabular}{rlrrr}
         \hline
-        \hline 
         \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{p-value, Execution time} & \textcolor{BrickRed}{Mean TIE} & \textcolor{BrickRed}{Mean TEI}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{VND, 100 Jobs}  & 0.00665 & 10120 & 12860\\
-        \textcolor{MidnightBlue}{VND, 50 Jobs}   & 0.002688  & 611.2 &  899.2  
-        \\[1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:vnd-exec}\textbf{p-values} of the \textbf{Wilcoxon signed-rank test} test for the \textbf{execution time} of the various algorithms.}
-\end{table} 
-
-From the result we can infer that using \textbf{Transpose, Insert, Exchange} is the faster option.
-
-$\bullet$ Then, we can compare the optimization results, keeping into account the optimal results too. As we have 3 populations (for each instance size), which we have verified to be gaussian, we can use the \textbf{ANOVA} test.
-
-\begin{table}[H]
-    \centering % centering table    
-    \begin{tabular}{l l l l l} % creating eight columns
+        Type & p.value & Mean, IGA 8 & Mean, GEN 10 \\ 
         \hline
-        \hline 
         \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{p-value, Optimization result} & \textcolor{BrickRed}{Mean TIE} & \textcolor{BrickRed}{Mean TEI} & \textcolor{BrickRed}{Mean Ideal}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{VND, 100 Jobs}  & 0.3259 & 1784000 & 1782000 & 1745000\\
-        \textcolor{MidnightBlue}{VND, 50 Jobs}   & 0.5677  & 597300 &  596700 & 586200  
-        \\[1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:vnd-res}\textbf{p-values} of the \textbf{ANOVA test} test for the \textbf{optimization results} of the various algorithms.}
-\end{table} 
-
-It seems that there is no statistical difference not only between the 2 algorithms, but also with respect to the optimal solution.\\
-As such, the choice of initial parameters will be based on the \textbf{execution speed}; as we have seen, the fastest option is \textbf{Transpose, Insert, Exchange}.
-
-\subsection{Tests on Iterative Improvement}
-
-Tests on Iterative improvement are more complex, due to the high number of input parameters that can be set.\\
-The approach we can use is to keep fixed a certain number of parameters, and test the differences on the other. For instance, we can fix the how the \textbf{starting state} and the \textbf{neighbours} are computed, and see if \textbf{first improvement} is better than \textbf{best improvement}.\\
-Depending on the parameter that is evaluated, we could have 2 or more options available, and suitable tests have to be used.\\
-In every case, it's also required to check the normality of the distributions. The results of the \textbf{Shapiro-Wilk} test are not reported for brevity, but the approach is similar to the one used in the previous section. Depending on the results of this test, the appropriate follow-up tests have been used.
-
-As a preliminary test, we can use \textbf{ANOVA} on the execution times and on the optimization results. In this case, all the 12 combinations of initial parameters are compared at once.
-
-\begin{table}[H]
-    \centering % centering table    
-    \begin{tabular}{l l l} % creating eight columns
+        Execution time & 1.292e-11 & 31509.20 & 51450.10 \\ 
+        ARPD & 2.2e-16 & 0.91 & 3.20 \\ 
+        \\[-1.6ex]
         \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{p-value, Execution time} & \textcolor{BrickRed}{p-value, Optimization result}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{100 Jobs}  & 2.2e-16 & 2.2e-16\\
-        \textcolor{MidnightBlue}{50 Jobs}   & 2.2e-16  & 2.2e-16   
-        \\[1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
     \end{tabular}
-    \caption{\label{tab:ii-anova}\textbf{p-values} of the \textbf{ANOVA test} test for the \textbf{execution times} and \textbf{optimization results} of the various algorithms.}
-\end{table} 
+    \caption{\label{tab:p-100}\textbf{p-values} of the \textbf{Wilcoxon} test for the various algorithms, relatively to \textit{execution time} and $ARPD$ of $100$ jobs instances.}
+\end{table}
 
-As expected, in every case there are significant differences in the population means. \textbf{ANOVA} however doesn't tell which are the statistically different populations, which means that more detailed tests have to be carried out.
+Unsurprisingly, it is confirmed by the statistical tests that \textbf{IGA} is better than the \textbf{Memetic algorithm} both in \textit{execution time} and in \textit{result quality}.
 
-\subsection{RZ Heuristic VS Random initial state}
-In this section it is investigated which is the best approach to compute the initial state of the problem.\\
-The \textbf{RZ heuristic} and the \textbf{random} initial state are compared, while the other parameters are kept fixed. \\
-Depending on the distribution of the populations, the appropriate tests were performed. \textbf{Bonferroni correction} is used to deal with the repeated pairwise tests, and so the significance level is divided by the number of hypotheses: assuming the usual significance at $\alpha = 0.05$, we have to use $\alpha = 0.05 / 6 = 0.008$.
+\subsection{Correlation plot of solution quality}
 
-\begin{table}[H]
-    \begin{tabular}{l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{FI, RZ, T} & \textcolor{MidnightBlue}{FI, Random, T} &  & 3e-11  & 34.83 & 479.40 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, E} & \textcolor{MidnightBlue}{FI, Random, E} &  & 1.7e-17 & 8037.00 & 112518.03 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, I} & \textcolor{MidnightBlue}{FI, Random, I} &  & 3.4e-17 & 19933.67 & 264573.10 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 3e-11 & 41.93 & 512.93 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, E} & \textcolor{MidnightBlue}{BI, Random, E} &  & 1.7e-17 & 5634.90 & 25956.37 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, I} & \textcolor{MidnightBlue}{BI, Random, I} &  & 3e-11 & 15790.23 & 58112.23 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-initialstate100exec}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{100 jobs} instances, changing the \textit{Initial state} computation.}
-\end{table} 
+A useful way to visualize how the 2 algorithms perform with respect to each other is to draw a \textbf{correlation plot}. \\
+On the axes, the \textbf{ARPD} (or the \textbf{execution time}), of the 2 algorithms. \\
+Each point represents the \textbf{ARPD} (or the \textbf{execution time}) of the 2 algorithms on the same instance. To get more robust results, each point is computed at the mean of 5 different runs on the same instance.
 
-
-\begin{table}[H]
-    \begin{tabular}{l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.}  & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{FI, RZ, T} & \textcolor{MidnightBlue}{FI, Random, T} & 1.4e-24 &  & 1824292.40 & 2430299.40 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, E} & \textcolor{MidnightBlue}{FI, Random, E} & 0.37 &  & 1799165.57 & 1773176.93 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, I} & \textcolor{MidnightBlue}{FI, Random, I} & 0.98 &  & 1782487.10 & 1781657.14 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, T} & \textcolor{MidnightBlue}{BI, Random, T} & 6.5e-25 &  & 1824527.83 & 2448811.80 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, E} & \textcolor{MidnightBlue}{BI, Random, E} & 0.45 &  & 1805388.90 & 1828531.93 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, I} & \textcolor{MidnightBlue}{BI, Random, I} & 0.53 &  & 1788360.23 & 1807937.30 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-initialstate100res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{100 jobs} instances, changing the \textit{Initial state} computation.}
-\end{table} 
-
-By looking at the adjusted p-values, it seems that the \textbf{RZ} performs better only when \textbf{transpose} is used as neighbour generator. This is not suprising, as the number of candidate solutions that is explored is much smaller than in the other cases. As such, having a good initial candidate solution can have a much bigger impact.
-In the other cases, we can consider the execution times. In all cases, using the \textbf{RZ} heuristic gives shorter computation time. As there is no statistical evidence that \textbf{random} gives better results, we can conclude that using the \textbf{RZ} heuristic is the best choice.
-
-\begin{table}[H]
-    \begin{tabular}{l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.}  & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-         \textcolor{MidnightBlue}{FI, RZ, T}&  \textcolor{MidnightBlue}{FI, Random, T} &  & 2.8e-11 & 3.97 & 45.17 \\ 
-         \textcolor{MidnightBlue}{FI, RZ, E}&  \textcolor{MidnightBlue}{FI, Random, E} &  & 3e-11 & 310.53 & 4691.67 \\ 
-         \textcolor{MidnightBlue}{FI, RZ, I}&  \textcolor{MidnightBlue}{FI, Random, I} &  & 3e-11 & 1176.97 & 11954.67 \\ 
-         \textcolor{MidnightBlue}{BI, RZ, T}&  \textcolor{MidnightBlue}{BI, Random, T} &  & 2.8e-11 &  5.17 & 56.13 \\ 
-         \textcolor{MidnightBlue}{BI, RZ, E}&  \textcolor{MidnightBlue}{BI, Random, E} &  & 3e-11 & 333.83 & 1553.77 \\ 
-         \textcolor{MidnightBlue}{BI, RZ, I}&  \textcolor{MidnightBlue}{BI, Random, I} &  & 1.7e-17 & 1051.07 & 3629.73 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-initialstate50exec}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{50 jobs} instances, changing the\textit{Initial state} computation.}
-\end{table} 
-
-\begin{table}[H]
-    \begin{tabular}{l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{FI, RZ, T} & \textcolor{MidnightBlue}{FI, Random, T} &  & 1.1e-15 & 607710.27 & 779167.53 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, E} & \textcolor{MidnightBlue}{FI, Random, E} &  & 0.63 &  602852.33 & 597764.77 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, I} & \textcolor{MidnightBlue}{FI, Random, I} &  & 0.97 & 596090.40 & 595541.27 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 1.1e-15 &   607855.87 & 784191.83 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, E} & \textcolor{MidnightBlue}{BI, Random, E} &  & 0.41 & 602511.47 & 610805.03 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, I} & \textcolor{MidnightBlue}{BI, Random, I} &  & 0.62 & 597905.50 & 602568.37 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-initialstate50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{50 jobs} instances, changing the\textit{Initial state} computation.}
-\end{table} 
-
-Looking at the instances with \textbf{50 jobs} further confirms what was observed above.
-
-
-
-
-
-
-\subsection{First improvement VS Best improvement}
-In this section it is tested which \textbf{iterative improvement} version is the better option. The approach to testing is the same of the previous section.
-
-\begin{table}[H]
-    \begin{tabular}{l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, T}     &  & 0.035 &  34.83 & 41.93 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, E}     & 0.0025 &  & 8037.00 & 5634.90 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, I}     & \textcolor{MidnightBlue}{BI, RZ, I}     & 0.0029 &  & 19933.67 & 15790.23 \\ 
-        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 0.32 &  479.40 & 512.93 \\ 
-        \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{BI, Random, E} &  & 1.7e-17 &  112518.03 & 25956.37 \\ 
-        \textcolor{MidnightBlue}{BI, Random, I} & \textcolor{MidnightBlue}{BI, Random, I} & 3.5e-23 &  & 264573.10 & 58112.23 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-ty100ex}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{100 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
-\end{table} 
-
-
-\begin{table}[H]
-    \begin{tabular}{l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, T}     & 0.99 &  & 1824292.40 & 1824527.83 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, E}     & 0.83 &  & 1799165.57 & 1805388.90 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, I}     & \textcolor{MidnightBlue}{BI, RZ, I}     & 0.84 &  & 1782487.10 & 1788360.23 \\ 
-        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{BI, Random, T} & 0.63 &  &2430299.40 & 2448811.80 \\ 
-        \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{BI, Random, E} & 0.068 &  & 1773176.93 & 1828531.93 \\ 
-        \textcolor{MidnightBlue}{FI, Random, I} & \textcolor{MidnightBlue}{BI, Random, I} & 0.4 &  & 1781657.14 & 1807937.30 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-ty100res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{100 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
-\end{table} 
-
-There is no significant difference in terms of \textbf{optimization results}. However, \textbf{Best improvement} is faster in every significant case, making it the best option.
-
-
-
-\begin{table}[H]
-    \begin{tabular}{l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, T}     &  & 0.11 &   3.97 & 5.17 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, E}     &  & 0.47 &   310.53 & 333.83 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, I}     & \textcolor{MidnightBlue}{BI, RZ, I}     & 0.27 &  &  1176.97 & 1051.07 \\ 
-        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 0.029 &  45.17 & 56.13 \\ 
-        \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{BI, Random, E} & 3.3e-21 &  &  4691.67 & 1553.77 \\ 
-        \textcolor{MidnightBlue}{FI, Random, I} & \textcolor{MidnightBlue}{BI, Random, I} & 2.5e-19 &  &  11954.67 & 3629.73 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-ty50ex}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{50 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
-\end{table} 
-
-
-
-
-
-\begin{table}[H]
-    \begin{tabular}{l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2} & \textcolor{BrickRed}{T-test} & \textcolor{BrickRed}{Wilc.} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-                
-        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, T}     & 0.99 &  &  607710.27 & 607855.87 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, E}     & 0.98 &  &  602852.33 & 602511.47 \\ 
-        \textcolor{MidnightBlue}{FI, RZ, I}     & \textcolor{MidnightBlue}{BI, RZ, I}     & 0.88 &  & 596090.40 & 597905.50 \\ 
-        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{BI, Random, T} &  & 0.64 &  779167.53 & 784191.83 \\ 
-        \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{BI, Random, E} & 0.29 &  &  597764.77 & 610805.03 \\ 
-        \textcolor{MidnightBlue}{FI, Random, I} & \textcolor{MidnightBlue}{BI, Random, I} & 0.57 &  &  595541.27 & 602568.37 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-ty50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{50 jobs} instances, changing the \textit{First improvement/Best improvement} setting.}
-\end{table} 
-
-
-The previous claim is confirmed by the \textbf{50 jobs} instances.
-
-
-
-\subsection{Transpose VS Exchange VS Insert}
-This last section will compare the different ways to generate neighbours. As there are 3 different possibilities, it is better to first perform a \textbf{Kruskal-Wallis} test on the 3 populations, and then proceed with pairwise tests if required.
-
-\begin{table}[H]
-    \hspace*{-1.8cm}
-    \begin{tabular}{l l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2}  & \textcolor{BrickRed}{Algorithm 3} & \textcolor{BrickRed}{Kruskal-Wallis} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2} & \textcolor{BrickRed}{Mean 3}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        
-        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{FI, RZ, I}& 2.2e-16 & 34.83 & 8037.00 & 19933.67 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, I} & 2.2e-16 & 41.93 & 5634.90 & 15790.23 \\ 
-        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{FI, Random, I} & 2.2e-16 & 479.40 & 112518.03 & 264573.10 \\ 
-        \textcolor{MidnightBlue}{BI, Random, T} & \textcolor{MidnightBlue}{BI, Random, E} & \textcolor{MidnightBlue}{BI, Random, I} &2.2e-16 & 512.93 & 25956.37 & 58112.23 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-n100exec}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{100 jobs} instances, changing the \textit{neighbourhood generation} setting.}
-\end{table} 
-
-
-\begin{table}[H]
-    \hspace*{-2.5cm}
-    \begin{tabular}{l l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2}  & \textcolor{BrickRed}{Algorithm 3} & \textcolor{BrickRed}{Kruskal-Wallis} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2} & \textcolor{BrickRed}{Mean 3}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        
-        \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{FI, RZ, I} & 0.23 & 1824292.40 & 1799165.57 & 1782487.10 \\ 
-        \textcolor{MidnightBlue}{BI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, I} & 0.32 & 1824527.83 & 1805388.90 & 1788360.23 \\ 
-        \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{FI, Random, I} & 1.495e-13 & 2430299.40 & 1773176.93 & 1781657.14 \\ 
-        \textcolor{MidnightBlue}{BI, Random, T} & \textcolor{MidnightBlue}{BI, Random, E} & \textcolor{MidnightBlue}{BI, Random, I} & 1.215e-13 & 2448811.80 & 1828531.93 & 1807937.30 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-n100res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{100 jobs} instances, changing the \textit{neighbourhood generation} setting.}
-\end{table} 
-
-
-\begin{table}[H]
-    \hspace*{-1.8cm}
-    \begin{tabular}{l l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2}  & \textcolor{BrickRed}{Algorithm 3} & \textcolor{BrickRed}{Kruskal-Wallis} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2} & \textcolor{BrickRed}{Mean 3}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-        
-           \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{FI, RZ, E}     & \textcolor{MidnightBlue}{FI, RZ, I} & 2.2e-16 & 3.97 & 310.53 & 1176.97 \\ 
-           \textcolor{MidnightBlue}{BI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, E}     & \textcolor{MidnightBlue}{BI, RZ, I} & 2.2e-16 & 5.17 & 333.83 & 1051.07 \\ 
-           \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{FI, Random, I} & 2.2e-16 & 45.17 & 4691.67 & 11954.67 \\ 
-           \textcolor{MidnightBlue}{BI, Random, T} & \textcolor{MidnightBlue}{BI, Random, E} & \textcolor{MidnightBlue}{BI, Random, I} & 2.2e-16 & 56.13 & 1553.77 & 3629.73 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-n50exec}\textbf{p-values} of the tests for the \textbf{execution times} on \textbf{50 jobs} instances, changing the \textit{neighbourhood generation} setting.}
-\end{table} 
-
-
-\begin{table}[H]
-    \hspace*{-2.2cm}
-    \begin{tabular}{l l l l l l l} % creating eight columns
-        \hline
-        \hline 
-        \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm 1} & \textcolor{BrickRed}{Algorithm 2}  & \textcolor{BrickRed}{Algorithm 3} & \textcolor{BrickRed}{Kruskal-Wallis} & \textcolor{BrickRed}{Mean 1} & \textcolor{BrickRed}{Mean 2} & \textcolor{BrickRed}{Mean 3}\\ [0.5ex]
-        \hline % inserts single-line
-        \\[-1.5ex]
-          \textcolor{MidnightBlue}{FI, RZ, T}     & \textcolor{MidnightBlue}{FI, RZ, E} & \textcolor{MidnightBlue}{FI, RZ, I} & 0.47 & 607710.27 & 602852.33 & 596090.40 \\ 
-          \textcolor{MidnightBlue}{BI, RZ, T}     & \textcolor{MidnightBlue}{BI, RZ, E} & \textcolor{MidnightBlue}{BI, RZ, I} & 0.58 & 607855.87 & 602511.47 & 597905.50 \\ 
-          \textcolor{MidnightBlue}{FI, Random, T} & \textcolor{MidnightBlue}{FI, Random, E} & \textcolor{MidnightBlue}{FI, Random, I} & 2.64e-13 & 779167.53 & 597764.77 & 595541.27 \\ 
-          \textcolor{MidnightBlue}{BI, Random, T} & \textcolor{MidnightBlue}{BI, Random, E} & \textcolor{MidnightBlue}{BI, Random, I} & 3.078e-13 & 784191.83 & 610805.03 & 602568.37 \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
-    \end{tabular}
-    \caption{\label{tab:ii-n50res}\textbf{p-values} of the tests for the \textbf{results} on \textbf{50 jobs} instances, changing the \textit{neighbourhood generation} setting.}
-\end{table} 
-
-The results of these tables are quite interesting: if the \textbf{RZ} heuristic is used, there is no statistical evidence that one way to generate \textbf{neighbours} is better than another. As such, taking the fastest option, i.e. \textbf{transpose}, seems to be the best idea.
-
-Combining all the previous results together, we can conclude that \textbf{best improvement, RZ heuristic, transpose} is the overall best combination. It's one of the fastest combinations, and its results cannot be said to be worse than the ones of other, slower, combinations.
-
-
-\section{Addendum: improvement on Iterative search}
-From the previous results, it emerges how \textbf{first improvement} can be substantially slower than other combinations, if certain input parameters are set.\\
-The main reason is that the entire set of neighbours of a state is generated, while in practice it would suffice to generate neighbours as long as an improving state (i.e. one with lower \textit{weighted completion time}) is found.
-
-To reduce the computation time of \textbf{first improvement}, the neighbourhood generator functions have been modified, so that no unnecessary neighbours are created.
-
-Below are reported some examples of how this modification can improve execution time.
-
+Them, we can compute the correlation coefficient of the 2 algorithms. The correlation is measured as \textbf{Pearson Correlation}. \\
+Then, the correlation value is tested to see if it is statistically significant.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth, center, keepaspectratio=1]{{"improved_ii"}.pdf}
-    \caption{\emph{Differences in \textbf{execution time} between the \textit{old} and \textit{new} version of \textbf{First improvement}. \textbf{Random, Insert} are compared above, while \textbf{RZ, Exchange} are compared below.}}
+    \includegraphics[width=1.2\textwidth, center, keepaspectratio=1]{{"cor"}.pdf}
+    \caption{\emph{Correlation plots of the execution times and of the ARPD for the various algorithms.}}
 \end{figure}
 
-
 \begin{table}[H]
-    \hspace*{-2.2cm}
-    \begin{tabular}{l l l l} % creating eight columns
+    \centering
+    \begin{tabular}{rlrrrr}
         \hline
-        \hline 
         \\[-1.5ex]
-        \textcolor{BrickRed}{Algorithm} & \textcolor{BrickRed}{t-test} & \textcolor{BrickRed}{Mean New} & \textcolor{BrickRed}{Mean Old}\\ [0.5ex]
-        \hline % inserts single-line
+        Type & Correlation & p.value & Mean, IGA & Mean, GEN \\ 
+        \hline
         \\[-1.5ex]
-        \textcolor{MidnightBlue}{FI, Random, I}  & 2e-22 & 63216.50 & 264573.10  \\ 
-        \textcolor{MidnightBlue}{BI, RZ, E}     & 0.2992 & 7204.5 & 8037.0  \\ 
-        [1ex] % [1ex] adds vertical space
-        \hline % inserts single-line
+        Execution time, 50 & -0.01 & 0.96 & 4550.76 & 7714.12 \\ 
+        ARPD, 50 & 0.26 & 0.16 & 0.49 & 1.91 \\ 
+        Execution time, 100 & -0.17 & 0.38 & 31509.20 & 51450.10 \\ 
+        ARPD, 100 & 0.52 & 0.003 & 0.91 & 3.20 \\ 
+        \\[-1.6ex]
+        \hline
     \end{tabular}
-    \caption{\label{tab:ii-imp}\textbf{p-values} of the \textbf{t-tests} for the \textbf{execution times} on \textbf{100 jobs} instances. Old and new versions of \textbf{First improvement} are compared.}
-\end{table} 
+    \caption{\label{tab:cor}\textbf{Pearson correlation} and \textbf{p-values} of the execution times and of the ARPD for the various algorithms.}
+\end{table}
 
-It can be seen how the improvements in execution time are strongly related to the initial parameters that are set. While there is a big improvement in the case of \textbf{Random, Insert} (a \textit{speed-up} of 320\%), in the case of \textbf{RZ, E} there's no statistical evidence of any improvement.
+The only case in which there is a statistically significant correlation is for the \textbf{ARPD} of $100$ jobs instances. In all the other cases, it seems that the \textbf{Memetic algorithm} is on average slower, but is more consistent in terms of results and execution time.
+
+\subsection{Run-Time Distributions}
+A way to compare the behaviour of different algorithms is to look at the \textbf{run-time distribution}, which can be seen as the function of solution quality over time. More formally, it is a function $P(t):\ \mathbb{R}^+ \rightarrow [0,\ 1]$ such that $P(\bar{t})$ is the probability to find the optimal solution (or some very good solution used as reference point) at time $\bar{t}$.
+
+The run-time distributions were computed by running the first 5 instances with $50$ jobs, $25$ times each. For each of them, the performance over time were recorded by writing the execution trace: to approximate the behaviour of the algorithm over time, it was recorded the solution quality every $100$ steps of the execution. \\
+The quality of the approximation can be seen by noticing at how to similar amounts of steps correspond similar elapsed times.\\
+Then the values for each instance have been averaged, to produce a smoother curve over time.
+
+The comparison is rather difficult to make, as \textbf{IGA} performs much better than the \textbf{Memetic Algorithm}.\\
+It was measured the percentage of times that at a certain time point the solution quality is close than the optimum, where close means that the \textbf{ARPD} is smaller than a certain threshold. \\
+The values of \textbf{ARPD} that were considered are $\{0.5\%,  1\%, 2\%\}$.
+
+
+\begin{figure}[H]
+    \subfloat[fig 1]{\includegraphics[width = 3in]{{"rtd0.5"}.pdf}} 
+    \subfloat[fig 2]{\includegraphics[width = 3in]{{"rtd1"}.pdf}}\    \subfloat[fig 3]{\includegraphics[width = 3in]{{"rtd1.5"}.pdf}}
+    \subfloat[fig 4]{\includegraphics[width = 3in]{{"rtd2"}.pdf}} 
+    \caption{Run time distribution with different thresholds. \textbf{IGA} is \textcolor{MidnightBlue}{blue}, \textbf{Memetic} is \textcolor{BrickRed}{red}.}
+    \label{rtd}
+\end{figure}
+
+We can see once again how \textbf{IGA} works better than the \textbf{Memetic algorithm}. For small \textbf{ARPD} thresholds, the \textbf{Memetic algorithm} often has a probability close to zero of giving solutions better than the threshold, even for high execution times.\\
+Only for \textbf{ARPD} $= 2$ the \textbf{Memetic algorithm} seems to be comparable with \textbf{IGA}, and it is even sightly better for high execution times.
+
+
 
 \newpage
 \bibliographystyle{plainurl}

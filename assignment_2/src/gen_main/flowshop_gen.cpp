@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 
     // Compute the max execution time used in the algorithm, if it hasn't been manually set.
     if (nMaxTime <= 0) {
-      nMaxTime = cProblem->GetProblemInstance().GetNumberOfJobs() <= 50 ? 500 * 600 : 500 * 10000;
+      nMaxTime = cProblem->GetProblemInstance().GetNumberOfJobs() <= 50 ? 500 * 200 : 500 * 1000;
     }
 
     cSearchEngine = new GenEngine(*cProblem, nMaxTime, &RandomInitialState, fWeightsType, &PMXCrossover, fMutationType, nPopulationSize, nCrossoverProb, nMutationProb, bWriteTrace);

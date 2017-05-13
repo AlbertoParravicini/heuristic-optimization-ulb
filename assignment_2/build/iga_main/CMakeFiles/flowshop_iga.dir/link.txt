@@ -1,1 +1,1 @@
-/usr/bin/c++      CMakeFiles/flowshop_iga.dir/flowshop_iga.cpp.o  -o ../flowshop_iga -rdynamic ../libshared.a -larmadillo 
+/usr/bin/c++   -O3   CMakeFiles/flowshop_iga.dir/flowshop_iga.cpp.o  -o ../flowshop_iga -rdynamic ../libshared.a -larmadillo 

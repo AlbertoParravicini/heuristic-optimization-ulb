@@ -166,7 +166,7 @@ void IgaEngine::PerformSearch()
       bImprovementFound = false;
     }
 
-    if (nStepCount % 100 == 0) {
+    if (nStepCount % 200 == 0) {
       std::cout << nStepCount << ") " 
             << "TIME: " << nElapsedTime << " / " << this->m_nMaxTime 
             << " - BEST: " << this->m_dResultValue 
@@ -182,10 +182,10 @@ void IgaEngine::PerformSearch()
     nPlateauSize = bImprovementFound ? 0 : (nPlateauSize + std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count());
 
     // Write the temporary results on a file;
-    if (m_bWriteTempData && nStepCount % 100 == 0)
+    if (m_bWriteTempData && nStepCount % 200 == 0)
     {
       std::ofstream output_file;
-      output_file.open("../results/results_details_iga.csv", std::ios_base::app);
+      output_file.open("./results/results_details_iga.csv", std::ios_base::app);
 
       // Write results
       output_file << nTimeStamp << ", " 

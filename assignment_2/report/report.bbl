@@ -6,10 +6,22 @@ William~H Kruskal and W~Allen Wallis.
 \newblock {\em Journal of the American statistical Association},
   47(260):583--621, 1952.
 
+\bibitem{pan2012local}
+Quan-Ke Pan and Rub{\'e}n Ruiz.
+\newblock Local search methods for the flowshop scheduling problem with
+  flowtime minimization.
+\newblock {\em European Journal of Operational Research}, 222(1):31--43, 2012.
+
 \bibitem{shapiro1965analysis}
 Samuel~Sanford Shapiro and Martin~B Wilk.
 \newblock An analysis of variance test for normality (complete samples).
 \newblock {\em Biometrika}, 52(3-4):591--611, 1965.
+
+\bibitem{uccoluk2002genetic}
+G{\"o}kt{\"u}rk {\"U}{\c{c}}oluk.
+\newblock Genetic algorithm solution of the tsp avoiding special crossover and
+  mutation.
+\newblock {\em Intelligent Automation \& Soft Computing}, 8(3):265--272, 2002.
 
 \bibitem{welch1947generalization}
 Bernard~L Welch.

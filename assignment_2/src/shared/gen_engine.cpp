@@ -246,10 +246,10 @@ void GenEngine::PerformSearch()
 
     // Local search.
     // Set the problem state as the one computed above, before doing the sub-search.
-    std::cout << "DOING LOCAL SEARCH: [";
+    std::cout << "DOING LOCAL SEARCH: [" << std::flush;
     for (int i = 0; i < this->m_nPopulationSize; i++)
     {
-      std::cout << "-";
+      std::cout << "-" << std::flush;
       this->m_pcProblem->SetInitialState(vecMutatedPop[i]);
       cLocalEngine->PerformSearch();
 
@@ -260,7 +260,7 @@ void GenEngine::PerformSearch()
       // Check if any of the new states is the new best candidate;
       if (vecLocalSearchPop[i].GetStateValue() < this->m_dResultValue)
       {
-        std::cout << " FOUND IMPROVEMENT: " << vecLocalSearchPop[i].GetStateValue();
+        std::cout << " FOUND IMPROVEMENT: " << vecLocalSearchPop[i].GetStateValue() << std::flush;
         this->m_cResult = vecLocalSearchPop[i];
         this->m_dResultValue = vecLocalSearchPop[i].GetStateValue();
         bImprovementFound = true;
@@ -304,7 +304,7 @@ void GenEngine::PerformSearch()
     if (m_bWriteTempData)
     {
       std::ofstream output_file;
-      output_file.open("../results/results_details_gen.csv", std::ios_base::app);
+      output_file.open("./results/results_details_gen.csv", std::ios_base::app);
 
       // Write results
       output_file << nTimeStamp << ", " 
